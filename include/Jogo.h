@@ -30,8 +30,8 @@ public:
     Jogo();
 
     void executar();
-    Status getStatus(); 
-    Fase* getFase();
+    Status getStatus() const; 
+    Fase* getFase() const;
 };
 
 #endif

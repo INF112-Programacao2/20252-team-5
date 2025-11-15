@@ -7,10 +7,9 @@ const unsigned int ALTURA_JANELA = 720;
 
 // Inicializa a janela com o tamanho e título
 Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo - ODS Game"),
-               status(Status::MENU), 
-               faseAtual(nullptr)    
-{
-}
+               status(Status::MENU),
+               faseAtual(nullptr)
+{}
 
 // Game Loop Principal
 
@@ -36,21 +35,21 @@ void Jogo::executar()
 void Jogo::processarEventos()
 {
 
-    sf::Event event; 
-    
+    sf::Event event;
+
     // O pollEvent retorna 'true' se um evento ocorreu
-    while (window.pollEvent(event)) 
-    { 
-        
-        if (event.type == sf::Event::Closed) 
+    while (window.pollEvent(event))
+    {
+
+        if (event.type == sf::Event::Closed)
         {
             window.close();
         }
 
         // Lógica de Transição de Estados
-        if (event.type == sf::Event::KeyPressed) 
+        if (event.type == sf::Event::KeyPressed)
         {
-            
+
             if (event.key.code == sf::Keyboard::P)
             {
                 if (status == Status::JOGANDO)
@@ -62,7 +61,6 @@ void Jogo::processarEventos()
                     status = Status::JOGANDO;
                 }
             }
-
         }
     }
 }
@@ -84,7 +82,7 @@ void Jogo::atualizar()
 
 void Jogo::desenhar()
 {
-    window.clear(sf::Color::Black); 
+    window.clear(sf::Color::Black);
 
     // Desenho é delegado à classe Tela
     if (status == Status::JOGANDO && faseAtual)
@@ -100,17 +98,17 @@ void Jogo::desenhar()
         // Tela::exibirTelaPause(window);
     }
 
-    window.display(); 
+    window.display();
 }
 
 // Getters
 
-Status Jogo::getStatus() 
+Status Jogo::getStatus() const
 {
     return status;
 }
 
-Fase* Jogo::getFase() 
+Fase *Jogo::getFase() const
 {
     return faseAtual;
 }
