@@ -1,35 +1,39 @@
 #ifndef FASE_H
 #define FASE_H
 
+#include "Personagem.h"
+#include "MaquinaDeReciclagem.h"
+#include "Temporizador.h"
+
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-class Personagem;
-class MaquinaDeReciclagem;
-class Timer;
-
-const int mapa_linhas = 15;
-const int mapa_colunas = 27;
+const int MAPA_LINHAS = 15;
+const int MAPA_COLUNAS = 27;
 
 class Fase
 {
 private:
-    Timer *timer;
+    Temporizador *temporizador;
     MaquinaDeReciclagem *maquina;
     int tempoInicial;
-    char mapa[mapa_linhas][mapa_colunas];
+    char mapa[MAPA_LINHAS][MAPA_COLUNAS + 1];
     int quantidadeMonstros;
 
 public:
-    Fase(int inicioTempo, const char mapaData[mapa_linhas][mapa_colunas + 1], int numMonstros);
+    Fase(int inicioTempo, int numMonstros);
     ~Fase();
 
     int getTempoInicial() const;          // + getTempo() int
-    const char *getMapa(int linha) const; // + getMapa(): char[]
     int getQuantidadeMonstros() const;    // + getQuantidade Monstros() int
+    const char *getMapa(int linha) const; // + getMapa(): char[]
+
+    void inicializarEntidades();
+    void atualizar(float deltaTime);
+    void desenhar(sf::RenderWindow &window);
 
     void detectarVitoria();        // + detectar Vitoria(): void
-    bool verificarDerrota() const; // Checa o Timer (Responsabilidade da Fase)
-}
+    bool verificarDerrota() const; // Checa o Temporizador (Responsabilidade da Fase)
+};
 
 #endif

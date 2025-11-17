@@ -1,4 +1,6 @@
 #include "../include/Jogo.h"
+#include "../include/Tela.h"
+
 #include <iostream>
 
 // Tamanho qualquer para a janela
@@ -6,50 +8,42 @@ const unsigned int LARGURA_JANELA = 1280;
 const unsigned int ALTURA_JANELA = 720;
 
 // Inicializa a janela com o tamanho e título
-Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo - ODS Game"),
+Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo: ODS Game"),
                status(Status::MENU),
-               faseAtual(nullptr)
-{}
+               faseAtual(nullptr) {}
 
-// Game Loop Principal
-
+// Game loop principal
 void Jogo::executar()
 {
     sf::Clock clock;
 
     while (window.isOpen())
     {
-        // Processamento de Input e Eventos
+        // Processamento de input e eventos
         processarEventos();
 
-        // Atualização da Lógica do Jogo
+        // Atualização da lógica do jogo
         atualizar();
 
-        // Renderização e Desenho
+        // Renderização e desenho
         desenhar();
     }
 }
 
 // Input/Eventos
-
 void Jogo::processarEventos()
 {
-
     sf::Event event;
 
     // O pollEvent retorna 'true' se um evento ocorreu
     while (window.pollEvent(event))
     {
-
         if (event.type == sf::Event::Closed)
-        {
             window.close();
-        }
 
-        // Lógica de Transição de Estados
+        // Lógica de transição de estados
         if (event.type == sf::Event::KeyPressed)
         {
-
             if (event.key.code == sf::Keyboard::P)
             {
                 if (status == Status::JOGANDO)
@@ -79,7 +73,6 @@ void Jogo::atualizar()
 }
 
 // Renderização
-
 void Jogo::desenhar()
 {
     window.clear(sf::Color::Black);
@@ -87,22 +80,21 @@ void Jogo::desenhar()
     // Desenho é delegado à classe Tela
     if (status == Status::JOGANDO && faseAtual)
     {
-        // Tela::desenharFase(faseAtual, window)
+        Tela::exibirFase(faseAtual, window);
     }
     else if (status == Status::MENU)
     {
-        // Tela::exibirMenu(window);
+        Tela::exibirMenu(window);
     }
     else if (status == Status::PAUSA)
     {
-        // Tela::exibirTelaPause(window);
+        Tela::exibirPause(window);
     }
 
     window.display();
 }
 
 // Getters
-
 Status Jogo::getStatus() const
 {
     return status;
