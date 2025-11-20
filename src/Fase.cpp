@@ -5,12 +5,15 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
+#include <vector>
 
 Fase::Fase(int inicioTempo, int numMonstros)
     : tempoInicial(inicioTempo),
       quantidadeMonstros(numMonstros),
       timer(nullptr), // Inicializa os ponteiros como nulos
-      maquina(nullptr)
+      maquina(nullptr),
+      level(nivelDomapa)
 {
     this->timer = new Timer(inicioTempo); // Agora nosso ponteiro para Timer aponta para um objeto Timer
 
@@ -66,6 +69,35 @@ const char *Fase::getMapa(int linha) const
 void Fase::inicializarEntidades()
 {
     // Cria os personagens e adiciona ao vetor 'entidades'.
+    switch (level)
+    {
+    case 1:
+    {
+        // Array de ponteiros inteligentes para entidades
+        std::vector<std::unique_ptr<Personagem>> entidades;
+
+        // Inserção de entidades no vetor
+        Personagem.push_back(std::make_unique</*aqui coloca as classes filhas de Personagem*/>());
+        // mais elementos...
+
+        // Caso precise configurar as entidades: for(std::unique_ptr<Personagem> &p : entidades) {...}
+
+        break;
+    }
+    case 2:
+    {
+        // repete case 1
+        break;
+    }
+    case 3:
+    {
+        // repete case 1
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 void Fase::atualizar(float deltaTime)

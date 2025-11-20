@@ -19,6 +19,8 @@ private:
     int tempoInicial;
     char mapa[MAPA_LINHAS][MAPA_COLUNAS + 1];
     int quantidadeMonstros;
+    int level;
+    void carregarMapa(int level); // Carregar_mapa() ira preencher o conteudo do mapa da classe Fase
 
 public:
     Fase(int inicioTempo, int numMonstros);
@@ -33,7 +35,7 @@ public:
     void desenhar(sf::RenderWindow &window);
 
     void detectarVitoria();        // + detectar Vitoria(): void
-    bool verificarDerrota() const; // Checa o Temporizador (Responsabilidade da Fase)
+    bool verificarDerrota() const; // Checa o Timer (Responsabilidade da Fase)
 };
 
 #endif
