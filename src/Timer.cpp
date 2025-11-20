@@ -1,9 +1,6 @@
 #include "../include/Timer.h"
 
-Timer::Timer(int tempoInicial)
-    : tempoRestante(tempoInicial)
-{
-}
+Timer::Timer(int tempoInicial) : tempoRestante(tempoInicial) {}
 
 int Timer::getTempoRestante() const
 {

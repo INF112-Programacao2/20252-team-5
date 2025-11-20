@@ -1,84 +1,14 @@
 #include "../include/Fase.h"
 #include "../include/Timer.h"               // Necessário para 'new Timer()' e 'timer->tempoZerou()'
-#include "../include/Personagem.h"          //Necessário para deletar as entidades
-#include "../include/MaquinaDeReciclagem.h" //Necessário para a composição
+#include "../include/Personagem.h"          // Necessário para deletar as entidades
+#include "../include/MaquinaDeReciclagem.h" // Necessário para a composição
 
-#include <cstring>
+#include <string>
 #include <iostream>
 #include <memory>
 #include <vector>
 
-void Fase::carregarMapa(int level)
-{
-    switch (level) // Escolha de um mapa modelo de acordo com o level
-    {
-    case 1:
-    {
-        // Mapa modelo pre-definido em array
-        char mapa_modelo_1[mapa_linhas][mapa_colunas] = {"111111111111111111",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000100000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "111111111111111111"};
-        for (int i = 0; i < mapa_linhas; i++)
-        {
-            std::strcmp(this->mapa[i], mapa_modelo_1[i], mapa_colunas); // Copia cada linha do mapa modelo para o mapa da Fase
-            this->mapa[i][mapa_colunas] = '\0';                         // Garante um terminador no final de cada linha
-        }
-        break;
-    }
-    case 2:
-    {
-        // Mapa modelo pre-definido em array
-        char mapa_modelo_2[mapa_linhas][mapa_colunas] = {"111111111111111111",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000200000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "111111111111111111"};
-        for (int i = 0; i < mapa_linhas; i++)
-        {
-            std::strcmp(this->mapa[i], mapa_modelo_2[i], mapa_colunas);
-            this->mapa[i][mapa_colunas] = '\0';
-        }
-        break;
-    }
-    case 3:
-    {
-        // Mapa modelo pre-definido em array
-        char mapa_modelo_3[mapa_linhas][mapa_colunas] = {"111111111111111111",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000300000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "100000000000000001",
-                                                         "111111111111111111"};
-        for (int i = 0; i < mapa_linhas; i++)
-        {
-            std::strcmp(this->mapa[i], mapa_modelo_3[i], mapa_colunas);
-            this->mapa[i][mapa_colunas] = '\0';
-        }
-        break;
-    }
-
-    default:
-        break;
-    }
-}
-
-Fase::Fase(int inicioTempo, int numMonstros, int nivelDoMapa)
+Fase::Fase(int inicioTempo, int numMonstros)
     : tempoInicial(inicioTempo),
       quantidadeMonstros(numMonstros),
       timer(nullptr), // Inicializa os ponteiros como nulos
@@ -90,7 +20,12 @@ Fase::Fase(int inicioTempo, int numMonstros, int nivelDoMapa)
     // this->maquina = new MaquinaDeReciclagem(posicaoX, posicaoY); ---> quando criarmos a classe MaquinaDeReciclagem
     this->maquina = nullptr; // Temporariamente nulo, até a classe Maquina ser criada👍
 
-    Fase::carregarMapa(level);
+    // Na sua implementação final, o mapa deve ser carregado de um arquivo
+    /*for (int i = 0; i < MAPA_LINHAS; ++i)
+    {
+        std::memset(mapa[i], '0', MAPA_COLUNAS);
+        mapa[i][MAPA_COLUNAS] = '\0'; // Adiciona terminador de string
+    }*/
 }
 
 // Destrutor: Limpa a memória alocada dinamicamente
@@ -105,11 +40,11 @@ Fase::~Fase()
     maquina = nullptr;
 
     // Deleta todas as entidades alocadas dinamicamente
-    for (Personagem *entidade : entidades)
+    /*for (Personagem *entidade : entidades)
     {
         delete entidade;
     }
-    entidades.clear();
+    entidades.clear();*/
 }
 
 int Fase::getTempoInicial() const

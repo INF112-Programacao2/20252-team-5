@@ -1,66 +1,116 @@
+#include "../include/VariaveisGlobais.h"
 #include "../include/Jogo.h"
+#include "../include/Tela.h"
+
 #include <iostream>
 
-// Tamanho qualquer para a janela
-const unsigned int LARGURA_JANELA = 1280;
-const unsigned int ALTURA_JANELA = 720;
-
 // Inicializa a janela com o tamanho e título
-Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo - ODS Game"),
+Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo: ODS Game"),
                status(Status::MENU),
-               faseAtual(nullptr)
-{}
+               faseAtual(nullptr) {}
 
-// Game Loop Principal
-
+// Game loop principal
 void Jogo::executar()
 {
     sf::Clock clock;
 
     while (window.isOpen())
     {
-        // Processamento de Input e Eventos
+        // Processamento de input e eventos
         processarEventos();
 
-        // Atualização da Lógica do Jogo
+        // Atualização da lógica do jogo
         atualizar();
 
-        // Renderização e Desenho
+        // Renderização e desenho
         desenhar();
     }
 }
 
 // Input/Eventos
-
 void Jogo::processarEventos()
 {
-
     sf::Event event;
 
     // O pollEvent retorna 'true' se um evento ocorreu
     while (window.pollEvent(event))
     {
-
         if (event.type == sf::Event::Closed)
-        {
             window.close();
-        }
 
-        // Lógica de Transição de Estados
-        if (event.type == sf::Event::KeyPressed)
+        switch (status)
         {
-
-            if (event.key.code == sf::Keyboard::P)
+        // MENU
+        case Status::MENU:
+            // Navegação no menu (delegada para Tela)
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             {
-                if (status == Status::JOGANDO)
-                {
-                    status = Status::PAUSA;
-                }
-                else if (status == Status::PAUSA)
+                Tela::anteriorOpcao();
+                sf::sleep(sf::milliseconds(300));
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            {
+                Tela::proximaOpcao();
+                sf::sleep(sf::milliseconds(300));
+            }
+
+            // Seleção no menu
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+            {
+                int opcao = Tela::getOpcaoSelecionada();
+                if (opcao == 0) // Jogar
                 {
                     status = Status::JOGANDO;
                 }
+                else if (opcao == 1) // Créditos
+                {
+                    status = Status::CREDITOS;
+                }
+                else if (opcao == 2) // Sair
+                {
+                    window.close();
+                }
             }
+            break;
+
+        // JOGANDO
+        case Status::JOGANDO:
+            // Pausar o jogo
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                status = Status::PAUSA;
+            }
+            break;
+
+        // PAUSA
+        case Status::PAUSA:
+            // Retomar o jogo
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                status = Status::JOGANDO;
+            }
+            break;
+
+        // VITORIA
+        case Status::VITORIA:
+            break;
+
+        // DERROTA
+        case Status::DERROTA:
+            break;
+
+        // CREDITOS
+        case Status::CREDITOS:
+            // Voltar ao menu principal
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                status = Status::MENU;
+            }
+            break;
+
+        // Default case
+        default:
+            break;
         }
     }
 }
@@ -79,30 +129,38 @@ void Jogo::atualizar()
 }
 
 // Renderização
-
 void Jogo::desenhar()
 {
-    window.clear(sf::Color::Black);
-
     // Desenho é delegado à classe Tela
-    if (status == Status::JOGANDO && faseAtual)
+    switch (status)
     {
-        // Tela::desenharFase(faseAtual, window)
-    }
-    else if (status == Status::MENU)
-    {
-        // Tela::exibirMenu(window);
-    }
-    else if (status == Status::PAUSA)
-    {
-        // Tela::exibirTelaPause(window);
+    case Status::JOGANDO:
+        if (faseAtual)
+            Tela::exibirFase(faseAtual, window);
+        break;
+    case Status::MENU:
+        Tela::exibirMenu(window);
+        break;
+    case Status::PAUSA:
+        Tela::exibirPause(window);
+        break;
+    case Status::VITORIA:
+        Tela::exibirVitoria(window);
+        break;
+    case Status::DERROTA:
+        Tela::exibirDerrota(window);
+        break;
+    case Status::CREDITOS:
+        Tela::exibirCreditos(window);
+        break;
+    default:
+        break;
     }
 
     window.display();
 }
 
 // Getters
-
 Status Jogo::getStatus() const
 {
     return status;

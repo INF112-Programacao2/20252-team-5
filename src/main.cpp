@@ -1,8 +1,13 @@
 #include "../include/Jogo.h"
+
 #include <iostream>
 
-int main() {
-    Jogo jogo; // Cria uma instância da classe Jogo
-    jogo.executar(); // E ja chama o método executar da classe
+int main()
+{
+    // Renderiza a janela ao instanciar a classe jogo
+    Jogo jogo;
+
+    // Inicia o loop principal do jogo
+    jogo.executar();
     return 0;
 }

@@ -1,8 +1,6 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-class Fase; // Novamente apenas definindo a class Fase para evitar importar a classe inteira
-
 class Timer
 {
 private:

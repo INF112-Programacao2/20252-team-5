@@ -3,23 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 
-enum Status
-{
-    MENU,
-    JOGANDO,
-    PAUSA,
-    VITORIA,
-    DERROTA
-};
-
-class Fase; // Pra nao precisar incluir a classe Fase inteira 
+#include "VariaveisGlobais.h"
+#include "Fase.h"
 
 class Jogo
 {
 private:
-    sf::RenderWindow window; 
+    sf::RenderWindow window;
     Status status;
-    Fase *faseAtual; // Usar ponteiro ajuda muito para alocar um objeto Fase e depois deletar
+    Fase *faseAtual;
 
     // Metodos para gameloop
     void processarEventos();
@@ -30,8 +22,8 @@ public:
     Jogo();
 
     void executar();
-    Status getStatus() const; 
-    Fase* getFase() const;
+    Status getStatus() const;
+    Fase *getFase() const;
 };
 
 #endif
