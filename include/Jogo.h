@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Enum.h"
+#include "VariaveisGlobais.h"
 #include "Fase.h"
 
 class Jogo
@@ -11,7 +11,7 @@ class Jogo
 private:
     sf::RenderWindow window;
     Status status;
-    Fase *faseAtual; // Usar ponteiro ajuda muito para alocar um objeto Fase e depois deletar
+    Fase *faseAtual;
 
     // Metodos para gameloop
     void processarEventos();

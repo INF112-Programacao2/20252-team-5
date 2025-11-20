@@ -1,7 +1,7 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 
-#include "Enum.h"
+#include "VariaveisGlobais.h"
 
 class PowerUp
 {

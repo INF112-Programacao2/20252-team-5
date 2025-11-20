@@ -1,4 +1,4 @@
-# 🗑️ Recicla Mundo
+# ♻️ Recicla Mundo
 ## História:
 Neste mundo, as consequências das péssimas ações humanas tomaram um rumo diferente. Devido ao mau gerenciamento do uso água e do saneamento, os esgotos ficaram cada vez mais tóxicos ao ponto de criaturas se formarem a partir da podridão humana, os lixos tóxicos, que planejam contaminar o mundo e acabar com a água limpa do planeta. Porém, por coincidência do destino, surge um herói, que destruirá os lixos, limpará as águas e salvará o mundo das mãos dos monstros de lixo. 
 

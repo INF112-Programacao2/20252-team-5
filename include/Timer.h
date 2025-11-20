@@ -1,13 +1,13 @@
-#ifndef TEMPORIZADOR_H
-#define TEMPORIZADOR_H
+#ifndef TIMER_H
+#define TIMER_H
 
-class Temporizador
+class Timer
 {
 private:
     int tempoRestante;
 
 public:
-    Temporizador(int tempoInicial); // Construtor da classe
+    Timer(int tempoInicial); // Construtor da classe
     int getTempoRestante() const;
     void decrementarTempo(); // Decrementa o tempo a cada frame
     void aumentarTempo(int bonusTempo);

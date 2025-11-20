@@ -3,7 +3,7 @@
 
 #include "Personagem.h"
 #include "MaquinaDeReciclagem.h"
-#include "Temporizador.h"
+#include "Timer.h"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -14,7 +14,7 @@ const int MAPA_COLUNAS = 27;
 class Fase
 {
 private:
-    Temporizador *temporizador;
+    Timer *timer;
     MaquinaDeReciclagem *maquina;
     int tempoInicial;
     char mapa[MAPA_LINHAS][MAPA_COLUNAS + 1];

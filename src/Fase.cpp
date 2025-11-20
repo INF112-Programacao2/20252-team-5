@@ -1,7 +1,7 @@
 #include "../include/Fase.h"
-#include "../include/Temporizador.h"        // Necessário para 'new Timer()' e 'timer->tempoZerou()'
-#include "../include/Personagem.h"          //Necessário para deletar as entidades
-#include "../include/MaquinaDeReciclagem.h" //Necessário para a composição
+#include "../include/Timer.h"               // Necessário para 'new Timer()' e 'timer->tempoZerou()'
+#include "../include/Personagem.h"          // Necessário para deletar as entidades
+#include "../include/MaquinaDeReciclagem.h" // Necessário para a composição
 
 #include <string>
 #include <iostream>
@@ -9,10 +9,10 @@
 Fase::Fase(int inicioTempo, int numMonstros)
     : tempoInicial(inicioTempo),
       quantidadeMonstros(numMonstros),
-      temporizador(nullptr), // Inicializa os ponteiros como nulos
+      timer(nullptr), // Inicializa os ponteiros como nulos
       maquina(nullptr)
 {
-    this->temporizador = new Temporizador(inicioTempo); // Agora nosso ponteiro para Timer aponta para um objeto Timer
+    this->timer = new Timer(inicioTempo); // Agora nosso ponteiro para Timer aponta para um objeto Timer
 
     // this->maquina = new MaquinaDeReciclagem(posicaoX, posicaoY); ---> quando criarmos a classe MaquinaDeReciclagem
     this->maquina = nullptr; // Temporariamente nulo, até a classe Maquina ser criada👍
@@ -29,8 +29,8 @@ Fase::Fase(int inicioTempo, int numMonstros)
 Fase::~Fase()
 {
     // Deleta o Timer
-    delete temporizador;
-    temporizador = nullptr;
+    delete timer;
+    timer = nullptr;
 
     // Deleta a Máquina
     delete maquina;
@@ -92,5 +92,5 @@ void Fase::detectarVitoria()
 
 bool Fase::verificarDerrota() const
 {
-    return temporizador->tempoZerou(); // Usa o ponteiro para acessar o objeto Timer e utilizar o método da classe
+    return timer->tempoZerou(); // Usa o ponteiro para acessar o objeto Timer e utilizar o método da classe
 }
