@@ -36,7 +36,7 @@ sf::Sprite Personagem::getSprite() const{
 }
 
 void Personagem::setVelocidade(float novaVelocidade){
-    _velocidade = velocidade;
+    _velocidade = novaVelocidade;
 }
 
 void Personagem::mudarPosicao(float x, float y){
@@ -66,4 +66,5 @@ bool Personagem::colisao(Direcao direcao, float dist, unsigned char mapa[19][29]
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
         return mapa[newY][tileX_left] == '1' || mapa[newY][tileX_right] == '1';
     }
+    return false;
 }

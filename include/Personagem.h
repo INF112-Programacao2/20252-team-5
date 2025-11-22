@@ -4,6 +4,13 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+const float TAM_PIXEL = 32.f;
+// define o tamanho de cada "casa" da matriz, dá para alterar depois e colocar
+// na classe fase, talvez
+
+enum class Direcao { Cima, Caindo, Esquerda, Direita};
+// auxilia na verificação de colisão
+
 class Personagem
 {
 private:
@@ -14,6 +21,7 @@ private:
     // não nos quadrados da matriz, para evitar teleporte de um tile para outro. 
     // Desse jeito ele passa de forma mais suave, mas dá para mudar, qualquer coisa
     sf::Sprite _sprite;
+    sf::Texture _texture;
 
 public:
     Personagem(float x, float y, float velocidade, std::string imagem);
@@ -23,7 +31,7 @@ public:
     sf::Sprite getSprite() const;
 
     void setVelocidade(float novaVelocidade);
-    void mudarPosicao(int novoX, int novoY);
+    void mudarPosicao(float novoX, float novoY);
     bool colisao(Direcao direcao, float dist, unsigned char mapa[19][29]);
     // esse mapa posteriormente deverá ser substituido por uma referencia para a fase
 };
