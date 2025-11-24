@@ -24,10 +24,10 @@ enum Condicao
 
 enum Direcao
 {
-    Cima, 
-    Caindo,
-    Esquerda,
-    Direita
+    CIMA, 
+    CAINDO,
+    ESQUERDA,
+    DIREITA
 };
 // auxilia na verificação de colisão
 
