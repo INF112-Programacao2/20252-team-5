@@ -3,6 +3,7 @@
 #include <cmath>
 #include <exception>
 #include "../include/Personagem.h"
+#include "../include/VariaveisGlobais.h"
 
 
 Personagem::Personagem(float x, float y, float velocidade, std::string imagem){
@@ -50,19 +51,19 @@ bool Personagem::colisao(Direcao direcao, float dist, unsigned char mapa[19][29]
     int tileX_left = floorf(_x / TAM_PIXEL);
     int tileY_top = floorf(_y / TAM_PIXEL);
     int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
-    if(direcao == Direcao::Esquerda){
+    if(direcao == Direcao::ESQUERDA){
         int newX = floorf((_x - dist) / TAM_PIXEL);
         return mapa[tileY_bottom][newX] == '1' || mapa[tileY_top][newX] == '1';
     }
-    if(direcao == Direcao::Direita){
+    if(direcao == Direcao::DIREITA){
         int newX = floorf((_x + TAM_PIXEL + dist) / TAM_PIXEL);
         return mapa[tileY_bottom][newX] == '1' || mapa[tileY_top][newX] == '1';
     }
-    if(direcao == Direcao::Cima){
+    if(direcao == Direcao::CIMA){
         int newY = floorf((_y - dist) / TAM_PIXEL);
         return mapa[newY][tileX_left] == '1' || mapa[newY][tileX_right] == '1';
     }
-    if(direcao == Direcao::Caindo){
+    if(direcao == Direcao::CAINDO){
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
         return mapa[newY][tileX_left] == '1' || mapa[newY][tileX_right] == '1';
     }
