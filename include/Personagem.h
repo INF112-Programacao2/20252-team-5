@@ -4,13 +4,6 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-const float TAM_PIXEL = 32.f;
-// define o tamanho de cada "casa" da matriz, dá para alterar depois e colocar
-// na classe fase, talvez
-
-enum class Direcao { Cima, Caindo, Esquerda, Direita};
-// auxilia na verificação de colisão
-
 class Personagem
 {
 private:
