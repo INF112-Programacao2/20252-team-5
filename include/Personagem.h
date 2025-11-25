@@ -19,8 +19,9 @@ private:
 
 public:
     Personagem(float x, float y, float velocidade, std::string imagem);
-    float getX() const;
-    float getY() const;
+    virtual ~Personagem();
+    float getPosicaoX() const;
+    float getPosicaoY() const;
     float getVelocidade() const;
     sf::Sprite getSprite() const;
 
