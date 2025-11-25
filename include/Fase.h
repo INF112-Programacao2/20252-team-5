@@ -19,8 +19,9 @@ private:
     int tempoInicial;
     char mapa[MAPA_LINHAS][MAPA_COLUNAS + 1];
     int quantidadeMonstros;
-    int level;
+    //int level;
     void carregarMapa(int level); // Carregar_mapa() ira preencher o conteudo do mapa da classe Fase
+    std::vector<Personagem*> entidades;
 
 public:
     Fase(int inicioTempo, int numMonstros);

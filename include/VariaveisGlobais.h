@@ -3,7 +3,7 @@
 
 const unsigned int LARGURA_JANELA = 1280;
 const unsigned int ALTURA_JANELA = 720;
-const float TAM_PIXEL = 32.f;
+const int TAM_PIXEL = 32;
 
 enum Status
 {
@@ -22,12 +22,13 @@ enum Condicao
     RAPIDO
 };
 
-enum Direcao
-{
-    CIMA, 
-    CAINDO,
+enum class Direcao {
+    NENHUMA,
+    CIMA,
+    BAIXO,
     ESQUERDA,
-    DIREITA
+    DIREITA,
+    CAINDO
 };
 // auxilia na verificação de colisão
 

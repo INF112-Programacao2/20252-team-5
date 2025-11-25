@@ -2,20 +2,31 @@
 #define JOGADOR_H
 
 #include "Personagem.h"
-#include "PowerUp.h"
+// #include "PowerUp.h" // Descomente quando tiver a classe PowerUp pronta
+class PowerUp; // Forward declaration para evitar erro de compilação agora
 
+// Herança: Jogador É UM Personagem
 class Jogador : public Personagem
 {
 private:
     PowerUp *powerUpAtivo;
 
 public:
-    Jogador(int x, int y, int velocidade, const sf::Texture &textura);
-    void ativarPowerUp(PowerUp &powerUp);
-    void desativarPowerUp();
-    PowerUp *getPowerUpAtivo() const;
+    // CORREÇÃO 1 & 2: Usar float e std::string para bater com Personagem
+    Jogador(float x, float y, float velocidade, std::string imagem);
+    
+    ~Jogador();
 
-    void capturarMonstro(Monstro *monstro);
+    // CORREÇÃO 3: Adicionar o método de atualização (movimento)
+    // O mapa é necessário para colisão (use o tamanho que definimos)
+    void atualizar(float deltaTime) override;
+
+    // Seus métodos de PowerUp (mantenha se for usar depois)
+    // void ativarPowerUp(PowerUp &powerUp);
+    // void desativarPowerUp();
+    // PowerUp *getPowerUpAtivo() const;
+
+    // void capturarMonstro(Monstro *monstro);
 };
 
 #endif

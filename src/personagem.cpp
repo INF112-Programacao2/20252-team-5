@@ -5,67 +5,87 @@
 #include "../include/Personagem.h"
 #include "../include/VariaveisGlobais.h"
 
-
-Personagem::Personagem(float x, float y, float velocidade, std::string imagem){
+Personagem::Personagem(float x, float y, float velocidade, std::string imagem)
+{
     _y = y;
     _x = x;
     _velocidade = velocidade;
 
-    if(!_texture.loadFromFile(imagem)){
+    if (!_texture.loadFromFile(imagem))
+    {
         std::cout << "Erro ao carregar \"" << imagem << "\"" << std::endl;
-        throw std::runtime_error("Erro ao carregar \""  + imagem + "\".");
+        throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     _sprite.setTexture(_texture);
     _sprite.setPosition(_x, _y);
 }
 
-float Personagem::getX() const{
+Personagem::~Personagem()
+{
+}
+
+float Personagem::getPosicaoX() const
+{
     return _x;
 }
 
-float Personagem::getY() const{
+float Personagem::getPosicaoY() const
+{
     return _y;
 }
 
-float Personagem::getVelocidade() const{
+float Personagem::getVelocidade() const
+{
     return _velocidade;
 }
 
-sf::Sprite Personagem::getSprite() const{
+sf::Sprite Personagem::getSprite() const
+{
     return _sprite;
 }
 
-void Personagem::setVelocidade(float novaVelocidade){
+void Personagem::setVelocidade(float novaVelocidade)
+{
     _velocidade = novaVelocidade;
 }
 
-void Personagem::mudarPosicao(float x, float y){
+void Personagem::mudarPosicao(float x, float y)
+{
     _x = x;
     _y = y;
     _sprite.setPosition(_x, _y);
 }
 
-bool Personagem::colisao(Direcao direcao, float dist, unsigned char mapa[19][29]){
-    int tileX_right = floorf((_x + TAM_PIXEL - 1.f)/ TAM_PIXEL);
+bool Personagem::colisao(Direcao direcao, float dist, unsigned char mapa[19][29])
+{
+    int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
     int tileX_left = floorf(_x / TAM_PIXEL);
     int tileY_top = floorf(_y / TAM_PIXEL);
     int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
-    if(direcao == Direcao::ESQUERDA){
+    if (direcao == Direcao::ESQUERDA)
+    {
         int newX = floorf((_x - dist) / TAM_PIXEL);
         return mapa[tileY_bottom][newX] == '1' || mapa[tileY_top][newX] == '1';
     }
-    if(direcao == Direcao::DIREITA){
+    if (direcao == Direcao::DIREITA)
+    {
         int newX = floorf((_x + TAM_PIXEL + dist) / TAM_PIXEL);
         return mapa[tileY_bottom][newX] == '1' || mapa[tileY_top][newX] == '1';
     }
-    if(direcao == Direcao::CIMA){
+    if (direcao == Direcao::CIMA)
+    {
         int newY = floorf((_y - dist) / TAM_PIXEL);
         return mapa[newY][tileX_left] == '1' || mapa[newY][tileX_right] == '1';
     }
-    if(direcao == Direcao::CAINDO){
+    if (direcao == Direcao::CAINDO)
+    {
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
         return mapa[newY][tileX_left] == '1' || mapa[newY][tileX_right] == '1';
     }
     return false;
+}
+void Personagem::desenhar(sf::RenderWindow &window)
+{
+    window.draw(_sprite);
 }

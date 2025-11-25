@@ -7,7 +7,7 @@
 
 class Personagem
 {
-private:
+protected:
     float _x;
     float _y;
     float _velocidade;
@@ -19,15 +19,18 @@ private:
 
 public:
     Personagem(float x, float y, float velocidade, std::string imagem);
-    float getX() const;
-    float getY() const;
+    virtual ~Personagem();
+    float getPosicaoX() const;
+    float getPosicaoY() const;
     float getVelocidade() const;
     sf::Sprite getSprite() const;
 
     void setVelocidade(float novaVelocidade);
     void mudarPosicao(float novoX, float novoY);
+    virtual void atualizar(float deltaTime) = 0;
     bool colisao(Direcao direcao, float dist, unsigned char mapa[19][29]);
     // esse mapa posteriormente deverá ser substituido por uma referencia para a fase
+    virtual void desenhar(sf::RenderWindow& window);
 };
 
 #endif
