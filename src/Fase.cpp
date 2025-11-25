@@ -17,9 +17,8 @@ Fase::Fase(int inicioTempo, int numMonstros)
 {
     this->timer = new Timer(inicioTempo); // Agora nosso ponteiro para Timer aponta para um objeto Timer
 
-    // this->maquina = new MaquinaDeReciclagem(posicaoX, posicaoY); ---> quando criarmos a classe MaquinaDeReciclagem
-    this->maquina = nullptr; // Temporariamente nulo, até a classe Maquina ser criada👍
-
+    this->maquina = new MaquinaDeReciclagem(posicaoX, posicaoY, this, timer);
+    
     // Na sua implementação final, o mapa deve ser carregado de um arquivo
     /*for (int i = 0; i < MAPA_LINHAS; ++i)
     {
