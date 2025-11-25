@@ -1,51 +1,54 @@
 #include "../include/Fase.h"
-#include "../include/Timer.h"               // Necessário para 'new Timer()' e 'timer->tempoZerou()'
-#include "../include/Personagem.h"          // Necessário para deletar as entidades
-#include "../include/MaquinaDeReciclagem.h" // Necessário para a composição
+#include "../include/Timer.h"
+#include "../include/Personagem.h"
+#include "../include/MaquinaDeReciclagem.h"
+#include "../include/Jogador.h" // <--- NECESSÁRIO para criar Jogador
+// #include "../include/Monstro.h" // <--- Descomente quando criar a classe Monstro
 
-#include <string>
+#include <cstring>
 #include <iostream>
-#include <memory>
-#include <vector>
+
+// Coordenadas fixas para a máquina (ajuste conforme seu mapa)
+const float MAQUINA_X = 100.0f;
+const float MAQUINA_Y = 100.0f;
 
 Fase::Fase(int inicioTempo, int numMonstros)
     : tempoInicial(inicioTempo),
       quantidadeMonstros(numMonstros),
-      timer(nullptr), // Inicializa os ponteiros como nulos
-      maquina(nullptr),
-      level(nivelDomapa)
+      timer(nullptr),
+      maquina(nullptr)
 {
-    this->timer = new Timer(inicioTempo); // Agora nosso ponteiro para Timer aponta para um objeto Timer
+    // 1. Inicializar o Timer
+    this->timer = new Timer(inicioTempo);
 
-    this->maquina = new MaquinaDeReciclagem(posicaoX, posicaoY, this, timer);
-    
-    // Na sua implementação final, o mapa deve ser carregado de um arquivo
-    /*for (int i = 0; i < MAPA_LINHAS; ++i)
+    // 2. Inicializar a Máquina (usando as constantes definidas acima)
+    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer);
+
+    // 3. Inicializar o Mapa
+    for (int i = 0; i < MAPA_LINHAS; ++i)
     {
         std::memset(mapa[i], '0', MAPA_COLUNAS);
-        mapa[i][MAPA_COLUNAS] = '\0'; // Adiciona terminador de string
-    }*/
+        mapa[i][MAPA_COLUNAS] = '\0';
+    }
+
+    // 4. Inicializar Entidades
+    inicializarEntidades();
 }
 
-// Destrutor: Limpa a memória alocada dinamicamente
 Fase::~Fase()
 {
-    // Deleta o Timer
     delete timer;
-    timer = nullptr;
-
-    // Deleta a Máquina
     delete maquina;
-    maquina = nullptr;
 
-    // Deleta todas as entidades alocadas dinamicamente
-    /*for (Personagem *entidade : entidades)
+    // Limpeza correta do vetor de ponteiros
+    for (Personagem *entidade : entidades)
     {
         delete entidade;
     }
-    entidades.clear();*/
+    entidades.clear();
 }
 
+// Getters
 int Fase::getTempoInicial() const
 {
     return tempoInicial;
@@ -65,63 +68,69 @@ const char *Fase::getMapa(int linha) const
     return nullptr;
 }
 
+// Lógica
 void Fase::inicializarEntidades()
 {
-    // Cria os personagens e adiciona ao vetor 'entidades'.
-    switch (level)
-    {
-    case 1:
-    {
-        // Array de ponteiros inteligentes para entidades
-        std::vector<std::unique_ptr<Personagem>> entidades;
+    // CORREÇÃO: Adicionar diretamente ao vetor da classe 'entidades'
+    // Usamos 'new' porque seu vetor é vector<Personagem*>
 
-        // Inserção de entidades no vetor
-        Personagem.push_back(std::make_unique</*aqui coloca as classes filhas de Personagem*/>());
-        // mais elementos...
+    // 1. Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura)
+    // Certifique-se de que a imagem existe em assets/
+    entidades.push_back(new Jogador(50.0f, 50.0f, 2.0f, "assets/textures/player.png"));
 
-        // Caso precise configurar as entidades: for(std::unique_ptr<Personagem> &p : entidades) {...}
-
-        break;
-    }
-    case 2:
-    {
-        // repete case 1
-        break;
-    }
-    case 3:
-    {
-        // repete case 1
-        break;
-    }
-
-    default:
-        break;
-    }
+    // 2. Criar Monstros (Exemplo futuro)
+    // for(int i = 0; i < quantidadeMonstros; i++) {
+    //     entidades.push_back(new Monstro(...));
+    // }
 }
 
 void Fase::atualizar(float deltaTime)
 {
-    // Lógica futura: a Fase usará o deltaTime e será chamada a cada frame do jogo
+    // 1. Atualizar Timer
+    // timer->atualizar(deltaTime);
 
+    // 2. Atualizar Entidades (Polimorfismo)
+    // Percorre todas as entidades (Jogador, Monstros) e chama atualizar()
+    for (Personagem *entidade : entidades)
+    {
+        // Precisamos fazer o cast do mapa se o atualizar pedir (ou mudar a assinatura)
+        // Por enquanto, assumindo que atualizar recebe o mapa:
+        // entidade->atualizar(mapa);
+    }
+
+    // 3. Verificar Derrota
     if (verificarDerrota())
     {
-        // Jogo::setStatus(Status::DERROTA);
+        // Logica de derrota
+        std::cout << "Tempo Esgotado!" << std::endl;
     }
 }
 
 void Fase::desenhar(sf::RenderWindow &window)
 {
-    // Lógica futura: Desenha o mapa, a máquina, e todas as entidades.
+    // Desenhar Mapa (futuro)
+
+    // Desenhar Máquina
+    if (maquina)
+    {
+        // maquina->desenhar(window); // Se a máquina tiver sprite
+    }
+
+    // Desenhar Todas as Entidades
+    for (Personagem *entidade : entidades)
+    {
+        entidade->desenhar(window);
+    }
 }
 
 void Fase::detectarVitoria()
 {
-    // Lógica futura:
-    // if (monstros_capturados == quantidadeMonstros)
-    // Jogo::setStatus(Status::VITORIA);
+    // Lógica de vitória
 }
 
 bool Fase::verificarDerrota() const
 {
-    return timer->tempoZerou(); // Usa o ponteiro para acessar o objeto Timer e utilizar o método da classe
+    if (timer)
+        return timer->tempoZerou();
+    return false;
 }

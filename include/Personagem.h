@@ -7,7 +7,7 @@
 
 class Personagem
 {
-private:
+protected:
     float _x;
     float _y;
     float _velocidade;
@@ -27,8 +27,10 @@ public:
 
     void setVelocidade(float novaVelocidade);
     void mudarPosicao(float novoX, float novoY);
+    virtual void atualizar(float deltaTime) = 0;
     bool colisao(Direcao direcao, float dist, unsigned char mapa[19][29]);
     // esse mapa posteriormente deverá ser substituido por uma referencia para a fase
+    virtual void desenhar(sf::RenderWindow& window);
 };
 
 #endif

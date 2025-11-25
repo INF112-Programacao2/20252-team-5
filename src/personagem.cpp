@@ -85,3 +85,7 @@ bool Personagem::colisao(Direcao direcao, float dist, unsigned char mapa[19][29]
     }
     return false;
 }
+void Personagem::desenhar(sf::RenderWindow &window)
+{
+    window.draw(_sprite);
+}
