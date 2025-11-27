@@ -32,8 +32,8 @@ public:
     int getQuantidadeMonstros() const;    // + getQuantidade Monstros() int
     const char *getMapa(int linha) const; // + getMapa(): char[]
 
-    std::vector<Personagem*>& getEntidades() { return entidades; } // Expõe o vetor Personagem para Jogo fazer a checagem de vitótia
-    Timer* getTimer() const { return timer; } // Expõe Timer para Jogo alterar o tempo
+    std::vector<Personagem*>& getEntidades();// Expõe o vetor Personagem para Jogo fazer a checagem de vitótia
+    Timer* getTimer() const; // Expõe Timer para Jogo alterar o tempo
     void removerEntidade(Personagem *entidade); // Para a Máquina avisar a Fase para deletar um Monstro do vetor entidades
 
     void inicializarEntidades();
