@@ -3,14 +3,19 @@
 #include "../include/Personagem.h"
 #include "../include/MaquinaDeReciclagem.h"
 #include "../include/Jogador.h" // <--- NECESSÁRIO para criar Jogador
-// #include "../include/Monstro.h" // <--- Descomente quando criar a classe Monstro
+#include "../include/Monstro.h"  // <--- NECESSÁRIO para criar o vetor de entidades
+#include "../include/VariaveisGlobais.h" // Para TAM_PIXEL
 
 #include <cstring>
 #include <iostream>
+#include <algorithm> // Para usar std::remove e std::erase
+#include <cmath> // Para calcular o raio de interação
 
 // Coordenadas fixas para a máquina (ajuste conforme seu mapa)
 const float MAQUINA_X = 100.0f;
 const float MAQUINA_Y = 100.0f;
+// Raio de interação para interagir com a máquina de reciclagem
+const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
 
 Fase::Fase(int inicioTempo, int numMonstros)
     : tempoInicial(inicioTempo),
@@ -68,41 +73,111 @@ const char *Fase::getMapa(int linha) const
     return nullptr;
 }
 
+std::vector<Personagem*>& Fase::getEntidades() 
+{ 
+    return entidades; 
+} 
+
+Timer* Fase::getTimer() const 
+{ 
+    return timer; 
+} 
+
 // Lógica
 void Fase::inicializarEntidades()
 {
-    // CORREÇÃO: Adicionar diretamente ao vetor da classe 'entidades'
-    // Usamos 'new' porque seu vetor é vector<Personagem*>
+    // 1. Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
+    entidades.push_back(new Jogador(50.0f, 50.0f, 2.0f, "assets/textures/player.png")); 
 
-    // 1. Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura)
-    // Certifique-se de que a imagem existe em assets/
-    entidades.push_back(new Jogador(50.0f, 50.0f, 2.0f, "assets/textures/player.png"));
+    // 2. Criar Monstros (adição simples por enquanto)
+    for(int i = 0; i < quantidadeMonstros; i++) {
+        // Monstro(Posição X, Y, Velocidade, Caminho da Textura, valorTempoBonus)
+        entidades.push_back(new Monstro(500.0f + i * 50.0f, 300.0f, 1.5f, "assets/textures/monster.png", 10)); 
+    }
+}
 
-    // 2. Criar Monstros (Exemplo futuro)
-    // for(int i = 0; i < quantidadeMonstros; i++) {
-    //     entidades.push_back(new Monstro(...));
-    // }
+// Nova função: Remove a entidade (Monstro) do vetor e libera a memória
+void Fase::removerEntidade(Personagem *entidade)
+{
+    // Usa std::remove para mover o elemento para o final e erase para remover
+    auto iterador = std::remove(entidades.begin(), entidades.end(), entidade);
+    if (iterador != entidades.end())
+    {
+        // Erase para remover
+        entidades.erase(iterador, entidades.end());
+        delete entidade; // Liberar a memória alocada
+    }
 }
 
 void Fase::atualizar(float deltaTime)
 {
-    // 1. Atualizar Timer
-    // timer->atualizar(deltaTime);
+Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
 
-    // 2. Atualizar Entidades (Polimorfismo)
-    // Percorre todas as entidades (Jogador, Monstros) e chama atualizar()
-    for (Personagem *entidade : entidades)
+    if (jogador)
     {
-        // Precisamos fazer o cast do mapa se o atualizar pedir (ou mudar a assinatura)
-        // Por enquanto, assumindo que atualizar recebe o mapa:
-        // entidade->atualizar(mapa);
+        // Atualiza a posição do jogador (e do monstro carregado, se houver)
+        jogador->atualizar(deltaTime);
+
+        Monstro *monstroCarregado = jogador->getMonstroCarregado();
+
+        if (monstroCarregado == nullptr)
+        {
+            // Tentar capturar um monstro, se não estiver carregando um
+            for (size_t i = 1; i < entidades.size(); ++i) 
+            {
+                Monstro *monstro = dynamic_cast<Monstro*>(entidades[i]);
+                if (monstro && !monstro->estaCapturado())
+                {
+                    // Checagem de colisão usando o GlobalBounds do SFML
+                    if (jogador->getSprite().getGlobalBounds().intersects(monstro->getSprite().getGlobalBounds()))
+                    {
+                        // Ação da captura
+                        monstro->capturar();
+                        jogador->setMonstroCarregado(monstro);
+                        break; 
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Lógica de entrega na Máquina, se estiver carregando um monstro
+            float maquinaX = static_cast<float>(maquina->getPosicaoX());
+            float maquinaY = static_cast<float>(maquina->getPosicaoY());
+            float jogadorX = jogador->getPosicaoX();
+            float jogadorY = jogador->getPosicaoY();
+            
+            // Simulando a proximidade da máquina
+            float distancia = std::sqrt(std::pow(jogadorX - maquinaX, 2) + std::pow(jogadorY - maquinaY, 2));
+
+            if (distancia < RAIO_INTERACAO)
+            {
+                if (monstroCarregado)
+                {
+                    maquina->receberInimigo(monstroCarregado); // A Máquina interaje com Timer e chama a remoção
+                    jogador->setMonstroCarregado(nullptr);     // Jogador não carrega mais
+                }
+            }
+        }
     }
 
-    // 3. Verificar Derrota
+    // Atualizar Monstros que não estão capturados
+    for (size_t i = 1; i < entidades.size(); ++i) 
+    {
+        Monstro *monstro = dynamic_cast<Monstro*>(entidades[i]);
+        if (monstro && !monstro->estaCapturado())
+        {
+            // Método com polimorfismo (futuramente)
+            monstro->atualizar(deltaTime); 
+        }
+    }
+
+    // Verificação de Derrota ou Vitória (o Jogo fará a mudança de Status)
     if (verificarDerrota())
     {
         // Logica de derrota
         std::cout << "Tempo Esgotado!" << std::endl;
+        // A fase apenas notifica a condição, o Jogo muda o Status
     }
 }
 
