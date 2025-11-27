@@ -15,7 +15,7 @@ private:
 
     // Metodos para gameloop
     void processarEventos();
-    void atualizar();
+    void atualizar(float deltaTime);
     void desenhar();
 
 public:
