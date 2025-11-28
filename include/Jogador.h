@@ -10,6 +10,7 @@ class Jogador : public Personagem
 {
 private:
     PowerUp *powerUpAtivo;
+    Monstro *monstroCarregado // NOVO: ponteiro para identificar o monstro capturado
 
 public:
     // CORREÇÃO 1 & 2: Usar float e std::string para bater com Personagem
@@ -26,7 +27,9 @@ public:
     // void desativarPowerUp();
     // PowerUp *getPowerUpAtivo() const;
 
-    // void capturarMonstro(Monstro *monstro);
+    // Métodos para "capturar" Monstro
+    getMonstroCarregado(); //
+    setMonstroCarregado();
 };
 
 #endif
