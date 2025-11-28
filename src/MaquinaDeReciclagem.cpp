@@ -43,11 +43,11 @@ void MaquinaDeReciclagem::receberInimigo(Monstro* inimigo)
         {
             timer->aumentarTempo(bonus); // e ja passo para aumentar o tempo
         }
-
+        
         if (fase)
         {
-            // Fase precisará de um método para remover o monstro do vetor de entidades 👍👍👍👍
-            // fase->removerMonstro(inimigo); por exemplo
+            // CORREÇÃO: Chama o método da fase para remover o Monstro
+            fase->removerEntidade(inimigo); 
         }
     }
 }
