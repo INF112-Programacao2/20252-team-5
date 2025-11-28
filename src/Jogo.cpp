@@ -1,13 +1,24 @@
 #include "../include/VariaveisGlobais.h"
 #include "../include/Jogo.h"
 #include "../include/Tela.h"
+#include "../include/Fase.h" // Necessário para criar uma fase
 
 #include <iostream>
 
 // Inicializa a janela com o tamanho e título
 Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo: ODS Game"),
                status(Status::MENU),
-               faseAtual(nullptr) {}
+               faseAtual(nullptr) 
+{
+    // Inicializa a primeira fase (Exemplo: 60 segundos, 5 monstros)
+    faseAtual = new Fase(60, 5); // Temporário
+}
+
+Jogo::~Jogo()
+{
+    // Limpa a memória da Fase
+    delete faseAtual;
+}
 
 // Game loop principal
 void Jogo::executar()
@@ -16,13 +27,15 @@ void Jogo::executar()
 
     while (window.isOpen())
     {
-        // Processamento de input e eventos
+        // Tempo decorrido desde o último frame (em segundos)
+        sf::Time elapsed = clock.restart();
+        float deltaTime = elapsed.asSeconds();
+        
         processarEventos();
 
-        // Atualização da lógica do jogo
-        atualizar();
+        // Passa o deltaTime para a lógica de atualização
+        atualizar(deltaTime); 
 
-        // Renderização e desenho
         desenhar();
     }
 }
@@ -116,13 +129,40 @@ void Jogo::processarEventos()
 }
 
 // Atualização da Lógica
-void Jogo::atualizar()
+void Jogo::atualizar(float deltaTime)
 {
-    if (status == Status::JOGANDO)
+    // Acumulador para decrementar o Timer a cada 1 segundo real
+    static float acumuladorTempo = 0.0f;
+    acumuladorTempo += deltaTime;
+
+    if (status == Status::JOGANDO && faseAtual)
     {
-        // Aqui vai ter a logica da fase
-    }
-    else if (status == Status::MENU)
+        // Atualizar a lógica da Fase
+        faseAtual->atualizar(deltaTime);
+
+        // Decremento do tempo a cada 1 segundo
+        if (acumuladorTempo >= 1.0f)
+        {
+            faseAtual->getTimer()->decrementarTempo();
+            acumuladorTempo -= 1.0f; // Retira 1 para manter o resto do tempo
+        }
+
+        // Verificação do estado do jogo
+        
+        // VITORIA: Se o vetor de entidades contém apenas o Jogador (que está na posição 0)
+        if (faseAtual->getEntidades().size() == 1) 
+        {
+            status = Status::VITORIA;
+            return;
+        }
+        
+        // DERROTA: Se o Timer da Fase zerou
+        if (faseAtual->verificarDerrota())
+        {
+            status = Status::DERROTA;
+            return;
+        }
+  } else if (status == Status::MENU)
     {
         // Logica do menu
     }
