@@ -41,6 +41,23 @@ void Jogador::atualizar(float deltaTime)
     {
         mudarPosicao(_x + dist, _y);
     }
+
+    // Se estiver carregando um inimigo, move o monstro junto
+    if (monstroCarregado != nullptr)
+    {
+        monstroCarregado->mudarPosicao(_x, _y); 
+    }
+}
+
+// Métodos set e get de MonstroCarregado
+Monstro *Jogador::getMonstroCarregado() const
+{
+    return monstroCarregado;
+}
+
+void Jogador::setMonstroCarregado(Monstro *monstro)
+{
+    monstroCarregado = monstro;
 }
 
 // Métodos de PowerUp (Mantenha vazios ou com lógica básica se ainda não tiver a classe PowerUp pronta)
