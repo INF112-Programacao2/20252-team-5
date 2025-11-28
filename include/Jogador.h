@@ -2,6 +2,7 @@
 #define JOGADOR_H
 
 #include "Personagem.h"
+#include "Monstro.h"
 // #include "PowerUp.h" // Descomente quando tiver a classe PowerUp pronta
 class PowerUp; // Forward declaration para evitar erro de compilação agora
 
