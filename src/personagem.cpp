@@ -59,7 +59,7 @@ void Personagem::setVelocidade(float novaVelocidade)
     _velocidade = novaVelocidade;
 }
 
-void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase) // dt é o tempo que se passou desde o ultimo frame, serve para que, independente da taxa de quadros, a velocidade seja a mesma
+void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
 {
     float Mov = getVelocidade() * dt;
 

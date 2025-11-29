@@ -29,7 +29,8 @@ public:
     void setX(float x);
     void setY(float y);
     void setVelocidade(float novaVelocidade);
-    void mudarPosicao(float novoX, float novoY);
+    void mudarPosicao(Direcao direcao, float dt, Fase fase);
+     // dt é o tempo que se passou desde o ultimo frame, serve para que, independente da taxa de quadros, a velocidade seja a mesma
     virtual void atualizar(float deltaTime) = 0;
     bool colisao(Direcao direcao, float dist, Fase fase);
     virtual void desenhar(sf::RenderWindow& window);
