@@ -1,26 +1,29 @@
-#ifndef MONSTRO_H
-#define MONSTRO_H
+#ifndef MONSTRO_H_
+#define MONSTRO_H_
 
 #include "Personagem.h"
 
 class Monstro : public Personagem {
 private:
-    int valorTempo; // tempo do bõnus
-    bool capturado; // Novo estado
+	int _valorTempo;
+	bool _capturado = false;
 public:
-    // Construtor simples para compilar
-    Monstro(float x, float y, float vel, std::string img, int valorTempoBonus) 
-        : Personagem(x, y, vel, img), valorTempo(valorTempoBonus), capturado(false) {}
-        
-    // Implementação obrigatória do método virtual puro
-    void atualizar(float deltaTime) override { /* Lógica futura */ }
-
-    // Método necessário para a Máquina de Reciclagem
-    int getValorTempo() const { return valorTempo; } // Retorna o tempo em segundos de bônus
-
-    // Métodos para a mecânica de jogo
-    void capturar() { capturado = true; } // Muda o estado
-    bool estaCapturado() const { return capturado; } // Checa o estado
+	Monstro(float x, float y, float velocidade, std::string imagem, int tempo);
+	int getValorTempo() const;
+	void receberCaptura();
+	virtual void comportamento();
 };
 
+
+class Perseguidor : public Monstro {
+public:
+	Perseguidor(float x, float y, float velocidade, std::string imagem, int tempo);
+	void comportamento(Jogador jogador) override;
+};
+
+class Escondedor : public Monstro {
+public:
+	Escondedor(float x, float y, float velocidade, std::string imagem, int tempo);
+	void comportamento(Jogador jogador) override;
+};
 #endif
