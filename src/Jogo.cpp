@@ -167,11 +167,11 @@ void Jogo::atualizar(float deltaTime)
         }*/
 
         // DERROTA: Se o Timer da Fase zerou
-        /*if (faseAtual->verificarDerrota())
+        if (faseAtual->verificarDerrota())
         {
             status = Status::DERROTA;
             return;
-        }*/
+        }
     }
     else if (status == Status::MENU)
     {
