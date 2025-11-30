@@ -150,6 +150,17 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
 void Tela::exibirDerrota(sf::RenderWindow &window)
 {
     carregarFonte();
-    window.clear(sf::Color::Red);
-    // Código para desenhar a tela de derrota
+    window.clear(sf::Color::Black);
+
+    sf::Text texto("Você Perdeu", font, 70);;
+    texto.setFillColor(sf::Color::Red);
+    tetxo.setPosition(150, 150);
+
+    sf::Text instrucoes("Pressione ENTER para tentar novamente", font, 35);
+    instrucoes.setFillColor(sf::Color::White);
+    instrucoes.setPosition(80, 350);
+
+    window.draw(texto);
+    window.draw(instrucoes);
+    
 }
