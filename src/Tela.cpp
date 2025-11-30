@@ -1,5 +1,6 @@
 #include "../include/VariaveisGlobais.h"
 #include "../include/Tela.h"
+#include "../include/Fase.h"
 
 #include <iostream>
 #include <string>
@@ -36,10 +37,10 @@ void Tela::carregarFonte()
         return;
 
     // Tentar caminho relativo quando executável roda em build (padrão)
-    if (!font.loadFromFile("../assets/PixelBook-Regular.ttf"))
+    if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
     {
         // Tentar caminho alternativo (quando executável é chamado da raiz do projeto)
-        if (!font.loadFromFile("assets/PixelBook-Regular.ttf"))
+        if (!font.loadFromFile("assets/fonts/PixelBook-Regular.ttf"))
         {
             std::cerr << "Erro ao carregar a fonte PixelBook-Regular.ttf (../assets/ ou assets/)" << std::endl;
         }
@@ -89,8 +90,14 @@ void Tela::exibirPause(sf::RenderWindow &window)
 void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
 {
     carregarFonte();
-    window.clear(sf::Color::White);
-    // Código para desenhar a fase
+    sf::Color color(72, 72, 72);
+    window.clear(color);
+
+    // Desenhar a fase
+    if (fase)
+        fase->desenhar(window);
+    else
+        std::cerr << "Erro ao exibir fase: ponteiro null!" << std::endl;
 }
 
 void Tela::exibirCreditos(sf::RenderWindow &window)

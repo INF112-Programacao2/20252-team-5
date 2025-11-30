@@ -2,18 +2,20 @@
 #include "../include/Timer.h"
 #include "../include/Personagem.h"
 #include "../include/MaquinaDeReciclagem.h"
-#include "../include/Jogador.h" // <--- NECESSÁRIO para criar Jogador
-#include "../include/Monstro.h"  // <--- NECESSÁRIO para criar o vetor de entidades
+#include "../include/Jogador.h"          // <--- NECESSÁRIO para criar Jogador
+#include "../include/Monstro.h"          // <--- NECESSÁRIO para criar o vetor de entidades
 #include "../include/VariaveisGlobais.h" // Para TAM_PIXEL
 
 #include <cstring>
 #include <iostream>
+#include <fstream>
 #include <algorithm> // Para usar std::remove e std::erase
-#include <cmath> // Para calcular o raio de interação
+#include <cmath>     // Para calcular o raio de interação
 
 // Coordenadas fixas para a máquina (ajuste conforme seu mapa)
 const float MAQUINA_X = 100.0f;
 const float MAQUINA_Y = 100.0f;
+
 // Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
 
@@ -29,14 +31,17 @@ Fase::Fase(int inicioTempo, int numMonstros)
     // 2. Inicializar a Máquina (usando as constantes definidas acima)
     this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer);
 
-    // 3. Inicializar o Mapa
-    for (int i = 0; i < MAPA_LINHAS; ++i)
-    {
-        std::memset(mapa[i], '0', MAPA_COLUNAS);
-        mapa[i][MAPA_COLUNAS] = '\0';
-    }
+    // 3. Carregar textura do tile
+    std::string path = "../assets/textures/block.png";
+    if (!texturaTile.loadFromFile(path))
+        std::cerr << "Erro ao carregar textura do tile: " << path << std::endl;
+    else
+        std::cout << "Textura carregada: " << texturaTile.getSize().x << "x" << texturaTile.getSize().y << std::endl;
 
-    // 4. Inicializar Entidades
+    // 4. Inicializar o Mapa
+    carregarMapa(1); // Provisório: sempre carrega o nível 1
+
+    // 5. Inicializar Entidades
     inicializarEntidades();
 }
 
@@ -45,11 +50,8 @@ Fase::~Fase()
     delete timer;
     delete maquina;
 
-    // Limpeza correta do vetor de ponteiros
     for (Personagem *entidade : entidades)
-    {
         delete entidade;
-    }
     entidades.clear();
 }
 
@@ -73,26 +75,92 @@ const char *Fase::getMapa(int linha) const
     return nullptr;
 }
 
-std::vector<Personagem*>& Fase::getEntidades() 
-{ 
-    return entidades; 
-} 
+std::vector<Personagem *> &Fase::getEntidades()
+{
+    return entidades;
+}
 
-Timer* Fase::getTimer() const 
-{ 
-    return timer; 
-} 
+Timer *Fase::getTimer() const
+{
+    return timer;
+}
 
-// Lógica
+void Fase::carregarMapa(int nivel)
+{
+    std::string path = "../assets/layout/nivel" + std::to_string(nivel) + ".txt";
+    std::ifstream arquivo(path);
+
+    if (!arquivo.is_open())
+    {
+        std::cerr << "Erro ao abrir arquivo de mapa: " << path << std::endl;
+        return;
+    }
+
+    std::cout << "Arquivo de mapa aberto com sucesso!" << std::endl;
+    std::string linha;
+    int linhaAtual = 0;
+
+    while (std::getline(arquivo, linha) && linhaAtual < MAPA_LINHAS)
+    {
+        int colunas = std::min((int)linha.length(), MAPA_COLUNAS);
+        std::strncpy(mapa[linhaAtual], linha.c_str(), colunas);
+
+        for (int j = colunas; j < MAPA_COLUNAS; ++j)
+        {
+            mapa[linhaAtual][j] = '0';
+        }
+
+        mapa[linhaAtual][MAPA_COLUNAS] = '\0';
+        linhaAtual++;
+    }
+
+    for (int i = linhaAtual; i < MAPA_LINHAS; ++i)
+    {
+        std::memset(mapa[i], '0', MAPA_COLUNAS);
+        mapa[i][MAPA_COLUNAS] = '\0';
+    }
+
+    arquivo.close();
+
+    while (std::getline(arquivo, linha) && linhaAtual < MAPA_LINHAS)
+    {
+        int colunas = std::min((int)linha.length(), MAPA_COLUNAS);
+        std::strncpy(mapa[linhaAtual], linha.c_str(), colunas);
+
+        mapa[linhaAtual][MAPA_COLUNAS] = '\0';
+        linhaAtual++;
+    }
+
+    arquivo.close();
+    std::cout << "Mapa carregado com sucesso: " << path << std::endl;
+}
+
 void Fase::inicializarEntidades()
 {
-    // 1. Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
-    entidades.push_back(new Jogador(50.0f, 50.0f, 2.0f, "assets/textures/player.png")); 
+    try
+    {
+        // 1. Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
+        entidades.push_back(new Jogador(
+            50.0f, 50.0f, 2.0f,
+            "../assets/textures/player/andando1_direita.png" // Provisório, já que ainda não tem animação
+            ));
+        std::cout << "Jogador criado com sucesso." << std::endl;
 
-    // 2. Criar Monstros (adição simples por enquanto)
-    for(int i = 0; i < quantidadeMonstros; i++) {
-        // Monstro(Posição X, Y, Velocidade, Caminho da Textura, valorTempoBonus)
-        entidades.push_back(new Monstro(500.0f + i * 50.0f, 300.0f, 1.5f, "assets/textures/monster.png", 10)); 
+        // 2. Criar Monstros (adição simples por enquanto)
+        for (int i = 0; i < quantidadeMonstros; i++)
+        {
+            // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
+            entidades.push_back(
+                new Perseguidor(
+                    500.0f + i * 50.0f, 300.0f, 1.5f,
+                    "../assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
+                    10));
+        }
+        std::cout << "Monstros criados com sucesso: " << quantidadeMonstros << std::endl;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Erro ao inicializar entidades: " << e.what() << std::endl;
     }
 }
 
@@ -111,7 +179,7 @@ void Fase::removerEntidade(Personagem *entidade)
 
 void Fase::atualizar(float deltaTime)
 {
-Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
+    Jogador *jogador = dynamic_cast<Jogador *>(entidades[0]);
 
     if (jogador)
     {
@@ -123,9 +191,9 @@ Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
         if (monstroCarregado == nullptr)
         {
             // Tentar capturar um monstro, se não estiver carregando um
-            for (size_t i = 1; i < entidades.size(); ++i) 
+            for (size_t i = 1; i < entidades.size(); ++i)
             {
-                Monstro *monstro = dynamic_cast<Monstro*>(entidades[i]);
+                Monstro *monstro = dynamic_cast<Monstro *>(entidades[i]);
                 if (monstro && !monstro->estaCapturado())
                 {
                     // Checagem de colisão usando o GlobalBounds do SFML
@@ -134,7 +202,7 @@ Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
                         // Ação da captura
                         monstro->capturar();
                         jogador->setMonstroCarregado(monstro);
-                        break; 
+                        break;
                     }
                 }
             }
@@ -146,7 +214,7 @@ Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
             float maquinaY = static_cast<float>(maquina->getPosicaoY());
             float jogadorX = jogador->getPosicaoX();
             float jogadorY = jogador->getPosicaoY();
-            
+
             // Simulando a proximidade da máquina
             float distancia = std::sqrt(std::pow(jogadorX - maquinaX, 2) + std::pow(jogadorY - maquinaY, 2));
 
@@ -162,13 +230,13 @@ Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
     }
 
     // Atualizar Monstros que não estão capturados
-    for (size_t i = 1; i < entidades.size(); ++i) 
+    for (size_t i = 1; i < entidades.size(); ++i)
     {
-        Monstro *monstro = dynamic_cast<Monstro*>(entidades[i]);
+        Monstro *monstro = dynamic_cast<Monstro *>(entidades[i]);
         if (monstro && !monstro->estaCapturado())
         {
             // Método com polimorfismo (futuramente)
-            monstro->atualizar(deltaTime); 
+            monstro->atualizar(deltaTime);
         }
     }
 
@@ -183,18 +251,42 @@ Jogador *jogador = dynamic_cast<Jogador*>(entidades[0]);
 
 void Fase::desenhar(sf::RenderWindow &window)
 {
-    // Desenhar Mapa (futuro)
-
-    // Desenhar Máquina
-    if (maquina)
+    try
     {
-        // maquina->desenhar(window); // Se a máquina tiver sprite
+        // Desenhar Mapa com sprites da textura
+        for (int linha = 0; linha < MAPA_LINHAS; linha++)
+        {
+            for (int coluna = 0; coluna < MAPA_COLUNAS; coluna++)
+            {
+                char tile = mapa[linha][coluna];
+
+                // Se o tile é '1', desenha sprite do block
+                if (tile == '1')
+                {
+                    sf::Sprite sprite(texturaTile);
+                    sprite.setPosition(coluna * TAM_PIXEL, linha * TAM_PIXEL);
+                    sprite.setScale(static_cast<float>(TAM_PIXEL) / texturaTile.getSize().x,
+                                    static_cast<float>(TAM_PIXEL) / texturaTile.getSize().y);
+                    window.draw(sprite);
+                }
+            }
+        }
+
+        // Desenhar Máquina
+        if (maquina)
+        {
+            // maquina->desenhar(window);
+        }
+
+        // Desenhar Todas as Entidades
+        for (Personagem *entidade : entidades)
+        {
+            // entidade->desenhar(window);
+        }
     }
-
-    // Desenhar Todas as Entidades
-    for (Personagem *entidade : entidades)
+    catch (const std::exception &e)
     {
-        entidade->desenhar(window);
+        std::cerr << "Erro ao desenhar fase: " << e.what() << std::endl;
     }
 }
 
