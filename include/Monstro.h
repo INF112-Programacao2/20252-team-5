@@ -2,28 +2,40 @@
 #define MONSTRO_H_
 
 #include "Personagem.h"
+// #include "Jogador.h"
+class Jogador;
 
-class Monstro : public Personagem {
+class Monstro : public Personagem
+{
 private:
 	int _valorTempo;
 	bool _capturado = false;
+
 public:
 	Monstro(float x, float y, float velocidade, std::string imagem, int tempo);
 	int getValorTempo() const;
 	void receberCaptura();
-	virtual void comportamento();
+
+	void capturar();
+	bool estaCapturado() const;
+
+	// Implementação de atualização genérica para monstros
+	void atualizar(float deltaTime) override;
+	virtual void comportamento(Jogador jogador) = 0;
 };
 
-
-class Perseguidor : public Monstro {
+class Perseguidor : public Monstro
+{
 public:
 	Perseguidor(float x, float y, float velocidade, std::string imagem, int tempo);
 	void comportamento(Jogador jogador) override;
 };
 
-class Escondedor : public Monstro {
+class Escondedor : public Monstro
+{
 public:
 	Escondedor(float x, float y, float velocidade, std::string imagem, int tempo);
 	void comportamento(Jogador jogador) override;
 };
+
 #endif
