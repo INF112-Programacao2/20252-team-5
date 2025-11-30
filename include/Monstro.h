@@ -28,11 +28,12 @@ class Perseguidor : public Monstro
 {
 public:
 	Perseguidor(float x, float y, float velocidade, std::string imagem, int tempo);
-	void comportamento(Jogador jogador) override;
+	void comportamento(Jogador jogador, float dt, Fase fase) override;
 };
 
-class Escondedor : public Monstro
-{
+class Escondedor : public Monstro {
+private:
+	_escondido = false;
 public:
 	Escondedor(float x, float y, float velocidade, std::string imagem, int tempo);
 	void comportamento(Jogador jogador) override;
