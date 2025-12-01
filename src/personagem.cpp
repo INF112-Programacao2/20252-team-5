@@ -64,7 +64,6 @@ void Personagem::setVelocidade(float novaVelocidade)
 void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
 {
     float Mov = getVelocidade() * dt;   // velocidade horizontal
-    float MovVert = velY * dt;  // velocidade vertical
 
     /////////// Movimento Horizontal ////////
     if (colisao(direcao, Mov, fase)) {
@@ -81,7 +80,7 @@ void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
         _x = novoX;
     }
     else {
-        if (direcao == Direcao::Esquerda) Mov = -Mov;
+        if (direcao == Direcao::ESQUERDA) Mov = -Mov;
         _x = _x + Mov;
     }
 }
