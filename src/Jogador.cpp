@@ -26,20 +26,25 @@ void Jogador::atualizar(float deltaTime)
     {
         // mudarPosicao(_x, _y - dist); // Implementação direta sem colisão por enquanto
         // Se quiser colisão: if (!colisao(CIMA, dist, mapa)) ... (Precisamos trazer o mapa pra cá depois)
-        mudarPosicao(_x, _y - dist);
+        _jump = true;
+        
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
-        mudarPosicao(_x, _y + dist);
-    }
+
+    //tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
+    //é só adicionar de volta
+
+    // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    // {
+    //     mudarPosicao(_x, _y + dist);
+    // }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        mudarPosicao(_x - dist, _y);
+        mudarPosicao(Direcao::ESQUERDA, deltaTime, fase);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        mudarPosicao(_x + dist, _y);
+        mudarPosicao(Direcao::DIREITA, deltaTime, fase);
     }
 
     // Se estiver carregando um inimigo, move o monstro junto

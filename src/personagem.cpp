@@ -59,10 +59,17 @@ void Personagem::setVelocidade(float novaVelocidade)
     _velocidade = novaVelocidade;
 }
 
+
+
 void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
 {
-    float Mov = getVelocidade() * dt;
+    float Mov = getVelocidade() * dt;   // velocidade horizontal
+    float MovVert = velY * dt;  // velocidade vertical
 
+    /////////// Movimento Vertical //////////
+
+
+    /////////// Movimento Horizontal ////////
     if (colisao(direcao, Mov, fase)) {
         int parede;
         float novoX;

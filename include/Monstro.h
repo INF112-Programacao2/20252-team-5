@@ -2,7 +2,7 @@
 #define MONSTRO_H_
 
 #include "Personagem.h"
-#include "Jogador.h
+#include "Jogador.h"
 #include "Fase.h"
 
 class Monstro : public Personagem {
