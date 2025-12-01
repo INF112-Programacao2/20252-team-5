@@ -27,7 +27,7 @@ void Jogador::atualizar(float deltaTime)
         // mudarPosicao(_x, _y - dist); // Implementação direta sem colisão por enquanto
         // Se quiser colisão: if (!colisao(CIMA, dist, mapa)) ... (Precisamos trazer o mapa pra cá depois)
         _jump = true;
-        
+        _velY = -FORCA_JUMP;
     }
 
     //tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
@@ -47,10 +47,42 @@ void Jogador::atualizar(float deltaTime)
         mudarPosicao(Direcao::DIREITA, deltaTime, fase);
     }
 
+    /////// Pulo e queda ////////
+    float MovVert = _velY * dt;
+    if(MovVert < 0.f){  // se o jogador está subindo
+        if(Luffy.colisao(Direcao::Cima, -MovVert, mapa)){   // se ele colide, velocidade vertical zera
+            velY = 0.f;
+        }
+    }
+
+    if(MovVert > 0.f){  // se o jogador está caindo
+        if(Luffy.colisao(Direcao::Caindo, MovVert, mapa)){  // se há colisão
+            int tileAbaixo = floorf((Luffy.getY() + TAM_PIXEL + ceil(MovVert)) / TAM_PIXEL);
+            // calcula o proximo bloco da matriz imediatamenta abaixo do personagem
+
+            float novaY = (float(tileAbaixo * TAM_PIXEL)) - TAM_PIXEL;
+            // define a nova coordenada y como o pixel acima do chão
+            Luffy.setY(novaY);
+
+            velY = 0.f;
+            jump = false;
+            MovVert = 0.f;
+            // zera as velocidades pois ele chegou ao chão
+        }
+    }
+
+    if(MovVert != 0.f)
+        // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
+        Luffy.setY(Luffy.getY() + MovVert);
+
+    velY += GRAVITY * dt;   // atualiza a velocidade constantemente por conta da gravidade
+
+
     // Se estiver carregando um inimigo, move o monstro junto
     if (monstroCarregado != nullptr)
     {
-        monstroCarregado->mudarPosicao(_x, _y); 
+        monstroCarregado->setX(_x);
+        monstroCarregado->setY(_y); 
     }
 }
 
