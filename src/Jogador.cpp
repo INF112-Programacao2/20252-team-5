@@ -30,6 +30,14 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
         _velY = -FORCA_JUMP;
     }
 
+    //tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
+    //é só adicionar de volta
+
+    // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    // {
+    //     mudarPosicao(_x, _y + dist);
+    // }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         // Agora 'fase' existe e pode ser usada na chamada

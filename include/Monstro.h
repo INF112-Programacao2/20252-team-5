@@ -4,8 +4,7 @@
 #include "Personagem.h"
 class Jogador;
 
-class Monstro : public Personagem
-{
+class Monstro : public Personagem{
 private:
 	int _valorTempo;
 	bool _capturado = false;

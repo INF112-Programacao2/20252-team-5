@@ -95,6 +95,7 @@ void Jogo::processarEventos()
             {
                 status = Status::PAUSA;
             }
+            
             break;
 
         // PAUSA
@@ -148,26 +149,26 @@ void Jogo::atualizar(float deltaTime)
     if (status == Status::JOGANDO && faseAtual)
     {
         // Atualizar a lógica da Fase
-        // faseAtual->atualizar(deltaTime);
+        faseAtual->atualizar(deltaTime);
 
         // Decremento do tempo a cada 1 segundo
-        /*if (acumuladorTempo >= 1.0f)
+        if (acumuladorTempo >= 1.0f)
         {
             faseAtual->getTimer()->decrementarTempo();
             acumuladorTempo -= 1.0f; // Retira 1 para manter o resto do tempo
-        }*/
+        }
 
         // Verificação do estado do jogo
 
         // VITORIA: Se o vetor de entidades contém apenas o Jogador (que está na posição 0)
-        /*if (faseAtual->getEntidades().size() == 1)
+        if (faseAtual->getEntidades().size() == 1)
         {
             status = Status::VITORIA;
             return;
-        }*/
+        }
 
         // DERROTA: Se o Timer da Fase zerou
-        if (faseAtual->verificarDerrota())
+         if (faseAtual->verificarDerrota())
         {
             status = Status::DERROTA;
             return;

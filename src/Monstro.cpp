@@ -52,6 +52,12 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
 	double dx = static_cast<double>(this->getPosicaoX() - jogador.getPosicaoX());
 	double dy = static_cast<double>(this->getPosicaoY() - jogador.getPosicaoY());
 	double dist = std::sqrt((dx * dx) + (dy * dy));
+	
+	// calculando em qual pixel da matriz o monstro se encontra
+	int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
+    int tileX_left = floorf(_x / TAM_PIXEL);
+    int tileY_top = floorf(_y / TAM_PIXEL);
+    int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
 
 	if (dist < 128)
 	{				// se o jogador estiver perto (Lógica de FUGA)
@@ -60,17 +66,16 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
 			// Foge para a DIREITA
 			this->mudarPosicao(Direcao::DIREITA, dt, fase);
 		}
-		else if (dx < 0) // Jogador à direita
-		{
-			// Foge para a ESQUERDA
-			this->mudarPosicao(Direcao::ESQUERDA, dt, fase); // CORRIGIDO: Ponto e vírgula aqui
-		}
-		if (false /* verificação do tunel */)
-		{
-			// CORRIGIDO: setX/setY requerem argumentos. Comentado até a lógica de coordenadas estar pronta.
-			// this->setX();
-			// this->setY();
+
+		// tunel na direita
+		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){	// assumindo que o tunel seja representado por um 2 na matriz
+			this->setX();
+			this->setY();
 			// coordenadas da saída do tunel
+		}	// tunel na esquerda
+		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
+			this->setX();
+			this->setY();
 		}
 	}
 }
@@ -89,27 +94,31 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
 	double dy = this->getPosicaoY() - jogador.getPosicaoY();
 	double dist = std::sqrt((dx * dx) + (dy * dy));
 
-	if (dist < 128)
-	{				// se o jogador estiver perto (Lógica de FUGA)
-		if (dx > 0) // Jogador à esquerda
-		{
-			// Foge para a DIREITA
+	// calculando em qual pixel da matriz o monstro se encontra
+	int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
+    int tileX_left = floorf(_x / TAM_PIXEL);
+    int tileY_top = floorf(_y / TAM_PIXEL);
+    int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
+
+	if (dist < 128) {	// se o jogador estiver perto
+		if(dx < 0){
+			this->mudarPosicao(Direcao::ESQUERDA, dt, fase);
+		}else{
 			this->mudarPosicao(Direcao::DIREITA, dt, fase);
 		}
-		else if (dx < 0) // Jogador à direita
-		{
-			// Foge para a ESQUERDA
-			this->mudarPosicao(Direcao::ESQUERDA, dt, fase);
-		}
-		if (false /* verificação do tunel */)
-		{
-			// CORRIGIDO: setX/setY requerem argumentos. Comentado até a lógica de coordenadas estar pronta.
-			// this->setX(); 
-			// this->setY(); 
+		
+		// tunel na direita
+		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){
+			this->setX();
+			this->setY();
 			// coordenadas da saída do tunel
+		} // tunel na esquerda
+		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
+			this->setX();
+			this->setY();
 		}
-		if (false /* verificação do esconderijo */)
-		{
+		if(fase.getMapa(tileY_top + 1)[tileX_left] == '3' || fase.getMapa(tileY_top)[tileX_right] == '3'){
+		// assumindo que o esconderijo seja representado por um 3 na matriz
 			_escondido = true;
 		}
 	}

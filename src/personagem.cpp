@@ -95,22 +95,22 @@ bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
     if (direcao == Direcao::ESQUERDA)
     {
         int newX = floorf((_x - dist) / TAM_PIXEL);
-        return fase.getMapa(tileY_bottom)[newX] == '1' || fase.getMapa(tileY_top)[newX] == '1';
+        return fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0';
     }
     if (direcao == Direcao::DIREITA)
     {
         int newX = floorf((_x + TAM_PIXEL + dist) / TAM_PIXEL);
-        return fase.getMapa(tileY_bottom)[newX] == '1' || fase.getMapa(tileY_top)[newX] == '1';
+        return fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0';
     }
     if (direcao == Direcao::CIMA)
     {
         int newY = floorf((_y - dist) / TAM_PIXEL);
-        return fase.getMapa(newY)[tileX_left] == '1' || fase.getMapa(newY)[tileX_right] == '1';
+        return fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0';
     }
     if (direcao == Direcao::CAINDO)
     {
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
-        return fase.getMapa(newY)[tileX_left] == '1' || fase.getMapa(newY)[tileX_right] == '1';
+        return fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0';
     }
     return false;
 }
