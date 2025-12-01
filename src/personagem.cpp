@@ -71,18 +71,18 @@ void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
         int parede;
         float novoX;
         if (direcao == Direcao::ESQUERDA) {
-            parede = floorf((getX() - Mov) / TAM_PIXEL);
+            parede = floorf((_x - Mov) / TAM_PIXEL);
             novoX = (float(parede) * TAM_PIXEL) + TAM_PIXEL;
         } else if (direcao == Direcao::DIREITA) {
-            parede = floorf((getX() + Mov + TAM_PIXEL) / TAM_PIXEL);
+            parede = floorf((_x + Mov + TAM_PIXEL) / TAM_PIXEL);
             novoX = (float(parede) * TAM_PIXEL) - TAM_PIXEL;
         }
 
-        setX(novoX);
+        _x = novoX;
     }
     else {
         if (direcao == Direcao::Esquerda) Mov = -Mov;
-        setX(getX() + Mov);
+        _x = _x + Mov;
     }
 }
 
