@@ -71,8 +71,10 @@ void Perseguidor::comportamento(Jogador jogador, float dt, Fase fase) {
 Escondedor::Escondedor(float x, float y, float velocidade, std::string imagem, int tempo) : 
 Personagem(x, y, velocidade, imagem), _valorTempo(tempo) {}
 
-void Escondedor::comportamento(Jogador jogador) {
+void Escondedor::comportamento(Jogador jogador, float dt, Fase fase) {
 	// calculando a distância entre o monstro e o jogador
+	int qtd = fase.getQuantidadeMonstros;
+	float dtt = dt;
 	double dx = this->getX() - jogador.getX();
 	double dy = this->getY() - jogador.getY();
 	double dist = std::sqrt((dx * dx) + (dy * dy));
