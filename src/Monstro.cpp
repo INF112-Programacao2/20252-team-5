@@ -64,11 +64,14 @@ void Perseguidor::comportamento(Jogador jogador, float dt, Fase fase) {
 		}else{
 			this->mudarPosicao(Direcao::DIREITA, dt, fase)
 		}
+
+		// tunel na direita
 		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){	// assumindo que o tunel seja representado por um 2 na matriz
 			this->setX();
 			this->setY();
 			// coordenadas da saída do tunel
-		} else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
+		}	// tunel na esquerda
+		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
 			this->setX();
 			this->setY();
 		}
@@ -100,11 +103,14 @@ void Escondedor::comportamento(Jogador jogador, float dt, Fase fase) {
 		}else{
 			this->mudarPosicao(Direcao::DIREITA, dt, fase);
 		}
+		
+		// tunel na direita
 		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){
 			this->setX();
 			this->setY();
 			// coordenadas da saída do tunel
-		} else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
+		} // tunel na esquerda
+		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
 			this->setX();
 			this->setY();
 		}
@@ -112,8 +118,5 @@ void Escondedor::comportamento(Jogador jogador, float dt, Fase fase) {
 		// assumindo que o esconderijo seja representado por um 3 na matriz
 			_escondido = true;
 		}
-	}
-	if(dist > 128){
-		
 	}
 }

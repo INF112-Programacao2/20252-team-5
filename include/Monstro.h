@@ -5,8 +5,7 @@
 #include "Jogador.h"
 #include "Fase.h"
 
-class Monstro : public Personagem
-{
+class Monstro : public Personagem{
 private:
 	int _valorTempo;
 	bool _capturado = false;
