@@ -4,7 +4,6 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "VariaveisGlobais.h"
-#include "Fase.h"
 
 class Fase;
 
@@ -34,10 +33,10 @@ public:
     void setX(float x);
     void setY(float y);
     void setVelocidade(float novaVelocidade);
-    void mudarPosicao(Direcao direcao, float dt, Fase fase);
+    void mudarPosicao(Direcao direcao, float dt, const Fase &fase);
      // dt é o tempo que se passou desde o ultimo frame, serve para que, independente da taxa de quadros, a velocidade seja a mesma
-    virtual void atualizar(float deltaTime) = 0;
-    bool colisao(Direcao direcao, float dist, Fase fase);
+    virtual void atualizar(float deltaTime, const Fase& fase) = 0;
+    bool colisao(Direcao direcao, float dist, const Fase &fase);
     virtual void desenhar(sf::RenderWindow& window);
 };
 

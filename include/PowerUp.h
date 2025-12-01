@@ -3,6 +3,8 @@
 
 #include "VariaveisGlobais.h"
 
+class Jogador;
+
 class PowerUp
 {
 private:

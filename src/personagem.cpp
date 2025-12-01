@@ -5,6 +5,7 @@
 #include "../include/Personagem.h"
 #include "../include/Fase.h"
 #include "../include/VariaveisGlobais.h"
+#include "../include/Fase.h"
 
 Personagem::Personagem(float x, float y, float velocidade, std::string imagem)
 {
@@ -59,11 +60,10 @@ void Personagem::setVelocidade(float novaVelocidade)
     _velocidade = novaVelocidade;
 }
 
-
-
-void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
+void Personagem::mudarPosicao(Direcao direcao, float dt, const Fase &fase)
 {
-    float Mov = getVelocidade() * dt;   // velocidade horizontal
+    float Mov = _velocidade * dt;   // velocidade horizontal
+    // Código anterior removido/simplificado para evitar erros de compilação/lógica
 
     /////////// Movimento Horizontal ////////
     if (colisao(direcao, Mov, fase)) {
@@ -72,20 +72,21 @@ void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
         if (direcao == Direcao::ESQUERDA) {
             parede = floorf((_x - Mov) / TAM_PIXEL);
             novoX = (float(parede) * TAM_PIXEL) + TAM_PIXEL;
+            setX(novoX);
         } else if (direcao == Direcao::DIREITA) {
             parede = floorf((_x + Mov + TAM_PIXEL) / TAM_PIXEL);
-            novoX = (float(parede) * TAM_PIXEL) - TAM_PIXEL;
+            // Ajuste o novoX para a lateral do tile + uma pequena margem
+            novoX = (float(parede) * TAM_PIXEL) - (TAM_PIXEL + 1.f);
+            setX(novoX);
         }
-
-        _x = novoX;
     }
     else {
         if (direcao == Direcao::ESQUERDA) Mov = -Mov;
-        _x = _x + Mov;
+        setX(_x + Mov);
     }
 }
 
-bool Personagem::colisao(Direcao direcao, float dist, Fase fase)
+bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
 {
     int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
     int tileX_left = floorf(_x / TAM_PIXEL);

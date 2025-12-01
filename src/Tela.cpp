@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cmath>
 
 int Tela::opcaoSelecionada = 0;
 sf::Font Tela::font;
@@ -142,16 +143,16 @@ void Tela::exibirCreditos(sf::RenderWindow &window)
 
 void Tela::exibirVitoria(sf::RenderWindow &window)
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
+    //sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
     window.setFramerateLimit(60);
 
     // Carregar fonte PixelBook
     sf::Font font;
-    if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    {
-        std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-        return 1;
-    }
+    //if (!font.loadFromFile("PixelBook-Regular.ttf"))
+    //{
+    //    std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
+    //    return 1;
+    //}
 
     // Texto principal (fade-in)
     sf::Text titulo("VOCÊ GANHOU!!", font, 80);
@@ -219,16 +220,16 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
 
 void Tela::exibirDerrota(sf::RenderWindow &window)
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
+    //sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
     window.setFramerateLimit(60);
 
     // Carregar fonte PixelBook
     sf::Font font;
-    if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    {
-        std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-        return 1;
-    }
+    //if (!font.loadFromFile("PixelBook-Regular.ttf"))
+    //{
+    //   std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
+    //    return 1;
+    //}
 
     // Texto principal (fade-in)
     sf::Text titulo("VOCÊ PERDEU", font, 80);

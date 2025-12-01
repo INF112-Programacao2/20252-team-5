@@ -113,6 +113,14 @@ void Jogo::processarEventos()
 
         // DERROTA
         case Status::DERROTA:
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+              //reinicia fase
+                delete faseAtual;
+                faseAtual = new Fase(60, 5); //recria a fase (lembrar de ajustar os valores
+
+                status = Status::MENU;
+                sf::sleep(sf::milliseconds(200));
+            }
             break;
 
         // CREDITOS

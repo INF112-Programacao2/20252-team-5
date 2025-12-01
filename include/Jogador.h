@@ -21,12 +21,12 @@ public:
 
     // CORREÇÃO 3: Adicionar o método de atualização (movimento)
     // O mapa é necessário para colisão (use o tamanho que definimos)
-    void atualizar(float deltaTime) override;
+    void atualizar(float deltaTime, const Fase &fase) override;
 
     // Seus métodos de PowerUp (mantenha se for usar depois)
-    // void ativarPowerUp(PowerUp &powerUp);
-    // void desativarPowerUp();
-    // PowerUp *getPowerUpAtivo() const;
+    void ativarPowerUp(PowerUp &powerUp);
+    void desativarPowerUp();
+    PowerUp *getPowerUpAtivo() const;
 
     // Métodos para "capturar" Monstro
     Monstro *getMonstroCarregado() const;

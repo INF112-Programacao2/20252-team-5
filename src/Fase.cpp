@@ -184,7 +184,7 @@ void Fase::atualizar(float deltaTime)
     if (jogador)
     {
         // Atualiza a posição do jogador (e do monstro carregado, se houver)
-        jogador->atualizar(deltaTime);
+        jogador->atualizar(deltaTime, *this);
 
         Monstro *monstroCarregado = jogador->getMonstroCarregado();
 
@@ -236,7 +236,7 @@ void Fase::atualizar(float deltaTime)
         if (monstro && !monstro->estaCapturado())
         {
             // Método com polimorfismo (futuramente)
-            monstro->atualizar(deltaTime);
+            monstro->atualizar(deltaTime, *this);
         }
     }
 
