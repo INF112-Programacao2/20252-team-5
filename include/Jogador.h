@@ -16,7 +16,7 @@ private:
 public:
     // CORREÇÃO 1 & 2: Usar float e std::string para bater com Personagem
     Jogador(float x, float y, float velocidade, std::string imagem);
-    
+
     ~Jogador();
 
     // CORREÇÃO 3: Adicionar o método de atualização (movimento)
@@ -29,8 +29,8 @@ public:
     // PowerUp *getPowerUpAtivo() const;
 
     // Métodos para "capturar" Monstro
-    Monstro *getMonstroCarregado() const; //
-    void setMonstroCarregado(Monstro monstro);
+    Monstro *getMonstroCarregado() const;
+    void setMonstroCarregado(Monstro *monstro);
 };
 
 #endif

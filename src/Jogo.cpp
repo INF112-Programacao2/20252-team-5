@@ -8,7 +8,7 @@
 // Inicializa a janela com o tamanho e título
 Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mundo: ODS Game"),
                status(Status::MENU),
-               faseAtual(nullptr) 
+               faseAtual(nullptr)
 {
     // Inicializa a primeira fase (Exemplo: 60 segundos, 5 monstros)
     faseAtual = new Fase(60, 5); // Temporário
@@ -30,11 +30,11 @@ void Jogo::executar()
         // Tempo decorrido desde o último frame (em segundos)
         sf::Time elapsed = clock.restart();
         float deltaTime = elapsed.asSeconds();
-        
+
         processarEventos();
 
         // Passa o deltaTime para a lógica de atualização
-        atualizar(deltaTime); 
+        atualizar(deltaTime);
 
         desenhar();
     }
@@ -71,17 +71,19 @@ void Jogo::processarEventos()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
             {
                 int opcao = Tela::getOpcaoSelecionada();
-                if (opcao == 0) // Jogar
+                switch (opcao)
                 {
+                case 0: // Jogar
                     status = Status::JOGANDO;
-                }
-                else if (opcao == 1) // Créditos
-                {
+                    break;
+                case 1: // Créditos
                     status = Status::CREDITOS;
-                }
-                else if (opcao == 2) // Sair
-                {
+                    break;
+                case 2: // Sair
                     window.close();
+                    break;
+                default:
+                    break;
                 }
             }
             break;
@@ -110,6 +112,14 @@ void Jogo::processarEventos()
 
         // DERROTA
         case Status::DERROTA:
+            if(sf::Keyboard::isKeyPressed(sf:KeyBoard::Enter)){
+              //reinicia fase
+                delete faseAtual;
+                faseAtual = new Fase(60, 5); //recria a fase (lembrar de ajustar os valores
+
+                status = Status::MENU;
+                sf::sleep(sf::milliseconds(200));
+            }
             break;
 
         // CREDITOS
@@ -138,31 +148,32 @@ void Jogo::atualizar(float deltaTime)
     if (status == Status::JOGANDO && faseAtual)
     {
         // Atualizar a lógica da Fase
-        faseAtual->atualizar(deltaTime);
+        // faseAtual->atualizar(deltaTime);
 
         // Decremento do tempo a cada 1 segundo
-        if (acumuladorTempo >= 1.0f)
+        /*if (acumuladorTempo >= 1.0f)
         {
             faseAtual->getTimer()->decrementarTempo();
             acumuladorTempo -= 1.0f; // Retira 1 para manter o resto do tempo
-        }
+        }*/
 
         // Verificação do estado do jogo
-        
+
         // VITORIA: Se o vetor de entidades contém apenas o Jogador (que está na posição 0)
-        if (faseAtual->getEntidades().size() == 1) 
+        /*if (faseAtual->getEntidades().size() == 1)
         {
             status = Status::VITORIA;
             return;
-        }
-        
+        }*/
+
         // DERROTA: Se o Timer da Fase zerou
         if (faseAtual->verificarDerrota())
         {
             status = Status::DERROTA;
             return;
         }
-  } else if (status == Status::MENU)
+    }
+    else if (status == Status::MENU)
     {
         // Logica do menu
     }

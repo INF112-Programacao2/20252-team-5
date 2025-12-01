@@ -1,4 +1,5 @@
 #include "../include/Jogador.h"
+#include "../include/PowerUp.h"
 #include <SFML/Window/Keyboard.hpp> // Necessário para detectar teclas
 
 // Construtor: Repassa os dados para a classe pai (Personagem)
@@ -6,8 +7,7 @@
 Jogador::Jogador(float x, float y, float velocidade, std::string imagem)
     : Personagem(x, y, velocidade, imagem)
 {
-    // Inicializações específicas do Jogador (se houver) podem vir aqui
-    // Ex: powerUpAtivo = nullptr;
+    powerUpAtivo = nullptr;
 }
 
 // Destrutor
@@ -65,17 +65,47 @@ void Jogador::setMonstroCarregado(Monstro *monstro)
     monstroCarregado = monstro;
 }
 
-// Métodos de PowerUp (Mantenha vazios ou com lógica básica se ainda não tiver a classe PowerUp pronta)
-/*
 void Jogador::ativarPowerUp(PowerUp &powerUp) {
-    // Lógica futura
+    powerUpAtivo = &powerUp;
+
+    Condicao efeito = powerUp.getCondicao();
+
+    if (efeito == RAPIDO)
+    {
+        setVelocidade(getVelocidade() * 2.0f);
+        std::cout << "PowerUp Ativado: RAPIDO!" << std::endl;
+    }
+    else if (efeito == INVISIVEL)
+    {
+        // Muda a cor do sprite para semi-transparente (Alpha = 128)
+        // A classe Personagem precisa expor o sprite ou ter um método 'setCor'
+        // Assumindo acesso direto ou um método auxiliar:
+        // _sprite.setColor(sf::Color(255, 255, 255, 128)); 
+        std::cout << "PowerUp Ativado: INVISIVEL!" << std::endl;
+    }
 }
 
-void Jogador::desativarPowerUp() {
-    // Lógica futura
+void Jogador::desativarPowerUp()
+{
+    if (powerUpAtivo == nullptr) return;
+
+    Condicao efeito = powerUpAtivo->getCondicao();
+
+    if (efeito == RAPIDO)
+    {
+        setVelocidade(getVelocidade() / 2.0f); 
+    }
+    else if (efeito == INVISIVEL)
+    {
+        // Restaura a opacidade total
+        // _sprite.setColor(sf::Color::White);
+    }
+
+    powerUpAtivo = nullptr;
+    std::cout << "PowerUp acabou." << std::endl;
 }
 
-PowerUp* Jogador::getPowerUpAtivo() const {
+PowerUp* Jogador::getPowerUpAtivo() const
+{
     return powerUpAtivo;
 }
-*/

@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-
 int main()
 {
     // Renderiza a janela ao instanciar a classe jogo

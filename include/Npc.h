@@ -2,6 +2,7 @@
 #define NPC_H
 
 #include "PowerUp.h"
+#include "Jogador.h"
 
 #include <string>
 

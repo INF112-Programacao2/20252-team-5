@@ -6,6 +6,8 @@
 #include "VariaveisGlobais.h"
 #include "Fase.h"
 
+class Fase;
+
 class Personagem
 {
 protected:

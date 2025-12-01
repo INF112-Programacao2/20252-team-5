@@ -20,6 +20,7 @@ private:
 
 public:
     Jogo();
+    ~Jogo();
 
     void executar();
     Status getStatus() const;
