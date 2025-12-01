@@ -21,7 +21,7 @@ public:
 
 	// Implementação de atualização genérica para monstros
 	void atualizar(float deltaTime) override;
-	virtual void comportamento(Jogador jogador) = 0;
+	virtual void comportamento(Jogador jogador, float dt, Fase fase) = 0;
 };
 
 class Perseguidor : public Monstro
@@ -31,12 +31,14 @@ public:
 	void comportamento(Jogador jogador, float dt, Fase fase) override;
 };
 
-class Escondedor : public Monstro {
+class Escondedor : public Monstro
+{
 private:
-	_escondido = false;
+	bool _escondido = false;
+
 public:
 	Escondedor(float x, float y, float velocidade, std::string imagem, int tempo);
-	void comportamento(Jogador jogador) override;
+	void comportamento(Jogador jogador, float dt, Fase fase) override;
 };
 
 #endif
