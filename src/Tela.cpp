@@ -148,11 +148,11 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
 
     // Carregar fonte PixelBook
     sf::Font font;
-    //if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    //{
-    //    std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-    //    return 1;
-    //}
+    if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
+    {
+       std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
+       return;
+    }
 
     // Texto principal (fade-in)
     sf::Text titulo("VOCÊ GANHOU!!", font, 80);
@@ -225,11 +225,11 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
 
     // Carregar fonte PixelBook
     sf::Font font;
-    //if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    //{
-    //   std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-    //    return 1;
-    //}
+    if (!font.loadFromFile("PixelBook-Regular.ttf"))
+    {
+      std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
+       return;
+    }
 
     // Texto principal (fade-in)
     sf::Text titulo("VOCÊ PERDEU", font, 80);
