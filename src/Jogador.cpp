@@ -1,7 +1,7 @@
 #include "../include/Jogador.h"
 #include "../include/PowerUp.h"
-#include <cmath> // Para ceil e floorf
-#include <iostream> // Para cout e endl
+#include <cmath>                    // Para ceil e floorf
+#include <iostream>                 // Para cout e endl
 #include <SFML/Window/Keyboard.hpp> // Necessário para detectar teclas
 
 // Construtor: Repassa os dados para a classe pai (Personagem)
@@ -10,12 +10,11 @@ Jogador::Jogador(float x, float y, float velocidade, std::string imagem)
     : Personagem(x, y, velocidade, imagem)
 {
     powerUpAtivo = nullptr;
+    monstroCarregado = nullptr;
 }
 
-// Destrutor
 Jogador::~Jogador()
 {
-    // Limpeza se necessário
 }
 
 // Método principal de controle do Jogador
@@ -30,8 +29,8 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
         _velY = -FORCA_JUMP;
     }
 
-    //tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
-    //é só adicionar de volta
+    // tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
+    // é só adicionar de volta
 
     // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     // {
@@ -79,8 +78,10 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
     }
 
     if (MovVert != 0.f)
+    {
         // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
         setY(_y + MovVert);
+    }
 
     _velY += GRAVITY * deltaTime; // atualiza a velocidade constantemente por conta da gravidade
 

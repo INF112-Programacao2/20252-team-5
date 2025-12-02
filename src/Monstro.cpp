@@ -1,5 +1,6 @@
 #include <cmath>
 #include <random>
+#include <iostream>
 #include "../include/Monstro.h"
 #include "../include/Personagem.h"
 #include "../include/Jogador.h"
@@ -69,13 +70,13 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
 
 		// tunel na direita
 		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){	// assumindo que o tunel seja representado por um 2 na matriz
-			this->setX();
-			this->setY();
+			//this->setX();
+			//this->setY();
 			// coordenadas da saída do tunel
 		}	// tunel na esquerda
 		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			this->setX();
-			this->setY();
+			//this->setX();
+			//this->setY();
 		}
 	}
 }
@@ -109,13 +110,13 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
 		
 		// tunel na direita
 		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){
-			this->setX();
-			this->setY();
+			//this->setX();
+			//this->setY();
 			// coordenadas da saída do tunel
 		} // tunel na esquerda
 		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			this->setX();
-			this->setY();
+			//this->setX();
+			//this->setY();
 		}
 		if(fase.getMapa(tileY_top + 1)[tileX_left] == '3' || fase.getMapa(tileY_top)[tileX_right] == '3'){
 		// assumindo que o esconderijo seja representado por um 3 na matriz

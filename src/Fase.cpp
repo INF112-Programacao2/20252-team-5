@@ -25,10 +25,8 @@ Fase::Fase(int inicioTempo, int numMonstros)
       timer(nullptr),
       maquina(nullptr)
 {
-    // 1. Inicializar o Timer
     this->timer = new Timer(inicioTempo);
 
-    // 2. Inicializar a Máquina (usando as constantes definidas acima)
     this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer);
 
     // 3. Carregar textura do tile
@@ -38,10 +36,8 @@ Fase::Fase(int inicioTempo, int numMonstros)
     else
         std::cout << "Textura carregada: " << texturaTile.getSize().x << "x" << texturaTile.getSize().y << std::endl;
 
-    // 4. Inicializar o Mapa
     carregarMapa(1); // Provisório: sempre carrega o nível 1
 
-    // 5. Inicializar Entidades
     inicializarEntidades();
 }
 
@@ -122,7 +118,7 @@ void Fase::carregarMapa(int nivel)
 
     arquivo.close();
 
-    while (std::getline(arquivo, linha) && linhaAtual < MAPA_LINHAS)
+    /*while (std::getline(arquivo, linha) && linhaAtual < MAPA_LINHAS)
     {
         int colunas = std::min((int)linha.length(), MAPA_COLUNAS);
         std::strncpy(mapa[linhaAtual], linha.c_str(), colunas);
@@ -131,7 +127,7 @@ void Fase::carregarMapa(int nivel)
         linhaAtual++;
     }
 
-    arquivo.close();
+    arquivo.close();*/
     std::cout << "Mapa carregado com sucesso: " << path << std::endl;
 }
 
@@ -139,14 +135,14 @@ void Fase::inicializarEntidades()
 {
     try
     {
-        // 1. Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
+        // Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
         entidades.push_back(new Jogador(
             50.0f, 50.0f, 2.0f,
             "../assets/textures/player/andando1_direita.png" // Provisório, já que ainda não tem animação
             ));
         std::cout << "Jogador criado com sucesso." << std::endl;
 
-        // 2. Criar Monstros (adição simples por enquanto)
+        // Criar Monstros (adição simples por enquanto)
         for (int i = 0; i < quantidadeMonstros; i++)
         {
             // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
@@ -281,7 +277,7 @@ void Fase::desenhar(sf::RenderWindow &window)
         // Desenhar Todas as Entidades
         for (Personagem *entidade : entidades)
         {
-            // entidade->desenhar(window);
+            entidade->desenhar(window);
         }
     }
     catch (const std::exception &e)
