@@ -47,12 +47,14 @@ sf::Sprite Personagem::getSprite() const
     return _sprite;
 }
 
-void Personagem::setX(float x){
+void Personagem::setX(float x) {
     _x = x;
+    _sprite.setPosition(sf::Vector2f(_x, _y));
 }
 
-void Personagem::setY(float y){
+void Personagem::setY(float y) {
     _y = y;
+    _sprite.setPosition(sf::Vector2f(_x, _y));
 }
 
 void Personagem::setVelocidade(float novaVelocidade)
@@ -62,8 +64,7 @@ void Personagem::setVelocidade(float novaVelocidade)
 
 void Personagem::mudarPosicao(Direcao direcao, float dt, const Fase &fase)
 {
-    float Mov = _velocidade * dt;   // velocidade horizontal
-    // Código anterior removido/simplificado para evitar erros de compilação/lógica
+    float Mov = getVelocidade() * dt;   // velocidade horizontal
 
     /////////// Movimento Horizontal ////////
     if (colisao(direcao, Mov, fase)) {
@@ -72,18 +73,20 @@ void Personagem::mudarPosicao(Direcao direcao, float dt, const Fase &fase)
         if (direcao == Direcao::ESQUERDA) {
             parede = floorf((_x - Mov) / TAM_PIXEL);
             novoX = (float(parede) * TAM_PIXEL) + TAM_PIXEL;
-            setX(novoX);
-        } else if (direcao == Direcao::DIREITA) {
+        }
+        else if (direcao == Direcao::DIREITA) {
             parede = floorf((_x + Mov + TAM_PIXEL) / TAM_PIXEL);
             // Ajuste o novoX para a lateral do tile + uma pequena margem
             novoX = (float(parede) * TAM_PIXEL) - (TAM_PIXEL + 1.f);
-            setX(novoX);
         }
+
+        setX(novoX);
     }
     else {
         if (direcao == Direcao::ESQUERDA) Mov = -Mov;
         setX(_x + Mov);
     }
+    _sprite.setPosition(sf::Vector2f(_x, _y));
 }
 
 bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
@@ -95,22 +98,22 @@ bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
     if (direcao == Direcao::ESQUERDA)
     {
         int newX = floorf((_x - dist) / TAM_PIXEL);
-        return fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0';
+        return (fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0');
     }
     if (direcao == Direcao::DIREITA)
     {
         int newX = floorf((_x + TAM_PIXEL + dist) / TAM_PIXEL);
-        return fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0';
+        return (fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0');
     }
     if (direcao == Direcao::CIMA)
     {
         int newY = floorf((_y - dist) / TAM_PIXEL);
-        return fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0';
+        return (fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0');
     }
     if (direcao == Direcao::CAINDO)
     {
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
-        return fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0';
+        return (fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0');
     }
     return false;
 }

@@ -69,13 +69,13 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
 
 		// tunel na direita
 		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){	// assumindo que o tunel seja representado por um 2 na matriz
-			this->setX();
-			this->setY();
+			this->setX(_x);	//MUDAR
+			this->setY(_y);
 			// coordenadas da saída do tunel
 		}	// tunel na esquerda
 		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			this->setX();
-			this->setY();
+			this->setX(_x); //MUDAR
+			this->setY(_y);
 		}
 	}
 }
@@ -109,13 +109,13 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
 		
 		// tunel na direita
 		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){
-			this->setX();
-			this->setY();
+			this->setX(_x);	//////////// MUDAR
+			this->setY(_y);
 			// coordenadas da saída do tunel
 		} // tunel na esquerda
 		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			this->setX();
-			this->setY();
+			this->setX(_x);
+			this->setY(_y);
 		}
 		if(fase.getMapa(tileY_top + 1)[tileX_left] == '3' || fase.getMapa(tileY_top)[tileX_right] == '3'){
 		// assumindo que o esconderijo seja representado por um 3 na matriz

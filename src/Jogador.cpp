@@ -56,7 +56,12 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
     { // se o jogador está subindo
         if (colisao(Direcao::CIMA, -MovVert, fase))
         { // Usando 'colisao' do Personagem
-            _velY = 0.f;
+            int tileAcima = floorf((_y - (-MovVert)) / TAM_PIXEL);
+                float novaY = (float(tileAcima * TAM_PIXEL)) + TAM_PIXEL;
+                
+                _y = novaY;
+                _y = 0.0;
+                MovVert = 0.f;
         }
     }
 
@@ -78,9 +83,10 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
         }
     }
 
-    if (MovVert != 0.f)
+    if (MovVert != 0.f){
         // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
         setY(_y + MovVert);
+    }
 
     _velY += GRAVITY * deltaTime; // atualiza a velocidade constantemente por conta da gravidade
 
