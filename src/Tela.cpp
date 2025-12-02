@@ -81,12 +81,81 @@ void Tela::exibirMenu(sf::RenderWindow &window)
     window.draw(titulo);
 }
 
-void Tela::exibirPause(sf::RenderWindow &window)
+void exibirTelaPause(sf::RenderWindow& window)
 {
-    carregarFonte();
-    window.clear(sf::Color::Yellow);
-    // Código para desenhar a tela de pausa
+    window.setFramerateLimit(60);
+
+    // Carregar fonte PixelBook
+    sf::Font font;
+    if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
+    {
+        std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
+        return;
+    }
+
+    // Texto principal (fade-in)
+    sf::Text titulo("PAUSADO", font, 80);
+    titulo.setFillColor(sf::Color(255, 255, 255, 0));  // começa invisível
+
+    sf::FloatRect tb = titulo.getLocalBounds();
+    titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
+    titulo.setPosition(800 / 2.f, 200);
+
+    // Texto instruções (piscando)
+    sf::Text instrucao("Pressione ENTER para continuar", font, 35);
+    instrucao.setFillColor(sf::Color(255, 255, 255, 255));
+
+    sf::FloatRect ib = instrucao.getLocalBounds();
+    instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
+    instrucao.setPosition(800 / 2.f, 400);
+
+    float fadeAlpha = 0;
+    bool blinkOn = true;
+    float blinkTimer = 0;
+    float backgroundPulse = 0;
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                window.close();
+
+            // ---- VOLTAR PARA O JOGO ----
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                return;
+        }
+
+        // Animação 1: Fade-in do texto principal
+        if (fadeAlpha < 255)
+            fadeAlpha += 0.35f;
+        titulo.setFillColor(sf::Color(255, 255, 255, fadeAlpha));
+
+        // Animação 2: Texto piscando
+        blinkTimer += 0.05f;
+        if (blinkTimer >= 1.f)
+        {
+            blinkTimer = 0;
+            blinkOn = !blinkOn;
+        }
+        instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
+
+        // Animação 3: Fundo respirando
+        backgroundPulse += 0.25f;
+        int pulse = 40 + std::sin(backgroundPulse) * 20;
+        window.clear(sf::Color(pulse, 80, 130)); // roxo-azulado
+
+        // Render
+        window.draw(titulo);
+        window.draw(instrucao);
+        window.display();
+    }
 }
+
 
 void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
 {
@@ -143,7 +212,6 @@ void Tela::exibirCreditos(sf::RenderWindow &window)
 
 void Tela::exibirVitoria(sf::RenderWindow &window)
 {
-    //sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
     window.setFramerateLimit(60);
 
     // Carregar fonte PixelBook
@@ -158,6 +226,8 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
     sf::Text titulo("VOCÊ GANHOU!!", font, 80);
     titulo.setFillColor(sf::Color(170, 200, 170));  // começa invisível
 
+    titulo.setString(sf::String::fromUtf8(textos[i].begin(), textos[i].end()));
+    
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
     titulo.setPosition(800 / 2.f, 200);
@@ -220,7 +290,6 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
 
 void Tela::exibirDerrota(sf::RenderWindow &window)
 {
-    //sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
     window.setFramerateLimit(60);
 
     // Carregar fonte PixelBook
@@ -235,6 +304,8 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
     sf::Text titulo("VOCÊ PERDEU", font, 80);
     titulo.setFillColor(sf::Color(255, 0, 0, 0));  // começa invisível
 
+    titulo.setString(sf::String::fromUtf8(textos[i].begin(), textos[i].end())); //adicionando a fonte certinha aqui
+    
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
     titulo.setPosition(800 / 2.f, 200);
