@@ -148,7 +148,7 @@ void Fase::inicializarEntidades()
             // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
             entidades.push_back(
                 new Perseguidor(
-                    800.f + i * 50.0f, 640.f, 300.f,
+                    800.f + i * 50.0f, 640.f, 150.f,
                     "../assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
                     10));
         }
