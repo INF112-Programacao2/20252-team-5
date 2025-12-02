@@ -148,14 +148,15 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
         if (dist >= 150) {
             _escondido = false;
             // Move para a tile acima (saindo do esconderijo)
-            this->setY((tileY_top + 1) * TAM_PIXEL); // tileY_top é a tile atual, se ele se escondeu em tileY_bottom, use tileY_bottom para sair.
+            this->setY((tileY_top - 1) * TAM_PIXEL); // tileY_top é a tile atual, se ele se escondeu em tileY_bottom, use tileY_bottom para sair.
         }
         // Se o jogador estiver perto, ele FICA aqui e NÃO EXECUTA NADA mais.
         return; // Monstro permanece escondido, termina a função.
     }
 
     if(dist < 150){
-        if(fase.getMapa(tileY_top + 1)[tileX_right] == '3' || fase(tileY_bottom + 1)[tileX_left] == '3'){	//o esconderijo é representado por um 3 na matriz
+        int tileAcima = tileY_top + 1;
+        if(fase.getMapa(tileAcima)[tileX_right] == '3'){	//o esconderijo é representado por um 3 na matriz
             int r = rand() % 2;
             if(r == 0){
                 _escondido = true;
