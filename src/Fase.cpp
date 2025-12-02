@@ -27,7 +27,7 @@ Fase::Fase(int inicioTempo, int numMonstros)
 {
     this->timer = new Timer(inicioTempo);
 
-    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer);
+    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer, "../assets/textures/MaquinaDeRec/Maquina.png");
 
     // 3. Carregar textura do tile
     std::string path = "../assets/textures/block.png";
@@ -310,7 +310,7 @@ void Fase::desenhar(sf::RenderWindow &window)
         // Desenhar Máquina
         if (maquina)
         {
-            // maquina->desenhar(window);
+            maquina->desenhar(window);
         }
 
         // Desenhar Todas as Entidades
