@@ -5,6 +5,7 @@
 #include "../include/Personagem.h"
 #include "../include/Fase.h"
 #include "../include/VariaveisGlobais.h"
+#include "../include/Fase.h"
 
 Personagem::Personagem(float x, float y, float velocidade, std::string imagem)
 {
@@ -14,7 +15,7 @@ Personagem::Personagem(float x, float y, float velocidade, std::string imagem)
 
     if (!_texture.loadFromFile(imagem))
     {
-        std::cout << "Erro ao carregar \"" << imagem << "\"" << std::endl;
+        std::cerr << "Erro ao carregar \"" << imagem << "\"" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
@@ -46,14 +47,14 @@ sf::Sprite Personagem::getSprite() const
     return _sprite;
 }
 
-void Personagem::setX(float x)
-{
+void Personagem::setX(float x) {
     _x = x;
+    _sprite.setPosition(sf::Vector2f(_x, _y));
 }
 
-void Personagem::setY(float y)
-{
+void Personagem::setY(float y) {
     _y = y;
+    _sprite.setPosition(sf::Vector2f(_x, _y));
 }
 
 void Personagem::setVelocidade(float novaVelocidade)

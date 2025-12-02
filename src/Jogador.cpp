@@ -12,24 +12,21 @@ Jogador::Jogador(float x, float y, float velocidade, std::string imagem)
     : Personagem(x, y, velocidade, imagem)
 {
     powerUpAtivo = nullptr;
+    monstroCarregado = nullptr;
 }
 
-// Destrutor
 Jogador::~Jogador()
 {
-    // Limpeza se necessário
 }
 
 // Método principal de controle do Jogador
-void Jogador::atualizar(float deltaTime)
+void Jogador::atualizar(float deltaTime, const Fase &fase)
 {
     // O deltaTime ajuda a manter a velocidade constante independente do FPS
     float dist = _velocidade * deltaTime * 100.0f; // Multiplicador para ajustar escala
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        // mudarPosicao(_x, _y - dist); // Implementação direta sem colisão por enquanto
-        // Se quiser colisão: if (!colisao(CIMA, dist, mapa)) ... (Precisamos trazer o mapa pra cá depois)
         _jump = true;
         _velY = -FORCA_JUMP;
     }
@@ -51,7 +48,7 @@ void Jogador::atualizar(float deltaTime)
         mudarPosicao(Direcao::DIREITA, deltaTime);
     }
 
-    /////// Pulo e queda ////////
+    /////// Pulo e queda (Corrigido para usar membros da classe e 'deltaTime') ////////
     float MovVert = _velY * deltaTime;
     if (MovVert < 0.f)
     { // se o jogador está subindo
@@ -70,7 +67,7 @@ void Jogador::atualizar(float deltaTime)
 
             float novaY = (float(tileAbaixo * TAM_PIXEL)) - TAM_PIXEL;
             // define a nova coordenada y como o pixel acima do chão
-            this->setY(novaY);
+            setY(novaY);
 
             _velY = 0.f;
             _jump = false;

@@ -4,7 +4,6 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "VariaveisGlobais.h"
-#include "Fase.h"
 
 class Fase;
 
