@@ -13,8 +13,8 @@
 #include <cmath>     // Para calcular o raio de interação
 
 // Coordenadas fixas para a máquina (ajuste conforme seu mapa)
-const float MAQUINA_X = 100.0f;
-const float MAQUINA_Y = 100.0f;
+const float MAQUINA_X = 60.0f;
+const float MAQUINA_Y = 216.0f;
 
 // Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
@@ -27,7 +27,8 @@ Fase::Fase(int inicioTempo, int numMonstros)
 {
     this->timer = new Timer(inicioTempo);
 
-    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer);
+    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer, "../assets/textures/MaquinaDeRec/Maquina.png");
+    std::cout << "maquina criada com sucesso\n";
 
     // 3. Carregar textura do tile
     std::string path = "../assets/textures/block.png";
@@ -232,7 +233,7 @@ void Fase::atualizar(float deltaTime)
         if (monstro && !monstro->estaCapturado())
         {
             // Método com polimorfismo (futuramente)
-            monstro->comportamento(*jogador, deltaTime, *this);
+            monstro->atualizar(deltaTime, *this);
         }
     }
 
@@ -271,7 +272,7 @@ void Fase::desenhar(sf::RenderWindow &window)
         // Desenhar Máquina
         if (maquina)
         {
-            // maquina->desenhar(window);
+            maquina->desenhar(window);
         }
 
         // Desenhar Todas as Entidades
