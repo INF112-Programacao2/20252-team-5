@@ -23,7 +23,7 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
     // O deltaTime ajuda a manter a velocidade constante independente do FPS
     float dist = _velocidade * deltaTime * 100.0f; // Multiplicador para ajustar escala
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !_jump)
     {
         _jump = true;
         _velY = -FORCA_JUMP;
@@ -83,7 +83,7 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
     }
 
     if (MovVert != 0.f)
-    {
+    {}
     if (MovVert != 0.f){
         // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
         setY(_y + MovVert);
