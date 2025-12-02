@@ -13,8 +13,8 @@
 #include <cmath>     // Para calcular o raio de interação
 
 // Coordenadas fixas para a máquina (ajuste conforme seu mapa)
-const float MAQUINA_X = 60.0f;
-const float MAQUINA_Y = 216.0f;
+const float MAQUINA_X = 100.0f;
+const float MAQUINA_Y = 100.0f;
 
 // Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
@@ -27,8 +27,7 @@ Fase::Fase(int inicioTempo, int numMonstros)
 {
     this->timer = new Timer(inicioTempo);
 
-    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer, "../assets/textures/MaquinaDeRec/Maquina.png");
-    std::cout << "maquina criada com sucesso\n";
+    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer);
 
     // 3. Carregar textura do tile
     std::string path = "../assets/textures/block.png";
@@ -144,12 +143,21 @@ void Fase::inicializarEntidades()
         std::cout << "Jogador criado com sucesso." << std::endl;
 
         // Criar Monstros (adição simples por enquanto)
-        for (int i = 0; i < quantidadeMonstros; i++)
+        for (int i = 0; i < quantidadeMonstros / 2; i++)
         {
             // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
             entidades.push_back(
                 new Perseguidor(
                     800.f + i * 50.0f, 640.f, 300.f,
+                    "../assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
+                    10));
+        }
+        for (int i = quantidadeMonstros / 2; i < quantidadeMonstros; i++)
+        {
+            // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
+            entidades.push_back(
+                new Perseguidor(
+                    200.f + i * 50.0f, 640.f, 300.f,
                     "../assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
                     10));
         }
@@ -233,7 +241,7 @@ void Fase::atualizar(float deltaTime)
         if (monstro && !monstro->estaCapturado())
         {
             // Método com polimorfismo (futuramente)
-            monstro->atualizar(deltaTime, *this);
+            monstro->comportamento(*jogador, deltaTime, *this);
         }
     }
 
@@ -266,13 +274,31 @@ void Fase::desenhar(sf::RenderWindow &window)
                                     static_cast<float>(TAM_PIXEL) / texturaTile.getSize().y);
                     window.draw(sprite);
                 }
+                else if (tile == '2')
+                {
+                    sf::Sprite sprite(texturaTile);
+                    sprite.setColor(sf::Color(64, 224, 208, 127));
+                    sprite.setPosition(coluna * TAM_PIXEL, linha * TAM_PIXEL);
+                    sprite.setScale(static_cast<float>(TAM_PIXEL) / texturaTile.getSize().x,
+                                    static_cast<float>(TAM_PIXEL) / texturaTile.getSize().y);
+                    window.draw(sprite);
+                }
+                else if (tile == '3')
+                {
+                    sf::Sprite sprite(texturaTile);
+                    sprite.setColor(sf::Color(255, 255, 255, 127));
+                    sprite.setPosition(coluna * TAM_PIXEL, linha * TAM_PIXEL);
+                    sprite.setScale(static_cast<float>(TAM_PIXEL) / texturaTile.getSize().x,
+                                    static_cast<float>(TAM_PIXEL) / texturaTile.getSize().y);
+                    window.draw(sprite);
+                }
             }
         }
 
         // Desenhar Máquina
         if (maquina)
         {
-            maquina->desenhar(window);
+            // maquina->desenhar(window);
         }
 
         // Desenhar Todas as Entidades
