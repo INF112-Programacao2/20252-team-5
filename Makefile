@@ -14,7 +14,7 @@ SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 
 # Executável
-TARGET = jogo
+TARGET = src/jogo
 
 # Regra padrão
 all: $(TARGET)
