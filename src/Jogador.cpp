@@ -1,6 +1,10 @@
 #include "../include/Jogador.h"
 #include "../include/PowerUp.h"
-#include <SFML/Window/Keyboard.hpp> // Necessário para detectar teclas
+#include "../include/Monstro.h"
+#include <SFML/Window/Keyboard.hpp>
+
+#include <cmath>
+#include <iostream>
 
 // Construtor: Repassa os dados para a classe pai (Personagem)
 // Note que usamos std::string para o caminho da imagem, igual ao Personagem.cpp
@@ -30,8 +34,8 @@ void Jogador::atualizar(float deltaTime)
         _velY = -FORCA_JUMP;
     }
 
-    //tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
-    //é só adicionar de volta
+    // tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
+    // é só adicionar de volta
 
     // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     // {
@@ -40,24 +44,28 @@ void Jogador::atualizar(float deltaTime)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        mudarPosicao(Direcao::ESQUERDA, deltaTime, fase);
+        mudarPosicao(Direcao::ESQUERDA, deltaTime);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        mudarPosicao(Direcao::DIREITA, deltaTime, fase);
+        mudarPosicao(Direcao::DIREITA, deltaTime);
     }
 
     /////// Pulo e queda ////////
     float MovVert = _velY * deltaTime;
-    if(MovVert < 0.f){  // se o jogador está subindo
-        if(this->colisao(Direcao::CIMA, -MovVert, mapa)){   // se ele colide, velocidade vertical zera
+    if (MovVert < 0.f)
+    { // se o jogador está subindo
+        if (this->colisao(Direcao::CIMA, -MovVert))
+        { // se ele colide, velocidade vertical zera
             _velY = 0.f;
         }
     }
 
-    if(MovVert > 0.f){  // se o jogador está caindo
-        if(this->colisao(Direcao::CAINDO, MovVert, mapa)){  // se há colisão
-            int tileAbaixo = floorf((this->getY() + TAM_PIXEL + ceil(MovVert)) / TAM_PIXEL);
+    if (MovVert > 0.f)
+    { // se o jogador está caindo
+        if (this->colisao(Direcao::CAINDO, MovVert))
+        { // se há colisão
+            int tileAbaixo = floorf((this->getPosicaoY() + TAM_PIXEL + ceil(MovVert)) / TAM_PIXEL);
             // calcula o proximo bloco da matriz imediatamenta abaixo do personagem
 
             float novaY = (float(tileAbaixo * TAM_PIXEL)) - TAM_PIXEL;
@@ -71,18 +79,17 @@ void Jogador::atualizar(float deltaTime)
         }
     }
 
-    if(MovVert != 0.f)
+    if (MovVert != 0.f)
         // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
-        this->setY(this->getY() + MovVert);
+        this->setY(this->getPosicaoY() + MovVert);
 
-    _velY += GRAVITY * deltaTime;   // atualiza a velocidade constantemente por conta da gravidade
-
+    _velY += GRAVITY * deltaTime; // atualiza a velocidade constantemente por conta da gravidade
 
     // Se estiver carregando um inimigo, move o monstro junto
     if (monstroCarregado != nullptr)
     {
         monstroCarregado->setX(_x);
-        monstroCarregado->setY(_y); 
+        monstroCarregado->setY(_y);
     }
 }
 
@@ -97,7 +104,8 @@ void Jogador::setMonstroCarregado(Monstro *monstro)
     monstroCarregado = monstro;
 }
 
-void Jogador::ativarPowerUp(PowerUp &powerUp) {
+void Jogador::ativarPowerUp(PowerUp &powerUp)
+{
     powerUpAtivo = &powerUp;
 
     Condicao efeito = powerUp.getCondicao();
@@ -112,20 +120,21 @@ void Jogador::ativarPowerUp(PowerUp &powerUp) {
         // Muda a cor do sprite para semi-transparente (Alpha = 128)
         // A classe Personagem precisa expor o sprite ou ter um método 'setCor'
         // Assumindo acesso direto ou um método auxiliar:
-        // _sprite.setColor(sf::Color(255, 255, 255, 128)); 
+        // _sprite.setColor(sf::Color(255, 255, 255, 128));
         std::cout << "PowerUp Ativado: INVISIVEL!" << std::endl;
     }
 }
 
 void Jogador::desativarPowerUp()
 {
-    if (powerUpAtivo == nullptr) return;
+    if (powerUpAtivo == nullptr)
+        return;
 
     Condicao efeito = powerUpAtivo->getCondicao();
 
     if (efeito == RAPIDO)
     {
-        setVelocidade(getVelocidade() / 2.0f); 
+        setVelocidade(getVelocidade() / 2.0f);
     }
     else if (efeito == INVISIVEL)
     {
@@ -137,7 +146,7 @@ void Jogador::desativarPowerUp()
     std::cout << "PowerUp acabou." << std::endl;
 }
 
-PowerUp* Jogador::getPowerUpAtivo() const
+PowerUp *Jogador::getPowerUpAtivo() const
 {
     return powerUpAtivo;
 }

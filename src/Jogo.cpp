@@ -1,6 +1,7 @@
 #include "../include/VariaveisGlobais.h"
 #include "../include/Jogo.h"
 #include "../include/Tela.h"
+#include "../include/Timer.h"
 #include "../include/Fase.h" // Necessário para criar uma fase
 
 #include <iostream>
@@ -95,7 +96,7 @@ void Jogo::processarEventos()
             {
                 status = Status::PAUSA;
             }
-            
+
             break;
 
         // PAUSA
@@ -109,10 +110,20 @@ void Jogo::processarEventos()
 
         // VITORIA
         case Status::VITORIA:
+            // Voltar ao menu principal
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                status = Status::MENU;
+            }
             break;
 
         // DERROTA
         case Status::DERROTA:
+            // Voltar ao menu principal
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                status = Status::MENU;
+            }
             break;
 
         // CREDITOS
@@ -160,7 +171,7 @@ void Jogo::atualizar(float deltaTime)
         }
 
         // DERROTA: Se o Timer da Fase zerou
-         if (faseAtual->verificarDerrota())
+        if (faseAtual->verificarDerrota())
         {
             status = Status::DERROTA;
             return;

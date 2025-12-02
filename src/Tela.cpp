@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cmath>
 
 int Tela::opcaoSelecionada = 0;
 sf::Font Tela::font;
@@ -36,10 +37,10 @@ void Tela::carregarFonte()
     if (carregou)
         return;
 
-    // Tentar caminho relativo quando executável roda em build (padrão)
+    // Tentar caminho relativo
     if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
     {
-        // Tentar caminho alternativo (quando executável é chamado da raiz do projeto)
+        // Tentar caminho alternativo
         if (!font.loadFromFile("assets/fonts/PixelBook-Regular.ttf"))
         {
             std::cerr << "Erro ao carregar a fonte PixelBook-Regular.ttf (../assets/ ou assets/)" << std::endl;
@@ -142,104 +143,17 @@ void Tela::exibirCreditos(sf::RenderWindow &window)
 
 void Tela::exibirVitoria(sf::RenderWindow &window)
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
-    window.setFramerateLimit(60);
+    carregarFonte();
+    window.clear(sf::Color::Black);
 
-    // Carregar fonte PixelBook
-    sf::Font font;
-    if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    {
-        std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-        return 1;
-    }
-
-    // Texto principal (fade-in)
-    sf::Text titulo("VOCÊ GANHOU!!", font, 80);
-    titulo.setFillColor(sf::Color(170, 200, 170));  // começa invisível
+    sf::Text titulo("VOCÊ GANHOU!", font, 80);
+    titulo.setFillColor(sf::Color(255, 0, 0, 0));
 
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
     titulo.setPosition(800 / 2.f, 200);
 
-    // Texto instruções (piscando)
-    sf::Text instrucao("Pressione ENTER para ir para o MENU", font, 32);
-    instrucao.setFillColor(sf::Color(215, 215, 215, 215));
-
-    sf::FloatRect ib = instrucao.getLocalBounds();
-    instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
-    instrucao.setPosition(800 / 2.f, 400);
-
-    float fadeAlpha = 0;
-    bool blinkOn = true;
-    float blinkTimer = 0;
-
-    float backgroundPulse = 0;
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                window.close();
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-                std::cout << "Simulando reinicio..." << std::endl;
-        }
-
-        // ---- Animação 1: Fade-in no texto principal ----
-        if (fadeAlpha < 255)
-            fadeAlpha += 0.25; // velocidade do fade-in
-        titulo.setFillColor(sf::Color(255, 0, 0, fadeAlpha));
-
-        // ---- Animação 2: Texto piscando ----
-        blinkTimer += 0.05f;
-        if (blinkTimer >= 1.0f)
-        {
-            blinkTimer = 0;
-            blinkOn = !blinkOn;
-        }
-        instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
-
-        // ---- Animação 3: Fundo "respirando" ----
-        backgroundPulse += 0.3f;
-        int pulse = 20 + std::sin(backgroundPulse) * 20;
-        window.clear(sf::Color(pulse, 200, 110));
-
-        // Desenhar tudo
-        window.draw(titulo);
-        window.draw(instrucao);
-        window.display();
-    }
-
-}
-
-void Tela::exibirDerrota(sf::RenderWindow &window)
-{
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Tela de Derrota - Teste");
-    window.setFramerateLimit(60);
-
-    // Carregar fonte PixelBook
-    sf::Font font;
-    if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    {
-        std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-        return 1;
-    }
-
-    // Texto principal (fade-in)
-    sf::Text titulo("VOCÊ PERDEU", font, 80);
-    titulo.setFillColor(sf::Color(255, 0, 0, 0));  // começa invisível
-
-    sf::FloatRect tb = titulo.getLocalBounds();
-    titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
-    titulo.setPosition(800 / 2.f, 200);
-
-    // Texto instruções (piscando)
-    sf::Text instrucao("Pressione ENTER para tentar novamente", font, 32);
+    sf::Text instrucao("Pressione ESC para ir para o menu principal", font, 32);
     instrucao.setFillColor(sf::Color(255, 255, 255, 255));
 
     sf::FloatRect ib = instrucao.getLocalBounds();
@@ -261,18 +175,78 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
                 window.close();
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                window.close();
+                return;
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-                std::cout << "Simulando reinicio..." << std::endl;
+                return;
         }
 
-        // ---- Animação 1: Fade-in no texto principal ----
         if (fadeAlpha < 255)
-            fadeAlpha += 2; // velocidade do fade-in
+            fadeAlpha += 2;
         titulo.setFillColor(sf::Color(255, 0, 0, fadeAlpha));
 
-        // ---- Animação 2: Texto piscando ----
+        blinkTimer += 0.05f;
+        if (blinkTimer >= 1.0f)
+        {
+            blinkTimer = 0;
+            blinkOn = !blinkOn;
+        }
+
+        instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
+
+        backgroundPulse += 0.3f;
+        int pulse = 20 + std::sin(backgroundPulse) * 20;
+        window.clear(sf::Color(pulse, 200, 110));
+
+        window.draw(titulo);
+        window.draw(instrucao);
+    }
+}
+
+void Tela::exibirDerrota(sf::RenderWindow &window)
+{
+    carregarFonte();
+    window.clear(sf::Color::Black);
+
+    sf::Text titulo("VOCÊ PERDEU!", font, 80);
+    titulo.setFillColor(sf::Color(255, 0, 0, 0)); // começa invisível
+
+    sf::FloatRect tb = titulo.getLocalBounds();
+    titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
+    titulo.setPosition(800 / 2.f, 200);
+
+    sf::Text instrucao("Pressione ESC para ir para o menu principal", font, 32);
+    instrucao.setFillColor(sf::Color(255, 255, 255, 255));
+
+    sf::FloatRect ib = instrucao.getLocalBounds();
+    instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
+    instrucao.setPosition(800 / 2.f, 400);
+
+    float fadeAlpha = 0;
+    bool blinkOn = true;
+    float blinkTimer = 0;
+
+    float backgroundPulse = 0;
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                return;
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                return;
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                return;
+        }
+
+        if (fadeAlpha < 255)
+            fadeAlpha += 2;
+        titulo.setFillColor(sf::Color(255, 0, 0, fadeAlpha));
+
         blinkTimer += 0.05f;
         if (blinkTimer >= 1.0f)
         {
@@ -281,15 +255,11 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
         }
         instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
 
-        // ---- Animação 3: Fundo "respirando" ----
         backgroundPulse += 0.3f;
-        int pulse = 20 + std::sin(backgroundPulse) * 20;
+        int pulse = 40 + std::sin(backgroundPulse) * 40;
         window.clear(sf::Color(pulse, 0, 0));
 
-        // Desenhar tudo
         window.draw(titulo);
         window.draw(instrucao);
-        window.display();
     }
-    
 }

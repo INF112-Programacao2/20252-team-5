@@ -66,15 +66,6 @@ int Fase::getQuantidadeMonstros() const
     return quantidadeMonstros;
 }
 
-const char *Fase::getMapa(int linha) const
-{
-    if (linha >= 0 && linha < MAPA_LINHAS)
-    {
-        return mapa[linha];
-    }
-    return nullptr;
-}
-
 std::vector<Personagem *> &Fase::getEntidades()
 {
     return entidades;
@@ -300,4 +291,37 @@ bool Fase::verificarDerrota() const
     if (timer)
         return timer->tempoZerou();
     return false;
+}
+
+std::string getLinhaDoMapa(int linha, int nivel)
+{
+    std::string nomeArquivo = "../assets/layout/nivel" + std::to_string(nivel) + ".txt";
+
+    std::ifstream arquivo(nomeArquivo);
+
+    // Se falhar, tenta caminho alternativo
+    if (!arquivo.is_open())
+    {
+        nomeArquivo = "assets/layout/nivel" + std::to_string(nivel) + ".txt";
+        arquivo.open(nomeArquivo);
+    }
+
+    if (!arquivo.is_open())
+    {
+        std::cerr << "Erro ao abrir o arquivo de mapa: " << nomeArquivo << std::endl;
+        return "";
+    }
+
+    std::string texto;
+    int linhaAtual = 0;
+
+    while (std::getline(arquivo, texto))
+    {
+        if (linhaAtual == linha)
+            return texto;
+
+        linhaAtual++;
+    }
+
+    return "";
 }

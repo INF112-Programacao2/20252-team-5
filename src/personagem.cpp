@@ -46,11 +46,13 @@ sf::Sprite Personagem::getSprite() const
     return _sprite;
 }
 
-void Personagem::setX(float x){
+void Personagem::setX(float x)
+{
     _x = x;
 }
 
-void Personagem::setY(float y){
+void Personagem::setY(float y)
+{
     _y = y;
 }
 
@@ -59,34 +61,38 @@ void Personagem::setVelocidade(float novaVelocidade)
     _velocidade = novaVelocidade;
 }
 
-
-
-void Personagem::mudarPosicao(Direcao direcao, float dt, Fase fase)
+void Personagem::mudarPosicao(Direcao direcao, float dt)
 {
-    float Mov = getVelocidade() * dt;   // velocidade horizontal
-    float MovVert = velY * dt;  // velocidade vertical
+    float Mov = getVelocidade() * dt; // velocidade horizontal
+    float MovVert = _velY * dt;       // velocidade vertical
 
     /////////// Movimento Horizontal ////////
-    if (colisao(direcao, Mov, fase)) {
+    if (colisao(direcao, Mov))
+    {
         int parede;
         float novoX;
-        if (direcao == Direcao::ESQUERDA) {
+        if (direcao == Direcao::ESQUERDA)
+        {
             parede = floorf((_x - Mov) / TAM_PIXEL);
             novoX = (float(parede) * TAM_PIXEL) + TAM_PIXEL;
-        } else if (direcao == Direcao::DIREITA) {
+        }
+        else if (direcao == Direcao::DIREITA)
+        {
             parede = floorf((_x + Mov + TAM_PIXEL) / TAM_PIXEL);
             novoX = (float(parede) * TAM_PIXEL) - TAM_PIXEL;
         }
 
         _x = novoX;
     }
-    else {
-        if (direcao == Direcao::Esquerda) Mov = -Mov;
+    else
+    {
+        if (direcao == Direcao::ESQUERDA)
+            Mov = -Mov;
         _x = _x + Mov;
     }
 }
 
-bool Personagem::colisao(Direcao direcao, float dist, Fase fase)
+bool Personagem::colisao(Direcao direcao, float dist)
 {
     int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
     int tileX_left = floorf(_x / TAM_PIXEL);
@@ -95,25 +101,26 @@ bool Personagem::colisao(Direcao direcao, float dist, Fase fase)
     if (direcao == Direcao::ESQUERDA)
     {
         int newX = floorf((_x - dist) / TAM_PIXEL);
-        return fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0';
+        return getLinhaDoMapa(tileY_bottom, NIVEL_ATUAL)[newX] != '0' || getLinhaDoMapa(tileY_top, NIVEL_ATUAL)[newX] != '0';
     }
     if (direcao == Direcao::DIREITA)
     {
         int newX = floorf((_x + TAM_PIXEL + dist) / TAM_PIXEL);
-        return fase.getMapa(tileY_bottom)[newX] != '0' || fase.getMapa(tileY_top)[newX] != '0';
+        return getLinhaDoMapa(tileY_bottom, NIVEL_ATUAL)[newX] != '0' || getLinhaDoMapa(tileY_top, NIVEL_ATUAL)[newX] != '0';
     }
     if (direcao == Direcao::CIMA)
     {
         int newY = floorf((_y - dist) / TAM_PIXEL);
-        return fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0';
+        return getLinhaDoMapa(newY, NIVEL_ATUAL)[tileX_left] != '0' || getLinhaDoMapa(newY, NIVEL_ATUAL)[tileX_right] != '0';
     }
     if (direcao == Direcao::CAINDO)
     {
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
-        return fase.getMapa(newY)[tileX_left] != '0' || fase.getMapa(newY)[tileX_right] != '0';
+        return getLinhaDoMapa(newY, NIVEL_ATUAL)[tileX_left] != '0' || getLinhaDoMapa(newY, NIVEL_ATUAL)[tileX_right] != '0';
     }
     return false;
 }
+
 void Personagem::desenhar(sf::RenderWindow &window)
 {
     window.draw(_sprite);

@@ -1,16 +1,16 @@
 #ifndef FASE_H
 #define FASE_H
 
-#include "Personagem.h"
-#include "MaquinaDeReciclagem.h"
-#include "Timer.h"
-#include "Monstro.h"
-#include "VariaveisGlobais.h"
-
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include <fstream>
 #include <string>
+
+#include "VariaveisGlobais.h"
+
+class Personagem;
+class MaquinaDeReciclagem;
+class Timer;
+class Monstro;
 
 class Fase
 {
@@ -28,9 +28,8 @@ public:
     Fase(int inicioTempo, int numMonstros);
     ~Fase();
 
-    int getTempoInicial() const;          // + getTempo() int
-    int getQuantidadeMonstros() const;    // + getQuantidade Monstros() int
-    const char *getMapa(int linha) const; // + getMapa(): char[]
+    int getTempoInicial() const;       // + getTempo() int
+    int getQuantidadeMonstros() const; // + getQuantidade Monstros() int
 
     std::vector<Personagem *> &getEntidades();  // Expõe o vetor Personagem para Jogo fazer a checagem de vitótia
     Timer *getTimer() const;                    // Expõe Timer para Jogo alterar o tempo
@@ -44,5 +43,7 @@ public:
     void detectarVitoria();        // + detectar Vitoria(): void
     bool verificarDerrota() const; // Checa o Timer (Responsabilidade da Fase)
 };
+
+std::string getLinhaDoMapa(int linha, int nivel);
 
 #endif

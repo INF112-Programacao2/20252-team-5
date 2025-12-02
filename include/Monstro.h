@@ -1,11 +1,13 @@
-#ifndef MONSTRO_H_
-#define MONSTRO_H_
+#ifndef MONSTRO_H
+#define MONSTRO_H
 
 #include "Personagem.h"
-#include "Jogador.h"
-#include "Fase.h"
 
-class Monstro : public Personagem{
+class Jogador;
+class Fase;
+
+class Monstro : public Personagem
+{
 private:
 	int _valorTempo;
 	bool _capturado = false;
@@ -14,20 +16,18 @@ public:
 	Monstro(float x, float y, float velocidade, std::string imagem, int tempo);
 	int getValorTempo() const;
 	void receberCaptura();
-
 	void capturar();
 	bool estaCapturado() const;
 
-	// Implementação de atualização genérica para monstros
 	void atualizar(float deltaTime) override;
-	virtual void comportamento(Jogador jogador, float dt, Fase fase) = 0;
+	virtual void comportamento(Jogador &jogador, float dt) = 0;
 };
 
 class Perseguidor : public Monstro
 {
 public:
 	Perseguidor(float x, float y, float velocidade, std::string imagem, int tempo);
-	void comportamento(Jogador jogador, float dt, Fase fase) override;
+	void comportamento(Jogador &jogador, float dt) override;
 };
 
 class Escondedor : public Monstro
@@ -37,7 +37,7 @@ private:
 
 public:
 	Escondedor(float x, float y, float velocidade, std::string imagem, int tempo);
-	void comportamento(Jogador jogador, float dt, Fase fase) override;
+	void comportamento(Jogador &jogador, float dt) override;
 };
 
 #endif
