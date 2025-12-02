@@ -232,7 +232,7 @@ void Fase::atualizar(float deltaTime)
         if (monstro && !monstro->estaCapturado())
         {
             // Método com polimorfismo (futuramente)
-            monstro->atualizar(deltaTime, *this);
+            monstro->comportamento(*jogador, deltaTime, *this);
         }
     }
 
