@@ -13,8 +13,8 @@
 #include <cmath>     // Para calcular o raio de interação
 
 // Coordenadas fixas para a máquina (ajuste conforme seu mapa)
-const float MAQUINA_X = 100.0f;
-const float MAQUINA_Y = 100.0f;
+const float MAQUINA_X = 60.0f;
+const float MAQUINA_Y = 216.0f;
 
 // Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
