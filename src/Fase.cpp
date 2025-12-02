@@ -181,6 +181,18 @@ void Fase::removerEntidade(Personagem *entidade)
         delete entidade; // Liberar a memória alocada
     }
 }
+// Nova função: Remove a entidade (Monstro) do vetor e libera a memória
+void Fase::removerEntidade(Personagem *entidade)
+{
+    // Usa std::remove para mover o elemento para o final e erase para remover
+    auto iterador = std::remove(entidades.begin(), entidades.end(), entidade);
+    if (iterador != entidades.end())
+    {
+        // Erase para remover
+        entidades.erase(iterador, entidades.end());
+        delete entidade; // Liberar a memória alocada
+    }
+}
 
 void Fase::atualizar(float deltaTime)
 {
