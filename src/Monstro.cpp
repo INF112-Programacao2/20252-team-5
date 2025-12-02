@@ -11,6 +11,8 @@
 Monstro::Monstro(float x, float y, float velocidade, std::string imagem, int tempo)
 	: Personagem(x, y, velocidade, imagem), _valorTempo(tempo), _capturado(false)
 {
+	float escala = (float)TAM_PIXEL / _texture.getSize().x;
+    _sprite.setScale(escala, escala);
 }
 
 int Monstro::getValorTempo() const
