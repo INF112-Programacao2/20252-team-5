@@ -82,12 +82,9 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
         }
     }
 
-<<<<<<< HEAD
     if (MovVert != 0.f)
     {
-=======
     if (MovVert != 0.f){
->>>>>>> 242dd9d33ccf35c2a9c2f0865606d185ca7cf9cb
         // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
         setY(_y + MovVert);
     }
