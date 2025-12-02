@@ -11,7 +11,7 @@ Jogo::Jogo() : window(sf::VideoMode(LARGURA_JANELA, ALTURA_JANELA), "Recicla Mun
                faseAtual(nullptr)
 {
     // Inicializa a primeira fase (Exemplo: 60 segundos, 5 monstros)
-    faseAtual = new Fase(60, 2); // Temporário
+    faseAtual = new Fase(300, 2); // Temporário
 }
 
 Jogo::~Jogo()
