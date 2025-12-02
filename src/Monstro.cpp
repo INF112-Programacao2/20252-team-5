@@ -63,9 +63,9 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
     float dist = std::sqrt(dx*dx + dy*dy);
 
 	int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
-    int tileX_left = floorf(_x / TAM_PIXEL);
-    int tileY_top = floorf(_y / TAM_PIXEL);
-    int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
+	int tileX_left = floorf(_x / TAM_PIXEL);
+	int tileY_top = floorf(_y / TAM_PIXEL);
+	int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
 
     // Só foge se o jogador estiver perto
     if(dist < 150){
@@ -135,9 +135,9 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
     float dist = std::sqrt(dx*dx + dy*dy);
 
 	int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
-    int tileX_left = floorf(_x / TAM_PIXEL);
-    int tileY_top = floorf(_y / TAM_PIXEL);
-    int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
+	int tileX_left = floorf(_x / TAM_PIXEL);
+	int tileY_top = floorf(_y / TAM_PIXEL);
+	int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
 
     // Só foge se o jogador estiver perto
 

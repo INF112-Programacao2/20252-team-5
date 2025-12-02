@@ -137,8 +137,8 @@ void Fase::inicializarEntidades()
     {
         // Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
         entidades.push_back(new Jogador(
-            50.0f, 50.0f, 2.0f,
-            "../assets/textures/player/andando1_direita.png" // Provisório, já que ainda não tem animação
+            50.0f, 50.0f, 300.0f,
+            "../assets/textures/player/andando2_direita.png" // Provisório, já que ainda não tem animação
             ));
         std::cout << "Jogador criado com sucesso." << std::endl;
 
