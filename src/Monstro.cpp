@@ -53,12 +53,12 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
 	double dx = static_cast<double>(this->getPosicaoX() - jogador.getPosicaoX());
 	double dy = static_cast<double>(this->getPosicaoY() - jogador.getPosicaoY());
 	double dist = std::sqrt((dx * dx) + (dy * dy));
-	
+
 	// calculando em qual pixel da matriz o monstro se encontra
 	int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
-    int tileX_left = floorf(_x / TAM_PIXEL);
-    int tileY_top = floorf(_y / TAM_PIXEL);
-    int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
+	int tileX_left = floorf(_x / TAM_PIXEL);
+	int tileY_top = floorf(_y / TAM_PIXEL);
+	int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
 
 	if (dist < 128)
 	{				// se o jogador estiver perto (Lógica de FUGA)
@@ -69,24 +69,16 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
 		}
 
 		// tunel na direita
-		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){	// assumindo que o tunel seja representado por um 2 na matriz
-<<<<<<< HEAD
-			//this->setX();
-			//this->setY();
-			// coordenadas da saída do tunel
-		}	// tunel na esquerda
-		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			//this->setX();
-			//this->setY();
-=======
-			this->setX(_x);	//MUDAR
+		if (fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0)
+		{					// assumindo que o tunel seja representado por um 2 na matriz
+			this->setX(_x); // MUDAR
 			this->setY(_y);
 			// coordenadas da saída do tunel
-		}	// tunel na esquerda
-		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			this->setX(_x); //MUDAR
+		} // tunel na esquerda
+		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0)
+		{
+			this->setX(_x); // MUDAR
 			this->setY(_y);
->>>>>>> 242dd9d33ccf35c2a9c2f0865606d185ca7cf9cb
 		}
 	}
 }
@@ -107,39 +99,36 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
 
 	// calculando em qual pixel da matriz o monstro se encontra
 	int tileX_right = floorf((_x + TAM_PIXEL - 1.f) / TAM_PIXEL);
-    int tileX_left = floorf(_x / TAM_PIXEL);
-    int tileY_top = floorf(_y / TAM_PIXEL);
-    int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
+	int tileX_left = floorf(_x / TAM_PIXEL);
+	int tileY_top = floorf(_y / TAM_PIXEL);
+	int tileY_bottom = floorf((_y + TAM_PIXEL - 1.f) / TAM_PIXEL);
 
-	if (dist < 128) {	// se o jogador estiver perto
-		if(dx < 0){
+	if (dist < 128)
+	{ // se o jogador estiver perto
+		if (dx < 0)
+		{
 			this->mudarPosicao(Direcao::ESQUERDA, dt, fase);
-		}else{
+		}
+		else
+		{
 			this->mudarPosicao(Direcao::DIREITA, dt, fase);
 		}
-		
+
 		// tunel na direita
-		if(fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0){
-<<<<<<< HEAD
-			//this->setX();
-			//this->setY();
-			// coordenadas da saída do tunel
-		} // tunel na esquerda
-		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
-			//this->setX();
-			//this->setY();
-=======
-			this->setX(_x);	//////////// MUDAR
+		if (fase.getMapa(tileY_top)[tileX_right + 1] == '2' && dx > 0)
+		{
+			this->setX(_x); //////////// MUDAR
 			this->setY(_y);
 			// coordenadas da saída do tunel
 		} // tunel na esquerda
-		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0){
+		else if (fase.getMapa(tileY_top)[tileX_left - 1] == '2' && dx < 0)
+		{
 			this->setX(_x);
 			this->setY(_y);
->>>>>>> 242dd9d33ccf35c2a9c2f0865606d185ca7cf9cb
 		}
-		if(fase.getMapa(tileY_top + 1)[tileX_left] == '3' || fase.getMapa(tileY_top)[tileX_right] == '3'){
-		// assumindo que o esconderijo seja representado por um 3 na matriz
+		if (fase.getMapa(tileY_top + 1)[tileX_left] == '3' || fase.getMapa(tileY_top)[tileX_right] == '3')
+		{
+			// assumindo que o esconderijo seja representado por um 3 na matriz
 			_escondido = true;
 		}
 	}

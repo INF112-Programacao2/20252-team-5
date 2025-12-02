@@ -21,12 +21,14 @@ Jogador::~Jogador()
 void Jogador::atualizar(float deltaTime, const Fase &fase)
 {
     // O deltaTime ajuda a manter a velocidade constante independente do FPS
-    float dist = _velocidade * deltaTime * 100.0f; // Multiplicador para ajustar escala
+    float dist = _velocidade * deltaTime * 50.0f; // Multiplicador para ajustar escala
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !_jump)
     {
+        if(colisao(Direcao::CAINDO, 1.f, fase)){
         _jump = true;
         _velY = -FORCA_JUMP;
+        }
     }
 
     // tirei o de ir para baixo porque existe gravidade, caso seja possível ele descer de uma plataforma para outra
@@ -56,11 +58,11 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
         if (colisao(Direcao::CIMA, -MovVert, fase))
         { // Usando 'colisao' do Personagem
             int tileAcima = floorf((_y - (-MovVert)) / TAM_PIXEL);
-                float novaY = (float(tileAcima * TAM_PIXEL)) + TAM_PIXEL;
-                
-                _y = novaY;
-                _y = 0.0;
-                MovVert = 0.f;
+            float novaY = (float(tileAcima * TAM_PIXEL)) + TAM_PIXEL;
+
+            setY(novaY);
+            _velY = 0.f;
+            MovVert = 0.f;
         }
     }
 
@@ -83,8 +85,10 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
     }
 
     if (MovVert != 0.f)
-    {}
-    if (MovVert != 0.f){
+    {
+    }
+    if (MovVert != 0.f)
+    {
         // caso não ocorra nenhuma das colisões acima listadas, a coordenada é atualizada
         setY(_y + MovVert);
     }

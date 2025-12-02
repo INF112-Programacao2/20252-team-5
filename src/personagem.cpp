@@ -5,7 +5,6 @@
 #include "../include/Personagem.h"
 #include "../include/Fase.h"
 #include "../include/VariaveisGlobais.h"
-#include "../include/Fase.h"
 
 Personagem::Personagem(float x, float y, float velocidade, std::string imagem)
 {
