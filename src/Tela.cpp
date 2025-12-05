@@ -70,7 +70,7 @@ void Tela::carregarGameBackground()
     if (gameBackgroundCarregado)
         return;
 
-    if (!gameBackgroundTexture.loadFromFile("../assets/textures/background-jogando.png"))
+    if (!gameBackgroundTexture.loadFromFile("assets/textures/background-jogando.png"))
     {
         std::cerr << "Erro ao carregar o background da fase (game_bg.png)." << std::endl;
     }

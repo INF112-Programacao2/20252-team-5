@@ -13,10 +13,6 @@
 #include <algorithm> // Para usar std::remove e std::erase
 #include <cmath>     // Para calcular o raio de interação
 
-// Coordenadas fixas para a máquina (ajuste conforme seu mapa)
-const float MAQUINA_X = 60.0f;
-const float MAQUINA_Y = 216.0f;
-
 // Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
 
@@ -26,11 +22,10 @@ Fase::Fase(int inicioTempo, int numMonstros)
       timer(nullptr),
       maquina(nullptr)
 {
+    
     this->timer = new Timer(inicioTempo);
 
-    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer, "assets/textures/MaquinaDeRec/Maquina.png");
-
-    // 3. Carregar textura do tile
+    // Carregar textura do tile
     std::string path = "assets/textures/block.png";
     if (!texturaTile.loadFromFile(path))
         std::cerr << "Erro ao carregar textura do tile: " << path << std::endl;
@@ -95,29 +90,7 @@ void Fase::carregarMapa(int nivel)
 
     std::cout << "Arquivo de mapa aberto com sucesso!" << std::endl;
 
-    // 2. Leitura da Primeira Linha (Quantidade de plataformas)
-    int num_plataformas;
-    std::string linha_qnt;
     std::string linha_coordenadas;
-    if (std::getline(arquivo, linha_qnt))
-    {
-        try {
-            // Converte a string lida para int
-            num_plataformas = std::stoi(linha_qnt);
-            std::cout << "Número de plataformas lido: " << num_plataformas << std::endl;
-        } catch (const std::exception& e) {
-            std::cerr << "Erro ao converter a quantidade de plataformas para número." << std::endl;
-            arquivo.close();
-            return;
-        }
-    }
-    else
-    {
-        std::cerr << "Erro: Arquivo vazio ou falha na leitura da 1ª linha." << std::endl;
-        arquivo.close();
-        return;
-    }
-    
     // 3. Leitura da Segunda Linha (Coordenadas)
     if (std::getline(arquivo, linha_coordenadas))
     {
@@ -201,11 +174,19 @@ void Fase::carregarMapa(int nivel)
 
 void Fase::inicializarEntidades()
 {
+    // inicializando a máquina
+    float Maquina_x = plataformas[1].first * TAM_PIXEL;
+    float Maquina_y = plataformas[1].second * TAM_PIXEL;
+    this->maquina = new MaquinaDeReciclagem(Maquina_x, Maquina_y, this, timer, "assets/textures/MaquinaDeRec/Maquina.png");
+
+    // coordenadas de inicio do jogador
+    float jogador_x = plataformas[0].first * TAM_PIXEL;
+    float jogador_y = plataformas[0].second * TAM_PIXEL;
     try
     {
         // Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
         entidades.push_back(new Jogador(
-            50.0f, 50.0f, 300.0f,
+            jogador_x, jogador_y, 300.0f,
             "assets/textures/player/andando2_direita.png" // Provisório, já que ainda não tem animação
             ));
         std::cout << "Jogador criado com sucesso." << std::endl;

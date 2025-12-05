@@ -48,28 +48,28 @@ Perseguidor::Perseguidor(float x, float y, float velocidade, std::string imagem,
     : Monstro(x, y, velocidade, imagem, tempo)
 {
     // Textura esquerda andando
-    if (!_textureAndandoEsquerda.loadFromFile("../assets/textures/monstro1/andando2_esquerda.png"))
+    if (!_textureAndandoEsquerda.loadFromFile("assets/textures/monstro1/andando2_esquerda.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura andando2_esquerda.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     // Textura direita andando
-    if (!_textureAndandoDireita.loadFromFile("../assets/textures/monstro1/andando2_direita.png"))
+    if (!_textureAndandoDireita.loadFromFile("assets/textures/monstro1/andando2_direita.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura andando2_direita.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     // Textura esquerda parado
-    if (!_textureParadoEsquerda.loadFromFile("../assets/textures/monstro1/parado_esquerda.png"))
+    if (!_textureParadoEsquerda.loadFromFile("assets/textures/monstro1/parado_esquerda.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura parado_esquerda.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     // Textura direita parado
-    if (!_textureParadoDireita.loadFromFile("../assets/textures/monstro1/parado_direita.png"))
+    if (!_textureParadoDireita.loadFromFile("assets/textures/monstro1/parado_direita.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura parado_direita.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
@@ -180,28 +180,28 @@ Escondedor::Escondedor(float x, float y, float velocidade, std::string imagem, i
 {
 
     // Textura esquerda andando
-    if (!_textureAndandoEsquerda.loadFromFile("../assets/textures/monstro1/andando2_esquerda.png"))
+    if (!_textureAndandoEsquerda.loadFromFile("assets/textures/monstro1/andando2_esquerda.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura andando2_esquerda.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     // Textura direita andando
-    if (!_textureAndandoDireita.loadFromFile("../assets/textures/monstro1/andando2_direita.png"))
+    if (!_textureAndandoDireita.loadFromFile("assets/textures/monstro1/andando2_direita.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura andando2_direita.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     // Textura esquerda parado
-    if (!_textureParadoEsquerda.loadFromFile("../assets/textures/monstro1/parado_esquerda.png"))
+    if (!_textureParadoEsquerda.loadFromFile("assets/textures/monstro1/parado_esquerda.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura parado_esquerda.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
     // Textura direita parado
-    if (!_textureParadoDireita.loadFromFile("../assets/textures/monstro1/parado_direita.png"))
+    if (!_textureParadoDireita.loadFromFile("assets/textures/monstro1/parado_direita.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura parado_direita.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");

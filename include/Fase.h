@@ -24,7 +24,6 @@ private:
     std::vector<Personagem *> entidades;
     sf::Texture texturaTile;
     std::vector<std::pair<int, int>> plataformas;
-
 public:
     Fase(int inicioTempo, int numMonstros);
     ~Fase();
@@ -34,6 +33,7 @@ public:
     const char *getMapa(int linha) const; // + getMapa(): char[]
 
     std::vector<Personagem *> &getEntidades();  // Expõe o vetor Personagem para Jogo fazer a checagem de vitótia
+    std::vector<std::pair<int, int>> getPlataformas();
     Timer *getTimer() const;                    // Expõe Timer para Jogo alterar o tempo
     void removerEntidade(Personagem *entidade); // Para a Máquina avisar a Fase para deletar um Monstro do vetor entidades
 
