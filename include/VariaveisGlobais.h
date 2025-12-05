@@ -38,4 +38,9 @@ enum class Direcao
     CAINDO
 };
 
+enum class ultimaDirecao {
+    ESQUERDA,
+    DIREITA
+};
+
 #endif

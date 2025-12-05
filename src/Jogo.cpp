@@ -1,7 +1,7 @@
 #include "../include/VariaveisGlobais.h"
 #include "../include/Jogo.h"
 #include "../include/Tela.h"
-#include "../include/Fase.h" // Necessário para criar uma fase
+#include "../include/Fase.h"
 
 #include <iostream>
 

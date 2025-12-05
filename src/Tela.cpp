@@ -36,7 +36,7 @@ void Tela::carregarFonte()
     static bool carregou = false;
     if (carregou)
         return;
-
+    std::cout << "chegou aqui";
     // Tentar caminho relativo quando executável roda em build (padrão)
     if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
     {
@@ -81,7 +81,7 @@ void Tela::exibirMenu(sf::RenderWindow &window)
     window.draw(titulo);
 }
 
-void exibirTelaPause(sf::RenderWindow& window)
+void Tela::exibirPause(sf::RenderWindow &window)
 {
     window.setFramerateLimit(60);
 
@@ -95,7 +95,7 @@ void exibirTelaPause(sf::RenderWindow& window)
 
     // Texto principal (fade-in)
     sf::Text titulo("PAUSADO", font, 80);
-    titulo.setFillColor(sf::Color(255, 255, 255, 0));  // começa invisível
+    titulo.setFillColor(sf::Color(255, 255, 255, 0)); // começa invisível
 
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
@@ -156,7 +156,6 @@ void exibirTelaPause(sf::RenderWindow& window)
     }
 }
 
-
 void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
 {
     carregarFonte();
@@ -214,20 +213,12 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
 {
     window.setFramerateLimit(60);
 
-    // Carregar fonte PixelBook
-    sf::Font font;
-    if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
-    {
-       std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-       return;
-    }
+    carregarFonte();
 
     // Texto principal (fade-in)
     sf::Text titulo("VOCÊ GANHOU!!", font, 80);
-    titulo.setFillColor(sf::Color(170, 200, 170));  // começa invisível
+    titulo.setFillColor(sf::Color(170, 200, 170));
 
-    titulo.setString(sf::String::fromUtf8(textos[i].begin(), textos[i].end()));
-    
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
     titulo.setPosition(800 / 2.f, 200);
@@ -285,27 +276,17 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
         window.draw(instrucao);
         window.display();
     }
-
 }
 
 void Tela::exibirDerrota(sf::RenderWindow &window)
 {
     window.setFramerateLimit(60);
 
-    // Carregar fonte PixelBook
-    sf::Font font;
-    if (!font.loadFromFile("PixelBook-Regular.ttf"))
-    {
-      std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-       return;
-    }
+    carregarFonte();
 
-    // Texto principal (fade-in)
     sf::Text titulo("VOCÊ PERDEU", font, 80);
-    titulo.setFillColor(sf::Color(255, 0, 0, 0));  // começa invisível
+    titulo.setFillColor(sf::Color(255, 0, 0, 0));
 
-    titulo.setString(sf::String::fromUtf8(textos[i].begin(), textos[i].end())); //adicionando a fonte certinha aqui
-    
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
     titulo.setPosition(800 / 2.f, 200);
@@ -363,5 +344,4 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
         window.draw(instrucao);
         window.display();
     }
-    
 }
