@@ -183,16 +183,16 @@ void Tela::exibirPause(sf::RenderWindow &window)
     // Isso simula o "dimming" da tela do jogo que estava por baixo.
     sf::RectangleShape overlay(sf::Vector2f(LARGURA_JANELA, ALTURA_JANELA));
     // Preto com 70% de opacidade (Alpha = 180 de 255)
-    overlay.setFillColor(sf::Color(0, 0, 0, 180)); 
+    overlay.setFillColor(sf::Color(0, 0, 0, 180));
     window.draw(overlay);
 
     // 3. Texto Principal: "PAUSADO"
     sf::Text titulo("PAUSADO", font, 60);
     titulo.setFillColor(sf::Color::White);
-    
+
     // Centralizar o título (LARGURA_JANELA = 1280)
     titulo.setPosition(
-        (LARGURA_JANELA - titulo.getLocalBounds().width) / 2, 
+        (LARGURA_JANELA - titulo.getLocalBounds().width) / 2,
         (ALTURA_JANELA / 3.0f) // Posicionado em 1/3 da altura
     );
     window.draw(titulo);
@@ -203,11 +203,11 @@ void Tela::exibirPause(sf::RenderWindow &window)
 
     // Centralizar as instruções, logo abaixo do título
     instrucao.setPosition(
-        (LARGURA_JANELA - instrucao.getLocalBounds().width) / 2, 
+        (LARGURA_JANELA - instrucao.getLocalBounds().width) / 2,
         (ALTURA_JANELA / 3.0f) + 100 // 100 pixels abaixo do título
     );
     window.draw(instrucao);
-    
+
     // NOTA: A janela NÃO é exibida (display) aqui.
     // O Jogo::desenhar() chama window.display() UMA VEZ no final do loop.
 }
@@ -348,15 +348,17 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
 
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
-    titulo.setPosition(800 / 2.f, 200);
+    titulo.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.35f);
 
     // Texto instruções (piscando)
     sf::Text instrucao("Pressione ENTER para tentar novamente", font, 32);
     instrucao.setFillColor(sf::Color(255, 255, 255, 255));
 
     sf::FloatRect ib = instrucao.getLocalBounds();
+    // Move a origem do texto para o centro do seu retângulo
     instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
-    instrucao.setPosition(800 / 2.f, 400);
+    // Posiciona o centro do texto no centro da janela, mas abaixo do título (ex: 55%)
+    instrucao.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.55f);
 
     float fadeAlpha = 0;
     bool blinkOn = true;
