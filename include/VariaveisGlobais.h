@@ -20,14 +20,6 @@ enum Status
     CREDITOS
 };
 
-enum Condicao
-{
-    NORMAL,
-    INVISIVEL,
-    RAPIDO
-};
-
-// Auxilia na verificação de colisão
 enum class Direcao
 {
     NENHUMA,
