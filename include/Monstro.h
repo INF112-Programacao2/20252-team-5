@@ -10,6 +10,18 @@ protected:
 	int _valorTempo;
 	bool _capturado = false;
 	Direcao _direcao = Direcao::DIREITA;
+
+	sf::Texture _textureParadoDireita; // Textura de parado para direita
+    sf::Texture _textureParadoEsquerda; // Textura de parado para esquerda
+    sf::Texture _textureAndandoDireita; // Textura de movendo para direita
+    sf::Texture _textureAndandoEsquerda; // Textura de movendo para esquerda
+    sf::Sprite _sprite2;
+
+    bool movendoHorizontalmente = true;
+    
+    float tempoAcumulado = 0.0f;
+    const float tempoIntervalo = 0.2f;
+	
 public:
 	Monstro(float x, float y, float velocidade, std::string imagem, int tempo);
 	int getValorTempo() const;
