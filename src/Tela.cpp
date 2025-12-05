@@ -9,6 +9,8 @@
 
 int Tela::opcaoSelecionada = 0;
 sf::Font Tela::font;
+sf::Texture Tela::backgroundTexture;
+bool Tela::backgroundCarregado = false;
 
 Tela::Tela() {}
 
@@ -36,7 +38,6 @@ void Tela::carregarFonte()
     static bool carregou = false;
     if (carregou)
         return;
-    std::cout << "chegou aqui";
     // Tentar caminho relativo quando executável roda em build (padrão)
     if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
     {
@@ -50,12 +51,32 @@ void Tela::carregarFonte()
     carregou = true;
 }
 
+void Tela::carregarBackground() {
+    if (backgroundCarregado)
+        return;
+
+    if (!backgroundTexture.loadFromFile("../assets/textures/background-menu.png"))
+    {
+        std::cerr << "Erro ao carregar o background do menu." << std::endl;
+    }
+    backgroundCarregado = true;
+}
+
+
+
 void Tela::exibirMenu(sf::RenderWindow &window)
 {
     carregarFonte();
+    carregarBackground();
 
-    // Desenho do menu
     window.clear(sf::Color::Black);
+
+    sf::Sprite background(backgroundTexture);
+    float escalaX = (float)LARGURA_JANELA / backgroundTexture.getSize().x;
+    float escalaY = (float)ALTURA_JANELA / backgroundTexture.getSize().y;
+    background.setScale(escalaX, escalaY); 
+
+    window.draw(background);
 
     sf::Text titulo("Recicla Mundo: ODS Game", font, 50);
     titulo.setPosition((LARGURA_JANELA - titulo.getLocalBounds().width) / 2, 100);
@@ -85,17 +106,11 @@ void Tela::exibirPause(sf::RenderWindow &window)
 {
     window.setFramerateLimit(60);
 
-    // Carregar fonte PixelBook
-    sf::Font font;
-    if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
-    {
-        std::cout << "Erro ao carregar PixelBook-Regular.ttf" << std::endl;
-        return;
-    }
+    carregarFonte();
 
     // Texto principal (fade-in)
     sf::Text titulo("PAUSADO", font, 80);
-    titulo.setFillColor(sf::Color(255, 255, 255, 0)); // começa invisível
+    titulo.setFillColor(sf::Color(255, 255, 255, 0));
 
     sf::FloatRect tb = titulo.getLocalBounds();
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
@@ -130,7 +145,7 @@ void Tela::exibirPause(sf::RenderWindow &window)
                 return;
         }
 
-        // Animação 1: Fade-in do texto principal
+        // Fade-in do texto principal
         if (fadeAlpha < 255)
             fadeAlpha += 0.35f;
         titulo.setFillColor(sf::Color(255, 255, 255, fadeAlpha));
