@@ -1,6 +1,5 @@
 #include "../include/Jogador.h"
 #include "../include/PowerUp.h"
-#include "../include/VariaveisGlobais.h"
 #include <cmath>                    // Para ceil e floorf
 #include <iostream>                 // Para cout e endl
 #include <SFML/Window/Keyboard.hpp> // Necessário para detectar teclas
@@ -13,14 +12,33 @@ Jogador::Jogador(float x, float y, float velocidade, std::string imagem)
     powerUpAtivo = nullptr;
     monstroCarregado = nullptr;
 
-    if (!_textureParadoEsquerda.loadFromFile("../assets/textures/player/andando2_esquerda.png"))
+    // Textura esquerda andando
+    if (!_textureAndandoEsquerda.loadFromFile("../assets/textures/player/andando2_esquerda.png"))
     {
         std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura andando2_esquerda.png" << std::endl;
         throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
     }
 
-    // Textura direita recebe a textura base
-    _textureParadoDireita = _texture;
+    // Textura direita andando
+    if (!_textureAndandoDireita.loadFromFile("../assets/textures/player/andando2_direita.png"))
+    {
+        std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura andando2_direita.png" << std::endl;
+        throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
+    }
+
+    // Textura esquerda parado
+    if (!_textureParadoEsquerda.loadFromFile("../assets/textures/player/parado_esquerda.png"))
+    {
+        std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura parado_esquerda.png" << std::endl;
+        throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
+    }
+
+    // Textura direita parado
+    if (!_textureParadoDireita.loadFromFile("../assets/textures/player/parado_direita.png"))
+    {
+        std::cerr << "ERRO FATAL: Nao foi possivel carregar a textura parado_direita.png" << std::endl;
+        throw std::runtime_error("Erro ao carregar \"" + imagem + "\".");
+    }
 }
 
 Jogador::~Jogador()
@@ -30,6 +48,13 @@ Jogador::~Jogador()
 // Método principal de controle do Jogador
 void Jogador::atualizar(float deltaTime, const Fase &fase)
 {
+
+    tempoAcumulado += deltaTime;
+
+    // Obtém a largura e altura do sprite
+    float largura = _sprite.getLocalBounds().width;
+    float altura = _sprite.getLocalBounds().height;
+
     // O deltaTime ajuda a manter a velocidade constante independente do FPS
     float dist = _velocidade * deltaTime * 50.0f; // Multiplicador para ajustar escala
 
@@ -50,39 +75,59 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
     //     mudarPosicao(_x, _y + dist);
     // }
 
-    // Indentificar se há movimento horizontal
-    bool movendoHorizontalmente = false;
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         // Agora 'fase' existe e pode ser usada na chamada
         mudarPosicao(Direcao::ESQUERDA, deltaTime, fase);
 
-        if (_ultimaDirecao != ultimaDirecao::ESQUERDA)
+        if (tempoAcumulado >= tempoIntervalo)
         {
-            // Usa a nova textura pré-carregada
-            _sprite.setTexture(_textureParadoEsquerda);
-            _ultimaDirecao = ultimaDirecao::ESQUERDA;
+            if (movendoHorizontalmente)
+            {
+                // Usa a nova textura pré-carregada
+                _sprite2.setTexture(_textureAndandoEsquerda);
+                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
+                _sprite2.setScale(0.6f, 0.6f);
+                _sprite = _sprite2;
+                movendoHorizontalmente = false;
+            }
+            else
+            {
+                _sprite2.setTexture(_textureParadoEsquerda);
+                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
+                _sprite2.setScale(0.6f, 0.6f);
+                _sprite = _sprite2;
+                movendoHorizontalmente = true;
+            }
+            tempoAcumulado = 0.0f;
         }
-        movendoHorizontalmente = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         // Agora 'fase' existe e pode ser usada na chamada
         mudarPosicao(Direcao::DIREITA, deltaTime, fase);
 
-        if (_ultimaDirecao != ultimaDirecao::DIREITA)
+        if (tempoAcumulado >= tempoIntervalo)
         {
-            // Usa a nova textura pré-carregada
-            _sprite.setTexture(_textureParadoDireita);
-            _ultimaDirecao = ultimaDirecao::DIREITA;
+            if (movendoHorizontalmente)
+            {
+                // Usa a nova textura pré-carregada
+                _sprite2.setTexture(_textureAndandoDireita);
+                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
+                _sprite2.setScale(0.6f, 0.6f);
+                _sprite = _sprite2;
+                movendoHorizontalmente = false;
+            }
+            else
+            {
+                _sprite2.setTexture(_textureParadoDireita);
+                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
+                _sprite2.setScale(0.6f, 0.6f);
+                _sprite = _sprite2;
+                movendoHorizontalmente = true;
+            }
+            tempoAcumulado = 0.0f;
         }
-        movendoHorizontalmente = true;
-    }
-    if (!movendoHorizontalmente) {
-        // Se precisar de uma textura específica para "Parado", você faria a troca aqui.
-        // No seu caso, o sprite de "andando" é o de "parado", então não precisamos fazer nada,
-        // pois a última textura definida permanece no _sprite.
     }
 
     /////// Pulo e queda (Corrigido para usar membros da classe e 'deltaTime') ////////
@@ -195,4 +240,3 @@ PowerUp *Jogador::getPowerUpAtivo() const
 {
     return powerUpAtivo;
 }
-
