@@ -1,5 +1,5 @@
 #include "../include/Jogador.h"
-#include "../include/PowerUp.h"
+#include "../include/VariaveisGlobais.h" // Se PowerUp foi removido, inclua VariaveisGlobais.h se ela contiver constantes importantes.
 #include <cmath>                    // Para ceil e floorf
 #include <iostream>                 // Para cout e endl
 #include <SFML/Window/Keyboard.hpp> // Necessário para detectar teclas
@@ -9,7 +9,7 @@
 Jogador::Jogador(float x, float y, float velocidade, std::string imagem)
     : Personagem(x, y, velocidade, imagem)
 {
-    powerUpAtivo = nullptr;
+    // Removido: powerUpAtivo = nullptr;
     monstroCarregado = nullptr;
 
     // Textura esquerda andando
@@ -82,22 +82,19 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
 
         if (tempoAcumulado >= tempoIntervalo)
         {
-            if (!movendoHorizontalmente)
+            _sprite.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
+            _sprite.setScale(0.8f,0.8f);
+
+            if (movendoHorizontalmente)
             {
                 // Usa a nova textura pré-carregada
-                _sprite2.setTexture(_textureAndandoEsquerda);
-                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
-                _sprite2.setScale(0.6f, 0.6f);
-                _sprite = _sprite2;
-                movendoHorizontalmente = true;
+                _sprite.setTexture(_textureAndandoEsquerda);
+                movendoHorizontalmente = false;
             }
             else
             {
-                _sprite2.setTexture(_textureParadoEsquerda);
-                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
-                _sprite2.setScale(0.6f, 0.6f);
-                _sprite = _sprite2;
-                movendoHorizontalmente = false;
+                _sprite.setTexture(_textureParadoEsquerda);
+                movendoHorizontalmente = true;
             }
             tempoAcumulado = 0.0f;
         }
@@ -109,22 +106,19 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
 
         if (tempoAcumulado >= tempoIntervalo)
         {
-            if (!movendoHorizontalmente)
+            _sprite.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
+            _sprite.setScale(0.8f,0.8f);
+            
+            if (movendoHorizontalmente)
             {
                 // Usa a nova textura pré-carregada
-                _sprite2.setTexture(_textureAndandoDireita);
-                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
-                _sprite2.setScale(0.6f, 0.6f);
-                _sprite = _sprite2;
-                movendoHorizontalmente = true;
+                _sprite.setTexture(_textureAndandoDireita);
+                movendoHorizontalmente = false;
             }
             else
             {
-                _sprite2.setTexture(_textureParadoDireita);
-                _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
-                _sprite2.setScale(0.6f, 0.6f);
-                _sprite = _sprite2;
-                movendoHorizontalmente = false;
+                _sprite.setTexture(_textureParadoDireita);
+                movendoHorizontalmente = true;
             }
             tempoAcumulado = 0.0f;
         }
@@ -192,51 +186,4 @@ Monstro *Jogador::getMonstroCarregado() const
 void Jogador::setMonstroCarregado(Monstro *monstro)
 {
     monstroCarregado = monstro;
-}
-
-void Jogador::ativarPowerUp(PowerUp &powerUp)
-{
-    powerUpAtivo = &powerUp;
-
-    Condicao efeito = powerUp.getCondicao();
-
-    if (efeito == RAPIDO)
-    {
-        setVelocidade(getVelocidade() * 2.0f);
-        std::cout << "PowerUp Ativado: RAPIDO!" << std::endl;
-    }
-    else if (efeito == INVISIVEL)
-    {
-        // Muda a cor do sprite para semi-transparente (Alpha = 128)
-        // A classe Personagem precisa expor o sprite ou ter um método 'setCor'
-        // Assumindo acesso direto ou um método auxiliar:
-        // _sprite.setColor(sf::Color(255, 255, 255, 128));
-        std::cout << "PowerUp Ativado: INVISIVEL!" << std::endl;
-    }
-}
-
-void Jogador::desativarPowerUp()
-{
-    if (powerUpAtivo == nullptr)
-        return;
-
-    Condicao efeito = powerUpAtivo->getCondicao();
-
-    if (efeito == RAPIDO)
-    {
-        setVelocidade(getVelocidade() / 2.0f);
-    }
-    else if (efeito == INVISIVEL)
-    {
-        // Restaura a opacidade total
-        // _sprite.setColor(sf::Color::White);
-    }
-
-    powerUpAtivo = nullptr;
-    std::cout << "PowerUp acabou." << std::endl;
-}
-
-PowerUp *Jogador::getPowerUpAtivo() const
-{
-    return powerUpAtivo;
 }
