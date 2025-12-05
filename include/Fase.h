@@ -23,6 +23,7 @@ private:
     int nivel;
     std::vector<Personagem *> entidades;
     sf::Texture texturaTile;
+    std::vector<std::pair<int, int>> plataformas;
 
 public:
     Fase(int inicioTempo, int numMonstros);

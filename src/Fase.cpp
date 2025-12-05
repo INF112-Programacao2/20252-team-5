@@ -7,6 +7,7 @@
 #include "../include/VariaveisGlobais.h" // Para TAM_PIXEL
 
 #include <cstring>
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include <algorithm> // Para usar std::remove e std::erase
@@ -93,6 +94,73 @@ void Fase::carregarMapa(int nivel)
     }
 
     std::cout << "Arquivo de mapa aberto com sucesso!" << std::endl;
+
+    // 2. Leitura da Primeira Linha (Quantidade de plataformas)
+    int num_plataformas;
+    std::string linha_qnt;
+    std::string linha_coordenadas;
+    if (std::getline(arquivo, linha_qnt))
+    {
+        try {
+            // Converte a string lida para int
+            num_plataformas = std::stoi(linha_qnt);
+            std::cout << "Número de plataformas lido: " << num_plataformas << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Erro ao converter a quantidade de plataformas para número." << std::endl;
+            arquivo.close();
+            return;
+        }
+    }
+    else
+    {
+        std::cerr << "Erro: Arquivo vazio ou falha na leitura da 1ª linha." << std::endl;
+        arquivo.close();
+        return;
+    }
+    
+    // 3. Leitura da Segunda Linha (Coordenadas)
+    if (std::getline(arquivo, linha_coordenadas))
+    {
+        std::cout << "Coordenadas brutas lidas: " << linha_coordenadas << std::endl;
+    }
+    else
+    {
+        std::cerr << "Erro: Falha na leitura da 2ª linha (coordenadas)." << std::endl;
+        arquivo.close();
+        return;
+    }
+
+    // 4. Processamento da Segunda Linha com std::stringstream
+    std::stringstream ss(linha_coordenadas);
+    std::string par_str;
+
+    // O loop continua enquanto puder extrair strings separadas por espaço ('7,2', '13,2', etc.)
+    while (std::getline(ss, par_str, ' '))
+    {
+        // Encontra a posição da vírgula ',' que separa X de Y
+        size_t pos_virgula = par_str.find(',');
+
+        if (pos_virgula != std::string::npos)
+        {
+            try {
+                // Extrai a sub-string antes da vírgula (o X)
+                std::string x_str = par_str.substr(0, pos_virgula);
+                // Extrai a sub-string depois da vírgula (o Y)
+                std::string y_str = par_str.substr(pos_virgula + 1);
+
+                // Converte as sub-strings para int
+                int x = std::stoi(x_str);
+                int y = std::stoi(y_str);
+
+                // Adiciona o par (x, y) ao vetor (usando emplace_back para eficiência)
+                plataformas.emplace_back(x, y);
+
+            } catch (const std::exception& e) {
+                std::cerr << "Erro ao processar par de coordenadas: " << par_str << ". Ignorando." << std::endl;
+            }
+        }
+    }
+
     std::string linha;
     int linhaAtual = 0;
 
