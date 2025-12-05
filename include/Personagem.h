@@ -12,11 +12,8 @@ class Personagem
 protected:
     float _x;
     float _y;
-    float _velocidade;  // velocidade horizontal
-    float _velY; // velocidade vertical
-    // coloquei float pois a movimentação que tentei fazer até agora é baseada nos pixels, 
-    // não nos quadrados da matriz, para evitar teleporte de um tile para outro. 
-    // Desse jeito ele passa de forma mais suave, mas dá para mudar, qualquer coisa
+    float _velocidade; 
+    float _velY;
     bool _jump = false;
     const float FORCA_JUMP = 700.f;
     sf::Sprite _sprite;
@@ -34,7 +31,6 @@ public:
     void setY(float y);
     void setVelocidade(float novaVelocidade);
     void mudarPosicao(Direcao direcao, float dt, const Fase &fase);
-     // dt é o tempo que se passou desde o ultimo frame, serve para que, independente da taxa de quadros, a velocidade seja a mesma
     virtual void atualizar(float deltaTime, const Fase& fase) = 0;
     bool colisao(Direcao direcao, float dist, const Fase &fase);
     virtual void desenhar(sf::RenderWindow& window);

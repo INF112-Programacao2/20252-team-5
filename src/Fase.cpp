@@ -2,20 +2,19 @@
 #include "../include/Timer.h"
 #include "../include/Personagem.h"
 #include "../include/MaquinaDeReciclagem.h"
-#include "../include/Jogador.h"          // <--- NECESSÁRIO para criar Jogador
-#include "../include/Monstro.h"          // <--- NECESSÁRIO para criar o vetor de entidades
-#include "../include/VariaveisGlobais.h" // Para TAM_PIXEL
+#include "../include/Jogador.h"
+#include "../include/Monstro.h"
+#include "../include/VariaveisGlobais.h"
 
 #include <cstring>
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include <algorithm> // Para usar std::remove e std::erase
-#include <cmath>     // Para calcular o raio de interação
+#include <algorithm>
+#include <cmath>
 #include <random>
 #include <ctime>
 
-// Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
 
 Fase::Fase(int inicioTempo, int numMonstros)
@@ -27,14 +26,13 @@ Fase::Fase(int inicioTempo, int numMonstros)
     
     this->timer = new Timer(inicioTempo);
 
-    // Carregar textura do tile
     std::string path = "assets/textures/block.png";
     if (!texturaTile.loadFromFile(path))
         std::cerr << "Erro ao carregar textura do tile: " << path << std::endl;
     else
         std::cout << "Textura carregada: " << texturaTile.getSize().x << "x" << texturaTile.getSize().y << std::endl;
 
-    carregarMapa(1); // Provisório: sempre carrega o nível 1
+    carregarMapa(1);
 
     inicializarEntidades();
 }
@@ -49,7 +47,6 @@ Fase::~Fase()
     entidades.clear();
 }
 
-// Getters
 int Fase::getTempoInicial() const
 {
     return tempoInicial;
@@ -93,7 +90,6 @@ void Fase::carregarMapa(int nivel)
     std::cout << "Arquivo de mapa aberto com sucesso!" << std::endl;
 
     std::string linha_coordenadas;
-    // 3. Leitura da Segunda Linha (Coordenadas)
     if (std::getline(arquivo, linha_coordenadas))
     {
         std::cout << "Coordenadas brutas lidas: " << linha_coordenadas << std::endl;
@@ -105,29 +101,22 @@ void Fase::carregarMapa(int nivel)
         return;
     }
 
-    // 4. Processamento da Segunda Linha com std::stringstream
     std::stringstream ss(linha_coordenadas);
     std::string par_str;
 
-    // O loop continua enquanto puder extrair strings separadas por espaço ('7,2', '13,2', etc.)
     while (std::getline(ss, par_str, ' '))
     {
-        // Encontra a posição da vírgula ',' que separa X de Y
         size_t pos_virgula = par_str.find(',');
 
         if (pos_virgula != std::string::npos)
         {
             try {
-                // Extrai a sub-string antes da vírgula (o X)
                 std::string x_str = par_str.substr(0, pos_virgula);
-                // Extrai a sub-string depois da vírgula (o Y)
                 std::string y_str = par_str.substr(pos_virgula + 1);
 
-                // Converte as sub-strings para int
                 int x = std::stoi(x_str);
                 int y = std::stoi(y_str);
 
-                // Adiciona o par (x, y) ao vetor (usando emplace_back para eficiência)
                 plataformas.emplace_back(x, y);
 
             } catch (const std::exception& e) {
@@ -161,39 +150,27 @@ void Fase::carregarMapa(int nivel)
 
     arquivo.close();
 
-    /*while (std::getline(arquivo, linha) && linhaAtual < MAPA_LINHAS)
-    {
-        int colunas = std::min((int)linha.length(), MAPA_COLUNAS);
-        std::strncpy(mapa[linhaAtual], linha.c_str(), colunas);
-
-        mapa[linhaAtual][MAPA_COLUNAS] = '\0';
-        linhaAtual++;
-    }
-
-    arquivo.close();*/
     std::cout << "Mapa carregado com sucesso: " << path << std::endl;
 }
 
 void Fase::inicializarEntidades()
 {
-    // inicializando a máquina
     float Maquina_x = plataformas[1].first * TAM_PIXEL;
     float Maquina_y = plataformas[1].second * TAM_PIXEL;
     this->maquina = new MaquinaDeReciclagem(Maquina_x, Maquina_y, this, timer, "assets/textures/MaquinaDeRec/Maquina.png");
 
-    // coordenadas de inicio do jogador
     float jogador_x = plataformas[0].first * TAM_PIXEL;
     float jogador_y = plataformas[0].second * TAM_PIXEL;
 
-    std::mt19937 gen(static_cast<unsigned int>(time(nullptr)));     // motor Mersenne Twister
-    std::uniform_int_distribution<> dist(0, plataformas.size() - 1);  // gerará números entre 2 (primeira plataforma) e tamanho do vetor - 1(ultima plataforma)
+    std::mt19937 gen(static_cast<unsigned int>(time(nullptr)));
+    std::uniform_int_distribution<> dist(0, plataformas.size() - 1);
 
     try
     {
         // Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
         entidades.push_back(new Jogador(
             jogador_x, jogador_y, 300.0f,
-            "assets/textures/player/andando2_direita.png" // Provisório, já que ainda não tem animação
+            "assets/textures/player/andando2_direita.png"
             ));
         std::cout << "Jogador criado com sucesso." << std::endl;
 
@@ -203,8 +180,7 @@ void Fase::inicializarEntidades()
             int n;
             do {
                 n = dist(gen);
-            } while (n < 2); // gera um número aleatório com base no motor criado acima até que ele seja maior que 2
-            // com base nesse número é escolhida a plataforma e definidas as coordenadas
+            } while (n < 2);
             float x = plataformas[n].first * TAM_PIXEL;
             float y = plataformas[n].second * TAM_PIXEL;
 
@@ -212,7 +188,7 @@ void Fase::inicializarEntidades()
             entidades.push_back(
                 new Perseguidor(
                     x, y, 200.f,
-                    "assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
+                    "assets/textures/monstro1/andando1_direita.png",
                     10));
         }
         std::cout << "Monstros criados com sucesso: " << quantidadeMonstros << std::endl;
@@ -223,16 +199,13 @@ void Fase::inicializarEntidades()
     }
 }
 
-// Nova função: Remove a entidade (Monstro) do vetor e libera a memória
 void Fase::removerEntidade(Personagem *entidade)
 {
-    // Usa std::remove para mover o elemento para o final e erase para remover
     auto iterador = std::remove(entidades.begin(), entidades.end(), entidade);
     if (iterador != entidades.end())
     {
-        // Erase para remover
         entidades.erase(iterador, entidades.end());
-        delete entidade; // Liberar a memória alocada
+        delete entidade;
     }
 }
 
@@ -242,23 +215,19 @@ void Fase::atualizar(float deltaTime)
 
     if (jogador)
     {
-        // Atualiza a posição do jogador (e do monstro carregado, se houver)
         jogador->atualizar(deltaTime, *this);
 
         Monstro *monstroCarregado = jogador->getMonstroCarregado();
 
         if (monstroCarregado == nullptr)
         {
-            // Tentar capturar um monstro, se não estiver carregando um
             for (size_t i = 1; i < entidades.size(); ++i)
             {
                 Monstro *monstro = dynamic_cast<Monstro *>(entidades[i]);
                 if (monstro && !monstro->estaCapturado())
                 {
-                    // Checagem de colisão usando o GlobalBounds do SFML
                     if (jogador->getSprite().getGlobalBounds().intersects(monstro->getSprite().getGlobalBounds()))
                     {
-                        // Ação da captura
                         monstro->capturar();
                         jogador->setMonstroCarregado(monstro);
                         break;
@@ -268,43 +237,36 @@ void Fase::atualizar(float deltaTime)
         }
         else
         {
-            // Lógica de entrega na Máquina, se estiver carregando um monstro
             float maquinaX = static_cast<float>(maquina->getPosicaoX());
             float maquinaY = static_cast<float>(maquina->getPosicaoY());
             float jogadorX = jogador->getPosicaoX();
             float jogadorY = jogador->getPosicaoY();
 
-            // Simulando a proximidade da máquina
             float distancia = std::sqrt(std::pow(jogadorX - maquinaX, 2) + std::pow(jogadorY - maquinaY, 2));
 
             if (distancia < RAIO_INTERACAO)
             {
                 if (monstroCarregado)
                 {
-                    maquina->receberInimigo(monstroCarregado); // A Máquina interaje com Timer e chama a remoção
-                    jogador->setMonstroCarregado(nullptr);     // Jogador não carrega mais
+                    maquina->receberInimigo(monstroCarregado);
+                    jogador->setMonstroCarregado(nullptr);
                 }
             }
         }
     }
 
-    // Atualizar Monstros que não estão capturados
     for (size_t i = 1; i < entidades.size(); ++i)
     {
         Monstro *monstro = dynamic_cast<Monstro *>(entidades[i]);
         if (monstro && !monstro->estaCapturado())
         {
-            // Método com polimorfismo (futuramente)
             monstro->comportamento(*jogador, deltaTime, *this);
         }
     }
 
-    // Verificação de Derrota ou Vitória (o Jogo fará a mudança de Status)
     if (verificarDerrota())
     {
-        // Logica de derrota
         std::cout << "Tempo Esgotado!" << std::endl;
-        // A fase apenas notifica a condição, o Jogo muda o Status
     }
 }
 
@@ -312,14 +274,12 @@ void Fase::desenhar(sf::RenderWindow &window)
 {
     try
     {
-        // Desenhar Mapa com sprites da textura
         for (int linha = 0; linha < MAPA_LINHAS; linha++)
         {
             for (int coluna = 0; coluna < MAPA_COLUNAS; coluna++)
             {
                 char tile = mapa[linha][coluna];
 
-                // Se o tile é '1', desenha sprite do block
                 if (tile == '1')
                 {
                     sf::Sprite sprite(texturaTile);
@@ -340,13 +300,11 @@ void Fase::desenhar(sf::RenderWindow &window)
             }
         }
 
-        // Desenhar Máquina
         if (maquina)
         {
             maquina->desenhar(window);
         }
 
-        // Desenhar Todas as Entidades
         for (Personagem *entidade : entidades)
         {
             entidade->desenhar(window);
@@ -360,7 +318,6 @@ void Fase::desenhar(sf::RenderWindow &window)
 
 void Fase::detectarVitoria()
 {
-    // Lógica de vitória
 }
 
 bool Fase::verificarDerrota() const

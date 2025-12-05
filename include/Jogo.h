@@ -1,8 +1,8 @@
 #ifndef JOGO_H
 #define JOGO_H
 
-#include <SFML/Graphics.hpp> // Para sf::RenderWindow, sf::VideoMode, sf::Clock, sf::Time
-#include "Fase.h"            // Para Fase* e Fase
+#include <SFML/Graphics.hpp>
+#include "Fase.h"
 #include "VariaveisGlobais.h"
 
 class Jogo {

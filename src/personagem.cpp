@@ -65,9 +65,8 @@ void Personagem::setVelocidade(float novaVelocidade)
 
 void Personagem::mudarPosicao(Direcao direcao, float dt, const Fase &fase)
 {
-    float Mov = _velocidade * dt; // velocidade horizontal
+    float Mov = _velocidade * dt;
 
-    /////////// Movimento Horizontal ////////
     if (colisao(direcao, Mov, fase))
     {
         int parede;
@@ -81,7 +80,6 @@ void Personagem::mudarPosicao(Direcao direcao, float dt, const Fase &fase)
         else if (direcao == Direcao::DIREITA)
         {
             parede = floorf((_x + Mov + TAM_PIXEL) / TAM_PIXEL);
-            // Ajuste o novoX para a lateral do tile + uma pequena margem
             novoX = (float(parede) * TAM_PIXEL) - (TAM_PIXEL + 1.f);
         }
 
@@ -106,7 +104,6 @@ bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
     if (direcao == Direcao::ESQUERDA)
     {
         int newX = floorf((_x - dist) / TAM_PIXEL);
-        // Proteção: Checa se coluna e linhas são válidas e se o mapa não é nullptr
         if (newX >= 0 && tileY_top >= 0 && tileY_bottom < MAPA_LINHAS)
         {
             const char *mapaLinhaTop = fase.getMapa(tileY_top);
@@ -119,11 +116,9 @@ bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
         }
     }
 
-    // --- Colisão Direita ---
     if (direcao == Direcao::DIREITA)
     {
         int newX = floorf((_x + TAM_PIXEL + dist) / TAM_PIXEL);
-        // Proteção: Checa se coluna e linhas são válidas e se o mapa não é nullptr
         if (newX < MAPA_COLUNAS && tileY_top >= 0 && tileY_bottom < MAPA_LINHAS)
         {
             const char *mapaLinhaTop = fase.getMapa(tileY_top);
@@ -136,26 +131,22 @@ bool Personagem::colisao(Direcao direcao, float dist, const Fase &fase)
         }
     }
 
-    // --- Colisão Cima ---
     if (direcao == Direcao::CIMA)
     {
         int newY = floorf((_y - dist) / TAM_PIXEL);
         const char *mapaLinha = fase.getMapa(newY);
 
-        // Proteção: Checa se newY e colunas são válidas e se o mapa não é nullptr
         if (mapaLinha && newY >= 0 && tileX_left >= 0 && tileX_right < MAPA_COLUNAS)
         {
             return mapaLinha[tileX_left] != '0' || mapaLinha[tileX_right] != '0';
         }
     }
 
-    // --- Colisão Caindo (BOTTOM) ---
     if (direcao == Direcao::CAINDO)
     {
         int newY = floorf((_y + TAM_PIXEL + dist) / TAM_PIXEL);
         const char *mapaLinha = fase.getMapa(newY);
 
-        // Proteção: Checa se newY está dentro do limite e se o mapa não é nullptr
         if (mapaLinha && newY < MAPA_LINHAS && tileX_left >= 0 && tileX_right < MAPA_COLUNAS)
         {
             return mapaLinha[tileX_left] != '0' || mapaLinha[tileX_right] != '0';
