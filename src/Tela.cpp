@@ -39,7 +39,7 @@ void Tela::carregarFonte()
     if (carregou)
         return;
     // Tentar caminho relativo quando executável roda em build (padrão)
-    if (!font.loadFromFile("../assets/fonts/PixelBook-Regular.ttf"))
+    if (!font.loadFromFile("assets/fonts/PixelBook-Regular.ttf"))
     {
         // Tentar caminho alternativo (quando executável é chamado da raiz do projeto)
         if (!font.loadFromFile("assets/fonts/PixelBook-Regular.ttf"))
@@ -55,7 +55,7 @@ void Tela::carregarBackground() {
     if (backgroundCarregado)
         return;
 
-    if (!backgroundTexture.loadFromFile("../assets/textures/background-menu.png"))
+    if (!backgroundTexture.loadFromFile("assets/textures/background-menu.png"))
     {
         std::cerr << "Erro ao carregar o background do menu." << std::endl;
     }

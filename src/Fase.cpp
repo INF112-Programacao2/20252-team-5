@@ -28,10 +28,10 @@ Fase::Fase(int inicioTempo, int numMonstros)
 {
     this->timer = new Timer(inicioTempo);
 
-    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer, "../assets/textures/MaquinaDeRec/Maquina.png");
+    this->maquina = new MaquinaDeReciclagem(MAQUINA_X, MAQUINA_Y, this, timer, "assets/textures/MaquinaDeRec/Maquina.png");
 
     // 3. Carregar textura do tile
-    std::string path = "../assets/textures/block.png";
+    std::string path = "assets/textures/block.png";
     if (!texturaTile.loadFromFile(path))
         std::cerr << "Erro ao carregar textura do tile: " << path << std::endl;
     else
@@ -84,7 +84,7 @@ Timer *Fase::getTimer() const
 
 void Fase::carregarMapa(int nivel)
 {
-    std::string path = "../assets/layout/nivel" + std::to_string(nivel) + ".txt";
+    std::string path = "assets/layout/nivel" + std::to_string(nivel) + ".txt";
     std::ifstream arquivo(path);
 
     if (!arquivo.is_open())
@@ -206,7 +206,7 @@ void Fase::inicializarEntidades()
         // Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
         entidades.push_back(new Jogador(
             50.0f, 50.0f, 300.0f,
-            "../assets/textures/player/andando2_direita.png" // Provisório, já que ainda não tem animação
+            "assets/textures/player/andando2_direita.png" // Provisório, já que ainda não tem animação
             ));
         std::cout << "Jogador criado com sucesso." << std::endl;
 
@@ -217,7 +217,7 @@ void Fase::inicializarEntidades()
             entidades.push_back(
                 new Perseguidor(
                     800.f + i * 50.0f, 640.f, 150.f,
-                    "../assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
+                    "assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
                     10));
         }
         for (int i = quantidadeMonstros / 2; i < quantidadeMonstros; i++)
@@ -226,7 +226,7 @@ void Fase::inicializarEntidades()
             entidades.push_back(
                 new Perseguidor(
                     200.f + i * 50.0f, 640.f, 300.f,
-                    "../assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
+                    "assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
                     10));
         }
         std::cout << "Monstros criados com sucesso: " << quantidadeMonstros << std::endl;
