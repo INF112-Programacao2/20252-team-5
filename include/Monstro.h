@@ -11,10 +11,10 @@ protected:
 	bool _capturado = false;
 	Direcao _direcao = Direcao::DIREITA;
 
-	sf::Texture _textureParadoDireita; // Textura de parado para direita
-    sf::Texture _textureParadoEsquerda; // Textura de parado para esquerda
-    sf::Texture _textureAndandoDireita; // Textura de movendo para direita
-    sf::Texture _textureAndandoEsquerda; // Textura de movendo para esquerda
+	sf::Texture _textureParadoDireita; 
+    sf::Texture _textureParadoEsquerda;
+    sf::Texture _textureAndandoDireita;
+    sf::Texture _textureAndandoEsquerda;
     sf::Sprite _sprite2;
 
     bool movendoHorizontalmente = true;
@@ -30,7 +30,6 @@ public:
 	void capturar();
 	bool estaCapturado() const;
 
-	// Implementação de atualização genérica para monstros
 	void atualizar(float deltaTime, const Fase& fase) override;
 	virtual void comportamento(const Jogador& jogador, float dt, const Fase& fase) = 0;
 };

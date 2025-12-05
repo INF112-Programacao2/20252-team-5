@@ -7,11 +7,11 @@ private:
     int tempoRestante;
 
 public:
-    Timer(int tempoInicial); // Construtor da classe
+    Timer(int tempoInicial);
     int getTempoRestante() const;
-    void decrementarTempo(); // Decrementa o tempo a cada frame
+    void decrementarTempo();
     void aumentarTempo(int bonusTempo);
-    bool tempoZerou() const; // Verifica se o jogo deve acabar
+    bool tempoZerou() const;
 };
 
 #endif

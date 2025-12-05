@@ -40,10 +40,8 @@ void Tela::carregarFonte()
     static bool carregou = false;
     if (carregou)
         return;
-    // Tentar caminho relativo quando executável roda em build (padrão)
     if (!font.loadFromFile("assets/fonts/PixelBook-Regular.ttf"))
     {
-        // Tentar caminho alternativo (quando executável é chamado da raiz do projeto)
         if (!font.loadFromFile("assets/fonts/PixelBook-Regular.ttf"))
         {
             std::cerr << "Erro ao carregar a fonte PixelBook-Regular.ttf (../assets/ ou assets/)" << std::endl;
@@ -79,13 +77,11 @@ void Tela::carregarGameBackground()
 
 void Tela::desenharScrollingBackground(class Fase *fase, sf::RenderWindow &window)
 {
-    carregarGameBackground(); // Garante que a textura esteja carregada
+    carregarGameBackground();
 
     if (!fase || !fase->getEntidades().size())
-        return; // Verifica se a fase está ok
+        return;
 
-    // 1. Obter a posição de referência (Assumindo que o Jogador é a primeira entidade)
-    // ATENÇÃO: Você pode precisar ajustar o método para obter a posição X do Jogador
     float playerX = fase->getEntidades()[0]->getPosicaoX();
     const float PARALLAX_FACTOR = 0.02f;
     float cameraOffset = playerX - (LARGURA_JANELA / 2.0f);
@@ -95,10 +91,8 @@ void Tela::desenharScrollingBackground(class Fase *fase, sf::RenderWindow &windo
     float scaleX = (float)LARGURA_JANELA / textureSize.x;
     float scaleY = (float)ALTURA_JANELA / textureSize.y;
 
-    // Aplica a escala para esticar a imagem
     backgroundSprite.setScale(scaleX, scaleY);
 
-    // A posição Y é sempre 0, mas a posição X é corrigida pelo Parallax
     backgroundSprite.setPosition(-parallaxOffset, 0.0f);
 
     window.draw(backgroundSprite);
@@ -120,19 +114,15 @@ void Tela::desenharHUD(class Fase *fase, sf::RenderWindow &window)
     std::string minutos_str = (minutos < 10) ? ("0" + std::to_string(minutos)) : std::to_string(minutos);
     std::string tempoStr = "TEMPO: " + minutos_str + ":" + segundos_str;
 
-    // 2. Configurar o sf::Text
-    sf::Text timerText(tempoStr, font, 36); // Usando o membro estático Tela::font
+    sf::Text timerText(tempoStr, font, 36);
     timerText.setFillColor(sf::Color::White);
 
-    // 3. Posição: Canto superior direito
-    // LARGURA_JANELA vem de VariaveisGlobais.h
     float padding = 20.0f;
     float posX = LARGURA_JANELA - timerText.getLocalBounds().width - padding;
     float posY = padding;
 
     timerText.setPosition(posX, posY);
 
-    // 4. Desenhar
     window.draw(timerText);
 }
 
@@ -176,40 +166,29 @@ void Tela::exibirMenu(sf::RenderWindow &window)
 
 void Tela::exibirPause(sf::RenderWindow &window)
 {
-    // 1. Carregar a fonte
     carregarFonte();
 
-    // 2. Criar e desenhar um Overlay (fundo semi-transparente)
-    // Isso simula o "dimming" da tela do jogo que estava por baixo.
     sf::RectangleShape overlay(sf::Vector2f(LARGURA_JANELA, ALTURA_JANELA));
-    // Preto com 70% de opacidade (Alpha = 180 de 255)
     overlay.setFillColor(sf::Color(0, 0, 0, 180));
     window.draw(overlay);
 
-    // 3. Texto Principal: "PAUSADO"
     sf::Text titulo("PAUSADO", font, 60);
     titulo.setFillColor(sf::Color::White);
 
-    // Centralizar o título (LARGURA_JANELA = 1280)
     titulo.setPosition(
         (LARGURA_JANELA - titulo.getLocalBounds().width) / 2,
-        (ALTURA_JANELA / 3.0f) // Posicionado em 1/3 da altura
+        (ALTURA_JANELA / 3.0f)
     );
     window.draw(titulo);
 
-    // 4. Texto de Instrução
     sf::Text instrucao("Pressione ESC para continuar", font, 24);
     instrucao.setFillColor(sf::Color(200, 200, 200));
 
-    // Centralizar as instruções, logo abaixo do título
     instrucao.setPosition(
         (LARGURA_JANELA - instrucao.getLocalBounds().width) / 2,
-        (ALTURA_JANELA / 3.0f) + 100 // 100 pixels abaixo do título
+        (ALTURA_JANELA / 3.0f) + 100
     );
     window.draw(instrucao);
-
-    // NOTA: A janela NÃO é exibida (display) aqui.
-    // O Jogo::desenhar() chama window.display() UMA VEZ no final do loop.
 }
 
 void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
@@ -219,7 +198,6 @@ void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
     window.clear(sf::Color::Black);
     desenharScrollingBackground(fase, window);
 
-    // Desenhar a fase
     if (fase)
         fase->desenhar(window);
     else
@@ -242,7 +220,6 @@ void Tela::exibirCreditos(sf::RenderWindow &window)
         "Valdinei da Silva Stampini\n\n\n"
         "Pressione ESC para voltar";
 
-    // Desenhar linha a linha, centralizando cada linha individualmente
     unsigned int charSize = 36;
     float y = 100.f;
     float lineSpacing = font.getLineSpacing(charSize);
@@ -274,24 +251,18 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
 
     carregarFonte();
 
-    // Texto principal (fade-in)
     sf::Text titulo("VOCÊ GANHOU!!", font, 80);
     titulo.setFillColor(sf::Color(170, 200, 170));
 
     sf::FloatRect tb = titulo.getLocalBounds();
-    // Move a origem do texto para o centro do seu retângulo
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f); 
-    // Posiciona o centro do texto na largura central, a 35% da altura da janela
     titulo.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.35f);
 
-    // Texto instruções (piscando)
     sf::Text instrucao("Pressione ENTER para ir para o MENU", font, 32);
     instrucao.setFillColor(sf::Color(215, 215, 215, 215));
 
     sf::FloatRect ib = instrucao.getLocalBounds();
-    // Move a origem do texto para o centro do seu retângulo
     instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
-    // Posiciona o centro do texto na largura central, a 55% da altura da janela
     instrucao.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.55f);
 
     float fadeAlpha = 0;
@@ -315,12 +286,10 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
                 std::cout << "Simulando reinicio..." << std::endl;
         }
 
-        // ---- Animação 1: Fade-in no texto principal ----
         if (fadeAlpha < 255)
-            fadeAlpha += 0.25; // velocidade do fade-in
+            fadeAlpha += 0.25;
         titulo.setFillColor(sf::Color(255, 0, 0, fadeAlpha));
 
-        // ---- Animação 2: Texto piscando ----
         blinkTimer += 0.05f;
         if (blinkTimer >= 1.0f)
         {
@@ -329,12 +298,10 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
         }
         instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
 
-        // ---- Animação 3: Fundo "respirando" ----
         backgroundPulse += 0.3f;
         int pulse = 20 + std::sin(backgroundPulse) * 20;
         window.clear(sf::Color(pulse, 200, 110));
 
-        // Desenhar tudo
         window.draw(titulo);
         window.draw(instrucao);
         window.display();
@@ -354,14 +321,11 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
     titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
     titulo.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.35f);
 
-    // Texto instruções (piscando)
     sf::Text instrucao("Pressione ENTER para tentar novamente", font, 32);
     instrucao.setFillColor(sf::Color(255, 255, 255, 255));
 
     sf::FloatRect ib = instrucao.getLocalBounds();
-    // Move a origem do texto para o centro do seu retângulo
     instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
-    // Posiciona o centro do texto no centro da janela, mas abaixo do título (ex: 55%)
     instrucao.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.55f);
 
     float fadeAlpha = 0;
@@ -385,12 +349,10 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
                 std::cout << "Simulando reinicio..." << std::endl;
         }
 
-        // ---- Animação 1: Fade-in no texto principal ----
         if (fadeAlpha < 255)
-            fadeAlpha += 2; // velocidade do fade-in
+            fadeAlpha += 2;
         titulo.setFillColor(sf::Color(255, 0, 0, fadeAlpha));
 
-        // ---- Animação 2: Texto piscando ----
         blinkTimer += 0.05f;
         if (blinkTimer >= 1.0f)
         {
@@ -399,12 +361,10 @@ void Tela::exibirDerrota(sf::RenderWindow &window)
         }
         instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
 
-        // ---- Animação 3: Fundo "respirando" ----
         backgroundPulse += 0.3f;
         int pulse = 20 + std::sin(backgroundPulse) * 20;
         window.clear(sf::Color(pulse, 0, 0));
 
-        // Desenhar tudo
         window.draw(titulo);
         window.draw(instrucao);
         window.display();

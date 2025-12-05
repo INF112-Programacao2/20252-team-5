@@ -28,22 +28,22 @@ public:
     Fase(int inicioTempo, int numMonstros);
     ~Fase();
 
-    int getTempoInicial() const;          // + getTempo() int
-    int getQuantidadeMonstros() const;    // + getQuantidade Monstros() int
-    const char *getMapa(int linha) const; // + getMapa(): char[]
+    int getTempoInicial() const;          
+    int getQuantidadeMonstros() const;    
+    const char *getMapa(int linha) const; 
 
-    std::vector<Personagem *> &getEntidades();  // Expõe o vetor Personagem para Jogo fazer a checagem de vitótia
+    std::vector<Personagem *> &getEntidades();  
     std::vector<std::pair<int, int>> getPlataformas();
-    Timer *getTimer() const;                    // Expõe Timer para Jogo alterar o tempo
-    void removerEntidade(Personagem *entidade); // Para a Máquina avisar a Fase para deletar um Monstro do vetor entidades
+    Timer *getTimer() const;                    
+    void removerEntidade(Personagem *entidade); 
 
-    void carregarMapa(int nivel); // Carrega o mapa do arquivo de texto
+    void carregarMapa(int nivel);
     void inicializarEntidades();
     void atualizar(float deltaTime);
-    void desenhar(sf::RenderWindow &window); // Desenha a fase completa
+    void desenhar(sf::RenderWindow &window); 
 
-    void detectarVitoria();        // + detectar Vitoria(): void
-    bool verificarDerrota() const; // Checa o Timer (Responsabilidade da Fase)
+    void detectarVitoria();       
+    bool verificarDerrota() const; 
 };
 
 #endif

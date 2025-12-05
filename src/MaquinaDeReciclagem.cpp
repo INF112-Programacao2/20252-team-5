@@ -10,7 +10,6 @@ MaquinaDeReciclagem::MaquinaDeReciclagem(int posX, int posY, Fase *_fase, Timer 
       fase(_fase),
       timer(_timer)
 {
-    // A Máquina está posicionada e conectada aos seus colaboradores
     if (!_texture.loadFromFile(imagem))
     {
         std::cerr << "Erro ao carregar \"" << imagem << "\"" << std::endl;
@@ -45,25 +44,24 @@ int MaquinaDeReciclagem::calcularBonusTempo(Monstro *inimigo) const
 {
     if (inimigo)
     {
-        return inimigo->getValorTempo(); // Só chama a get de tempo do monstro e retorna o valor
+        return inimigo->getValorTempo();
     }
     return 0;
 }
 
 void MaquinaDeReciclagem::receberInimigo(Monstro *inimigo)
 {
-    if (inimigo) // isso verifica se ha um inimigo capturado no momento q a função é chamada
+    if (inimigo)
     {
-        int bonus = calcularBonusTempo(inimigo); // primeiro pego o bonus do monstro
+        int bonus = calcularBonusTempo(inimigo);
 
         if (timer)
         {
-            timer->aumentarTempo(bonus); // e ja passo para aumentar o tempo
+            timer->aumentarTempo(bonus);
         }
 
         if (fase)
         {
-            // CORREÇÃO: Chama o método da fase para remover o Monstro
             fase->removerEntidade(inimigo);
         }
     }
