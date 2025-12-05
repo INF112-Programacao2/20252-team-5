@@ -79,7 +79,7 @@ void Perseguidor::comportamento(const Jogador &jogador, float dt, const Fase &fa
         }
     }
 
-    if(dist < 150){
+    if(dist < 150){     // se o jogador se aproximar, o monstro foge do player
         if(dx < 0) _direcao = Direcao::ESQUERDA;
         else _direcao = Direcao::DIREITA;
     }
@@ -107,6 +107,12 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
     int tileX = floorf(_x / TAM_PIXEL); // posição no eixo x em relação à matriz
     int tileY = floorf(_y / TAM_PIXEL); // posição no eixo y em relação à matriz
 
+    if(dist >= 150){    // se o player estiver distante
+        _escondido = false; // não está mais escondido
+        _direcao = Direcao::DIREITA;    // não importa a direção, o importante é que ela seja válida (direita ou esquerda)
+        _y = _y - TAM_PIXEL;    // sai do esconderijo;
+    }
+
     // verifica se há parede ou queda a frente, se houver, muda a direção do movimento
     if(_direcao == Direcao::DIREITA){
         if(colisao(_direcao, 1.f, fase) || fase.getMapa(tileY + 1)[tileX + 1] == '0'){
@@ -122,8 +128,15 @@ void Escondedor::comportamento(const Jogador &jogador, float dt, const Fase &fas
         }
     }
 
-    if(dist < 150){
-        if(dx < 0) _direcao = Direcao::ESQUERDA;
+    tileX = floorf(_x / TAM_PIXEL);
+    tileY = floorf(_y / TAM_PIXEL);
+
+    if(dist < 150){     // se o player se aproximar, verfica:
+        if(fase.getMapa(tileY + 1)[tileX] == '3'){  // se abaixo do monstrinho houver um esconderijo
+            _direcao = Direcao::NENHUMA;    // para de se mover
+            _escondido = true;              // fica escondido
+            _y = (tileY + 1) * TAM_PIXEL;   // entra no esconderijo
+        } else  if(dx < 0) _direcao = Direcao::ESQUERDA;    // se não houver, foge do player
         else _direcao = Direcao::DIREITA;
     }
 }
