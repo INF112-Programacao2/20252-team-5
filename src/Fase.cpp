@@ -207,7 +207,6 @@ void Fase::inicializarEntidades()
             // com base nesse número é escolhida a plataforma e definidas as coordenadas
             float x = plataformas[n].first * TAM_PIXEL;
             float y = plataformas[n].second * TAM_PIXEL;
-            std::cout << x << " " << y << std::endl;
 
             // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
             entidades.push_back(
@@ -324,15 +323,6 @@ void Fase::desenhar(sf::RenderWindow &window)
                 if (tile == '1')
                 {
                     sf::Sprite sprite(texturaTile);
-                    sprite.setPosition(coluna * TAM_PIXEL, linha * TAM_PIXEL);
-                    sprite.setScale(static_cast<float>(TAM_PIXEL) / texturaTile.getSize().x,
-                                    static_cast<float>(TAM_PIXEL) / texturaTile.getSize().y);
-                    window.draw(sprite);
-                }
-                else if (tile == '2')
-                {
-                    sf::Sprite sprite(texturaTile);
-                    sprite.setColor(sf::Color(64, 224, 208, 127));
                     sprite.setPosition(coluna * TAM_PIXEL, linha * TAM_PIXEL);
                     sprite.setScale(static_cast<float>(TAM_PIXEL) / texturaTile.getSize().x,
                                     static_cast<float>(TAM_PIXEL) / texturaTile.getSize().y);
