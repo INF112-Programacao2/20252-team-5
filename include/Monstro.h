@@ -2,13 +2,14 @@
 #define MONSTRO_H_
 
 #include "Personagem.h"
+#include "VariaveisGlobais.h"
 class Jogador;
 
 class Monstro : public Personagem{
-private:
+protected:
 	int _valorTempo;
 	bool _capturado = false;
-
+	Direcao _direcao = Direcao::DIREITA;
 public:
 	Monstro(float x, float y, float velocidade, std::string imagem, int tempo);
 	int getValorTempo() const;
