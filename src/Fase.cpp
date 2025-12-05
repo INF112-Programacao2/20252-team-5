@@ -12,6 +12,8 @@
 #include <fstream>
 #include <algorithm> // Para usar std::remove e std::erase
 #include <cmath>     // Para calcular o raio de interação
+#include <random>
+#include <ctime>
 
 // Raio de interação para interagir com a máquina de reciclagem
 const float RAIO_INTERACAO = TAM_PIXEL * 2.0f;
@@ -182,6 +184,10 @@ void Fase::inicializarEntidades()
     // coordenadas de inicio do jogador
     float jogador_x = plataformas[0].first * TAM_PIXEL;
     float jogador_y = plataformas[0].second * TAM_PIXEL;
+
+    std::mt19937 gen(static_cast<unsigned int>(time(nullptr)));     // motor Mersenne Twister
+    std::uniform_int_distribution<> dist(0, plataformas.size() - 1);  // gerará números entre 2 (primeira plataforma) e tamanho do vetor - 1(ultima plataforma)
+
     try
     {
         // Criar Jogador (Posição X, Y, Velocidade, Caminho da Textura) sempre na 1a posição do vetor
@@ -192,21 +198,21 @@ void Fase::inicializarEntidades()
         std::cout << "Jogador criado com sucesso." << std::endl;
 
         // Criar Monstros (adição simples por enquanto)
-        for (int i = 0; i < quantidadeMonstros / 2; i++)
+        for (int i = 0; i < quantidadeMonstros; i++)
         {
+            int n;
+            do {
+                n = dist(gen);
+            } while (n < 2); // gera um número aleatório com base no motor criado acima até que ele seja maior que 2
+            // com base nesse número é escolhida a plataforma e definidas as coordenadas
+            float x = plataformas[n].first * TAM_PIXEL;
+            float y = plataformas[n].second * TAM_PIXEL;
+            std::cout << x << " " << y << std::endl;
+
             // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
             entidades.push_back(
                 new Perseguidor(
-                    800.f + i * 50.0f, 640.f, 150.f,
-                    "assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
-                    10));
-        }
-        for (int i = quantidadeMonstros / 2; i < quantidadeMonstros; i++)
-        {
-            // Monstro concreto (Perseguidor) - Pos X, Pos Y, Velocidade, Textura, valorTempoBonus
-            entidades.push_back(
-                new Perseguidor(
-                    200.f + i * 50.0f, 640.f, 300.f,
+                    x, y, 200.f,
                     "assets/textures/monstro1/andando1_direita.png", // Provisório, já que ainda não tem animação
                     10));
         }
