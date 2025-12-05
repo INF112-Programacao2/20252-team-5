@@ -50,7 +50,7 @@ void Jogo::processarEventos()
     {
         if (event.type == sf::Event::Closed)
             window.close();
-            
+
         // NOVO: TRATAMENTO DE EVENTOS DE TECLA (TOGGLE PAUSE/MENU)
         if (event.type == sf::Event::KeyPressed)
         {
@@ -65,14 +65,14 @@ void Jogo::processarEventos()
                 {
                     status = Status::JOGANDO;
                 }
-                
+
                 // Trata a saída da tela de Créditos
                 else if (status == Status::CREDITOS)
                 {
                     status = Status::MENU;
                 }
             }
-            
+
             // Tratamento de Enter para o menu pode ser feito aqui também para evitar spam de ENTER
             if (event.key.code == sf::Keyboard::Enter)
             {
@@ -94,19 +94,18 @@ void Jogo::processarEventos()
                     default:
                         break;
                     }
-                } 
+                }
                 else if (status == Status::DERROTA)
                 {
                     // Lógica de reinício de fase (já estava correta, mas simplificada aqui)
                     delete faseAtual;
                     // Lembre-se de ajustar os valores: 60, 5 eram só exemplos
-                    faseAtual = new Fase(60, 5); 
+                    faseAtual = new Fase(60, 5);
                     status = Status::MENU;
                 }
             }
-        } // Fim do if (event.type == sf::Event::KeyPressed)
-
-        // Lógica de Navegação no Menu (mantida com isKeyPressed para repetição de movimento)
+        }
+        
         if (status == Status::MENU)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -128,10 +127,10 @@ void Jogo::atualizar(float deltaTime)
 {
     // Acumulador para decrementar o Timer a cada 1 segundo real
     static float acumuladorTempo = 0.0f;
-    acumuladorTempo += deltaTime;
 
     if (status == Status::JOGANDO && faseAtual)
     {
+        acumuladorTempo += deltaTime;
         // Atualizar a lógica da Fase
         faseAtual->atualizar(deltaTime);
 
@@ -152,7 +151,7 @@ void Jogo::atualizar(float deltaTime)
         }
 
         // DERROTA: Se o Timer da Fase zerou
-         if (faseAtual->verificarDerrota())
+        if (faseAtual->verificarDerrota())
         {
             status = Status::DERROTA;
             return;
