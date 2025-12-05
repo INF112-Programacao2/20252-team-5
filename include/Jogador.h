@@ -1,6 +1,7 @@
 #ifndef JOGADOR_H
 #define JOGADOR_H
 
+#include <SFML/Graphics.hpp>
 #include "Personagem.h"
 #include "Monstro.h"
 // #include "PowerUp.h" // Descomente quando tiver a classe PowerUp pronta
@@ -12,10 +13,17 @@ class Jogador : public Personagem
 private:
     PowerUp *powerUpAtivo;
     Monstro *monstroCarregado; // NOVO: ponteiro para identificar o monstro capturado
+
+    sf::Texture _textureParadoDireita; // Textura de parado para direita
+    sf::Texture _textureParadoEsquerda; // Textura de parado para esquerda
+    sf::Texture _textureAndandoDireita; // Textura de movendo para direita
+    sf::Texture _textureAndandoEsquerda; // Textura de movendo para esquerda
+    sf::Sprite _sprite2;
+
+    bool movendoHorizontalmente = true;
     
-    sf::Texture _textureParadoEsquerda;
-    sf::Texture _textureParadoDireita;
-    ultimaDirecao _ultimaDirecao;
+    float tempoAcumulado = 0.0f;
+    const float tempoIntervalo = 0.2f;
 
 public:
     // CORREÇÃO 1 & 2: Usar float e std::string para bater com Personagem
@@ -38,3 +46,4 @@ public:
 };
 
 #endif
+
