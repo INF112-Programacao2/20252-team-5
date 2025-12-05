@@ -8,8 +8,11 @@ class Tela
 private:
     static int opcaoSelecionada;
     static sf::Font font;
+    static sf::Texture backgroundTexture;
+    static bool backgroundCarregado;
 
     static void carregarFonte();
+    static void carregarBackground();
 
 public:
     Tela();
