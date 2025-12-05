@@ -279,16 +279,20 @@ void Tela::exibirVitoria(sf::RenderWindow &window)
     titulo.setFillColor(sf::Color(170, 200, 170));
 
     sf::FloatRect tb = titulo.getLocalBounds();
-    titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
-    titulo.setPosition(800 / 2.f, 200);
+    // Move a origem do texto para o centro do seu retângulo
+    titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f); 
+    // Posiciona o centro do texto na largura central, a 35% da altura da janela
+    titulo.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.35f);
 
     // Texto instruções (piscando)
     sf::Text instrucao("Pressione ENTER para ir para o MENU", font, 32);
     instrucao.setFillColor(sf::Color(215, 215, 215, 215));
 
     sf::FloatRect ib = instrucao.getLocalBounds();
+    // Move a origem do texto para o centro do seu retângulo
     instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
-    instrucao.setPosition(800 / 2.f, 400);
+    // Posiciona o centro do texto na largura central, a 55% da altura da janela
+    instrucao.setPosition(LARGURA_JANELA / 2.f, ALTURA_JANELA * 0.55f);
 
     float fadeAlpha = 0;
     bool blinkOn = true;
