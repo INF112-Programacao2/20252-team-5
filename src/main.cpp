@@ -4,10 +4,24 @@
 
 int main()
 {
-    // Renderiza a janela ao instanciar a classe jogo
-    Jogo jogo;
+    std::cout << "DEBUG: Entrou na main." << std::endl;
 
-    // Inicia o loop principal do jogo
-    jogo.executar();
+    // Tente envolver a inicialização em um bloco try-catch, se possível, para diagnosticar exceções.
+    try
+    {
+        Jogo jogo;
+        std::cout << "DEBUG: Objeto Jogo criado com sucesso." << std::endl;
+        jogo.executar();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "ERRO FATAL: " << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "ERRO FATAL DESCONHECIDO." << std::endl;
+    }
+
+    std::cout << "DEBUG: Main terminada." << std::endl;
     return 0;
 }

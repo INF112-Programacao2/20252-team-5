@@ -1,5 +1,6 @@
 #include "../include/Jogador.h"
 #include "../include/PowerUp.h"
+#include "../include/VariaveisGlobais.h"
 #include <cmath>                    // Para ceil e floorf
 #include <iostream>                 // Para cout e endl
 #include <SFML/Window/Keyboard.hpp> // Necessário para detectar teclas

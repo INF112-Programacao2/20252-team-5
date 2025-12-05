@@ -12,6 +12,10 @@ class Jogador : public Personagem
 private:
     PowerUp *powerUpAtivo;
     Monstro *monstroCarregado; // NOVO: ponteiro para identificar o monstro capturado
+    
+    sf::Texture _textureParadoEsquerda;
+    sf::Texture _textureParadoDireita;
+    ultimaDirecao _ultimaDirecao;
 
 public:
     // CORREÇÃO 1 & 2: Usar float e std::string para bater com Personagem
