@@ -50,91 +50,75 @@ void Jogo::processarEventos()
     {
         if (event.type == sf::Event::Closed)
             window.close();
-
-        switch (status)
+            
+        // NOVO: TRATAMENTO DE EVENTOS DE TECLA (TOGGLE PAUSE/MENU)
+        if (event.type == sf::Event::KeyPressed)
         {
-        // MENU
-        case Status::MENU:
-            // Navegação no menu (delegada para Tela)
+            if (event.key.code == sf::Keyboard::Escape)
+            {
+                // Alterna o status entre JOGANDO e PAUSA
+                if (status == Status::JOGANDO)
+                {
+                    status = Status::PAUSA;
+                }
+                else if (status == Status::PAUSA)
+                {
+                    status = Status::JOGANDO;
+                }
+                
+                // Trata a saída da tela de Créditos
+                else if (status == Status::CREDITOS)
+                {
+                    status = Status::MENU;
+                }
+            }
+            
+            // Tratamento de Enter para o menu pode ser feito aqui também para evitar spam de ENTER
+            if (event.key.code == sf::Keyboard::Enter)
+            {
+                // Lógica de seleção de menu e reinício de fase
+                if (status == Status::MENU)
+                {
+                    int opcao = Tela::getOpcaoSelecionada();
+                    switch (opcao)
+                    {
+                    case 0: // Jogar
+                        status = Status::JOGANDO;
+                        break;
+                    case 1: // Créditos
+                        status = Status::CREDITOS;
+                        break;
+                    case 2: // Sair
+                        window.close();
+                        break;
+                    default:
+                        break;
+                    }
+                } 
+                else if (status == Status::DERROTA)
+                {
+                    // Lógica de reinício de fase (já estava correta, mas simplificada aqui)
+                    delete faseAtual;
+                    // Lembre-se de ajustar os valores: 60, 5 eram só exemplos
+                    faseAtual = new Fase(60, 5); 
+                    status = Status::MENU;
+                }
+            }
+        } // Fim do if (event.type == sf::Event::KeyPressed)
+
+        // Lógica de Navegação no Menu (mantida com isKeyPressed para repetição de movimento)
+        if (status == Status::MENU)
+        {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             {
                 Tela::anteriorOpcao();
-                sf::sleep(sf::milliseconds(300));
+                sf::sleep(sf::milliseconds(200)); // Mantém um delay para navegação
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
             {
                 Tela::proximaOpcao();
-                sf::sleep(sf::milliseconds(300));
+                sf::sleep(sf::milliseconds(200)); // Mantém um delay para navegação
             }
-
-            // Seleção no menu
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-            {
-                int opcao = Tela::getOpcaoSelecionada();
-                switch (opcao)
-                {
-                case 0: // Jogar
-                    status = Status::JOGANDO;
-                    break;
-                case 1: // Créditos
-                    status = Status::CREDITOS;
-                    break;
-                case 2: // Sair
-                    window.close();
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
-
-        // JOGANDO
-        case Status::JOGANDO:
-            // Pausar o jogo
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            {
-                status = Status::PAUSA;
-            }
-            
-            break;
-
-        // PAUSA
-        case Status::PAUSA:
-            // Retomar o jogo
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            {
-                status = Status::JOGANDO;
-            }
-            break;
-
-        // VITORIA
-        case Status::VITORIA:
-            break;
-
-        // DERROTA
-        case Status::DERROTA:
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
-              //reinicia fase
-                delete faseAtual;
-                faseAtual = new Fase(60, 5); //recria a fase (lembrar de ajustar os valores
-
-                status = Status::MENU;
-                sf::sleep(sf::milliseconds(200));
-            }
-            break;
-
-        // CREDITOS
-        case Status::CREDITOS:
-            // Voltar ao menu principal
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            {
-                status = Status::MENU;
-            }
-            break;
-
-        // Default case
-        default:
-            break;
         }
     }
 }

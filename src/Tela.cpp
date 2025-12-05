@@ -70,7 +70,7 @@ void Tela::carregarGameBackground()
     if (gameBackgroundCarregado)
         return;
 
-    if (!gameBackgroundTexture.loadFromFile("../assets/textures/background-jogando.png"))
+    if (!gameBackgroundTexture.loadFromFile("assets/textures/background-jogando.png"))
     {
         std::cerr << "Erro ao carregar o background da fase (game_bg.png)." << std::endl;
     }
@@ -176,71 +176,40 @@ void Tela::exibirMenu(sf::RenderWindow &window)
 
 void Tela::exibirPause(sf::RenderWindow &window)
 {
-    window.setFramerateLimit(60);
-
+    // 1. Carregar a fonte
     carregarFonte();
 
-    // Texto principal (fade-in)
-    sf::Text titulo("PAUSADO", font, 80);
-    titulo.setFillColor(sf::Color(255, 255, 255, 0));
+    // 2. Criar e desenhar um Overlay (fundo semi-transparente)
+    // Isso simula o "dimming" da tela do jogo que estava por baixo.
+    sf::RectangleShape overlay(sf::Vector2f(LARGURA_JANELA, ALTURA_JANELA));
+    // Preto com 70% de opacidade (Alpha = 180 de 255)
+    overlay.setFillColor(sf::Color(0, 0, 0, 180)); 
+    window.draw(overlay);
 
-    sf::FloatRect tb = titulo.getLocalBounds();
-    titulo.setOrigin(tb.left + tb.width / 2.f, tb.top + tb.height / 2.f);
-    titulo.setPosition(800 / 2.f, 200);
+    // 3. Texto Principal: "PAUSADO"
+    sf::Text titulo("PAUSADO", font, 60);
+    titulo.setFillColor(sf::Color::White);
+    
+    // Centralizar o título (LARGURA_JANELA = 1280)
+    titulo.setPosition(
+        (LARGURA_JANELA - titulo.getLocalBounds().width) / 2, 
+        (ALTURA_JANELA / 3.0f) // Posicionado em 1/3 da altura
+    );
+    window.draw(titulo);
 
-    // Texto instruções (piscando)
-    sf::Text instrucao("Pressione ENTER para continuar", font, 35);
-    instrucao.setFillColor(sf::Color(255, 255, 255, 255));
+    // 4. Texto de Instrução
+    sf::Text instrucao("Pressione ESC para continuar", font, 24);
+    instrucao.setFillColor(sf::Color(200, 200, 200));
 
-    sf::FloatRect ib = instrucao.getLocalBounds();
-    instrucao.setOrigin(ib.left + ib.width / 2.f, ib.top + ib.height / 2.f);
-    instrucao.setPosition(800 / 2.f, 400);
-
-    float fadeAlpha = 0;
-    bool blinkOn = true;
-    float blinkTimer = 0;
-    float backgroundPulse = 0;
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                window.close();
-
-            // ---- VOLTAR PARA O JOGO ----
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-                return;
-        }
-
-        // Fade-in do texto principal
-        if (fadeAlpha < 255)
-            fadeAlpha += 0.35f;
-        titulo.setFillColor(sf::Color(255, 255, 255, fadeAlpha));
-
-        // Animação 2: Texto piscando
-        blinkTimer += 0.05f;
-        if (blinkTimer >= 1.f)
-        {
-            blinkTimer = 0;
-            blinkOn = !blinkOn;
-        }
-        instrucao.setFillColor(sf::Color(255, 255, 255, blinkOn ? 255 : 40));
-
-        // Animação 3: Fundo respirando
-        backgroundPulse += 0.25f;
-        int pulse = 40 + std::sin(backgroundPulse) * 20;
-        window.clear(sf::Color(pulse, 80, 130)); // roxo-azulado
-
-        // Render
-        window.draw(titulo);
-        window.draw(instrucao);
-        window.display();
-    }
+    // Centralizar as instruções, logo abaixo do título
+    instrucao.setPosition(
+        (LARGURA_JANELA - instrucao.getLocalBounds().width) / 2, 
+        (ALTURA_JANELA / 3.0f) + 100 // 100 pixels abaixo do título
+    );
+    window.draw(instrucao);
+    
+    // NOTA: A janela NÃO é exibida (display) aqui.
+    // O Jogo::desenhar() chama window.display() UMA VEZ no final do loop.
 }
 
 void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
