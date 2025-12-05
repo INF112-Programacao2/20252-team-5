@@ -11,6 +11,8 @@ int Tela::opcaoSelecionada = 0;
 sf::Font Tela::font;
 sf::Texture Tela::backgroundTexture;
 bool Tela::backgroundCarregado = false;
+sf::Texture Tela::gameBackgroundTexture;
+bool Tela::gameBackgroundCarregado = false;
 
 Tela::Tela() {}
 
@@ -51,7 +53,8 @@ void Tela::carregarFonte()
     carregou = true;
 }
 
-void Tela::carregarBackground() {
+void Tela::carregarBackground()
+{
     if (backgroundCarregado)
         return;
 
@@ -62,7 +65,76 @@ void Tela::carregarBackground() {
     backgroundCarregado = true;
 }
 
+void Tela::carregarGameBackground()
+{
+    if (gameBackgroundCarregado)
+        return;
 
+    if (!gameBackgroundTexture.loadFromFile("../assets/textures/background-jogando.png"))
+    {
+        std::cerr << "Erro ao carregar o background da fase (game_bg.png)." << std::endl;
+    }
+    gameBackgroundCarregado = true;
+}
+
+void Tela::desenharScrollingBackground(class Fase *fase, sf::RenderWindow &window)
+{
+    carregarGameBackground(); // Garante que a textura esteja carregada
+
+    if (!fase || !fase->getEntidades().size())
+        return; // Verifica se a fase está ok
+
+    // 1. Obter a posição de referência (Assumindo que o Jogador é a primeira entidade)
+    // ATENÇÃO: Você pode precisar ajustar o método para obter a posição X do Jogador
+    float playerX = fase->getEntidades()[0]->getPosicaoX();
+    const float PARALLAX_FACTOR = 0.02f;
+    float cameraOffset = playerX - (LARGURA_JANELA / 2.0f);
+    float parallaxOffset = cameraOffset * PARALLAX_FACTOR;
+    sf::Sprite backgroundSprite(gameBackgroundTexture);
+    sf::Vector2u textureSize = gameBackgroundTexture.getSize();
+    float scaleX = (float)LARGURA_JANELA / textureSize.x;
+    float scaleY = (float)ALTURA_JANELA / textureSize.y;
+
+    // Aplica a escala para esticar a imagem
+    backgroundSprite.setScale(scaleX, scaleY);
+
+    // A posição Y é sempre 0, mas a posição X é corrigida pelo Parallax
+    backgroundSprite.setPosition(-parallaxOffset, 0.0f);
+
+    window.draw(backgroundSprite);
+}
+
+void Tela::desenharHUD(class Fase *fase, sf::RenderWindow &window)
+{
+    carregarFonte();
+
+    if (!fase || !fase->getTimer())
+        return;
+
+    int tempoTotal = fase->getTimer()->getTempoRestante();
+
+    int minutos = tempoTotal / 60;
+    int segundos = tempoTotal % 60;
+
+    std::string segundos_str = (segundos < 10) ? ("0" + std::to_string(segundos)) : std::to_string(segundos);
+    std::string minutos_str = (minutos < 10) ? ("0" + std::to_string(minutos)) : std::to_string(minutos);
+    std::string tempoStr = "TEMPO: " + minutos_str + ":" + segundos_str;
+
+    // 2. Configurar o sf::Text
+    sf::Text timerText(tempoStr, font, 36); // Usando o membro estático Tela::font
+    timerText.setFillColor(sf::Color::White);
+
+    // 3. Posição: Canto superior direito
+    // LARGURA_JANELA vem de VariaveisGlobais.h
+    float padding = 20.0f;
+    float posX = LARGURA_JANELA - timerText.getLocalBounds().width - padding;
+    float posY = padding;
+
+    timerText.setPosition(posX, posY);
+
+    // 4. Desenhar
+    window.draw(timerText);
+}
 
 void Tela::exibirMenu(sf::RenderWindow &window)
 {
@@ -74,7 +146,7 @@ void Tela::exibirMenu(sf::RenderWindow &window)
     sf::Sprite background(backgroundTexture);
     float escalaX = (float)LARGURA_JANELA / backgroundTexture.getSize().x;
     float escalaY = (float)ALTURA_JANELA / backgroundTexture.getSize().y;
-    background.setScale(escalaX, escalaY); 
+    background.setScale(escalaX, escalaY);
 
     window.draw(background);
 
@@ -174,14 +246,17 @@ void Tela::exibirPause(sf::RenderWindow &window)
 void Tela::exibirFase(class Fase *fase, sf::RenderWindow &window)
 {
     carregarFonte();
-    sf::Color color(72, 72, 72);
-    window.clear(color);
+
+    window.clear(sf::Color::Black);
+    desenharScrollingBackground(fase, window);
 
     // Desenhar a fase
     if (fase)
         fase->desenhar(window);
     else
         std::cerr << "Erro ao exibir fase: ponteiro null!" << std::endl;
+
+    Tela::desenharHUD(fase, window);
 }
 
 void Tela::exibirCreditos(sf::RenderWindow &window)
