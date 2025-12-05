@@ -82,14 +82,14 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
 
         if (tempoAcumulado >= tempoIntervalo)
         {
-            if (movendoHorizontalmente)
+            if (!movendoHorizontalmente)
             {
                 // Usa a nova textura pré-carregada
                 _sprite2.setTexture(_textureAndandoEsquerda);
                 _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
                 _sprite2.setScale(0.6f, 0.6f);
                 _sprite = _sprite2;
-                movendoHorizontalmente = false;
+                movendoHorizontalmente = true;
             }
             else
             {
@@ -97,7 +97,7 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
                 _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
                 _sprite2.setScale(0.6f, 0.6f);
                 _sprite = _sprite2;
-                movendoHorizontalmente = true;
+                movendoHorizontalmente = false;
             }
             tempoAcumulado = 0.0f;
         }
@@ -109,14 +109,14 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
 
         if (tempoAcumulado >= tempoIntervalo)
         {
-            if (movendoHorizontalmente)
+            if (!movendoHorizontalmente)
             {
                 // Usa a nova textura pré-carregada
                 _sprite2.setTexture(_textureAndandoDireita);
                 _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
                 _sprite2.setScale(0.6f, 0.6f);
                 _sprite = _sprite2;
-                movendoHorizontalmente = false;
+                movendoHorizontalmente = true;
             }
             else
             {
@@ -124,7 +124,7 @@ void Jogador::atualizar(float deltaTime, const Fase &fase)
                 _sprite2.setOrigin(largura / 2.0f, (altura / 2.0f) - 15.0f);
                 _sprite2.setScale(0.6f, 0.6f);
                 _sprite = _sprite2;
-                movendoHorizontalmente = true;
+                movendoHorizontalmente = false;
             }
             tempoAcumulado = 0.0f;
         }
